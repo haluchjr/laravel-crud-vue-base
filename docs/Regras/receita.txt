@@ -1,0 +1,14 @@
+# Cria model e migration
+docker exec -it app php artisan make:model Projeto -m
+
+# Gera no banco a migration, antes edite pra adicionar ou remover
+docker exec -it app php artisan migrate -q
+
+# alimentar o banco
+docker exec -it app php artisan tinker
+\App\Models\Projeto::create(['nome' => 'Meu Primeiro Projeto Teste', 'status' => 'ativo']);
+
+Novo campo.
+docker exec -it app php artisan make:migration add_arquivo_to_projetos_table --table=projetos
+
+docker exec -it app php artisan storage:link

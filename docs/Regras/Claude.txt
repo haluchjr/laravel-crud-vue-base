@@ -1,0 +1,1 @@
+pro inertia/vue, o que preciso ter eh o arquivo composer.json e o package.json?21:17

@@ -1,0 +1,76 @@
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./docker/php8.3
+      network: host
+      dockerfile: Dockerfile
+      args:
+        USER_ID: 1000
+        GROUP_ID: 1000
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      - TMPDIR=/tmp
+      - TMP=/tmp
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - cache
+      - db_mysql
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    networks:
+      - app-net
+
+  frontend:
+    image: node:20-alpine
+    container_name: frontend
+    user: "1000:1000"
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    ports:
+      - "5173:5173"
+    command: tail -f /dev/null
+    depends_on:
+      - backend
+    networks:
+      - app-net
+
+  cache:
+    image: redis:7-alpine
+    container_name: cache
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache_redis:/data
+    networks:
+      - app-net
+
+  db_mysql:
+    image: mysql:8.0
+    container_name: db_mysql
+    restart: unless-stopped
+    command: --authentication_policy=mysql_native_password
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: r00t
+      MYSQL_DATABASE: sistema
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user123
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-net
+
+volumes:
+  cache_redis:
+  db_data:
+
+networks:
+  app-net:
+    driver: bridge

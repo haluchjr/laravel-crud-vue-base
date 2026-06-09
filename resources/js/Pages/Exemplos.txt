@@ -1,0 +1,73 @@
+<script setup>
+import { ref } from 'vue';
+import CrudLayout from '@/Layouts/CrudLayout.vue';
+import ModalBootstrap from '@/Components/ModalBs.vue';
+defineProps({
+    retorno: {
+        type: Object,
+        required: true
+    }
+})
+
+// Estado para controlar se o modal está aberto (true) ou fechado (false)
+const modalAberto = ref(false);
+
+const confirmarExclusao = () => {
+    // Aqui rodaria a lógica para deletar o item...
+    alert('Item excluído!');
+    modalAberto.value = false; // Fecha o modal
+};
+
+</script>
+<template>
+    <CrudLayout>
+        <template #header>
+            <h1 class="h3 mb-0">Listagem</h1>
+        </template>
+
+        <!-- Tudo que colocar aqui dentro cai no <slot /> principal com container do Bootstrap -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+             <h1>Módulo: {{ retorno.nome_modulo }}</h1>
+        <p>Aulas concluídas hoje: <strong>{{ retorno.aulas_assistidas }}</strong></p>
+        <div :class="{ 'successo': retorno.status === 'sucesso', 'aviso': retorno.status === 'aviso' }">
+            Status do backend: {{ retorno.status }} 
+        </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <p>Clique no botão para testar o modal Bootstrap:</p>
+                
+                <button class="btn btn-danger" @click="modalAberto = true">
+                    Excluir Registro
+                </button>
+            </div>
+        </div>
+
+
+        <ModalBootstrap 
+            :show="modalAberto" 
+            title="Atenção: Excluir Item" 
+            @close="modalAberto = false"
+        >
+            <p>Você tem certeza absoluta que deseja apagar este registro? Esta ação não poderá ser desfeita.</p>
+
+            <template v-slot:actions>
+                <button type="button" class="btn btn-secondary" @click="modalAberto = false">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" @click="confirmarExclusao">
+                    Sim, Excluir
+                </button>
+            </template>
+        </ModalBootstrap>
+
+        <template #sistema>
+            teste
+        </template>
+    </CrudLayout>
+
+
+</template>

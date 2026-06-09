@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Define cores para o terminal (opcional, mas ajuda na leitura)
+VERDE='\033[0;32m'
+AMARELO='\033[1;33m'
+VERMELHO='\033[0;31m'
+NC='\033[0m' # No Color
+
+echo -e "${AMARELO}Iniciando a limpeza do ambiente...${NC}"
+echo ""
+
+# 1. Limpa o Laravel Telescope antes de derrubar (apenas se o container estiver rodando)
+if [ "$(docker ps -q -f name=^app$)" ]; then
+    echo "Limpando dados antigos do Telescope..."
+    # Removeu-se o -t para evitar erros de "the input device is not a TTY"
+    docker exec -i app php artisan telescope:prune
+else
+    echo -e "${AMARELO}Container 'app' não está rodando. Pulando o prune do Telescope.${NC}"
+fi
+
+echo ""
+echo -e "${VERMELHO}Desligando os containers (Mantendo os volumes intactos)...${NC}"
+# 2. Derruba os containers e remove a rede virtual (sem mexer nos volumes!)
+docker compose down
+
+echo ""
+echo "----------------------------------------"
+echo "Verificando status atual dos serviços:"
+echo "----------------------------------------"
+
+# 3. Lista o status final para garantir que tudo morreu
+# Se a tabela vier vazia, significa sucesso total.
+OUTPUT=$(docker compose ps --format "{{.Name}}\t{{.Status}}\t{{.Ports}}\t{{.Service}}" | column -t -s $'\t')
+
+echo ""
+echo "----------------------------------------"
+echo -e "${VERDE}Tudo desligado com sucesso! Seus dados do MySQL/Redis estão salvos.${NC}"
+echo "----------------------------------------"
