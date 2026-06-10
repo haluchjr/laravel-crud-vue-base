@@ -10,6 +10,10 @@ class Menu extends Model
 {
     protected $fillable = ['nome', 'url', 'icon', 'ordem', 'nivel_permissao', 'menu_pai_id'];
 
+    protected $casts = [
+        'nivel_permissao' => 'array',
+    ];
+
     /**
      * Relacionamento para pegar os filhos diretos (Submenu Nível 1)
      */

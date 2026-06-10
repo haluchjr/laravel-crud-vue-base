@@ -24,6 +24,10 @@ class User extends Authenticatable
         'status',
         'nivel'
     ];
+    
+    protected $casts = [
+        'nivel' => 'integer',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.

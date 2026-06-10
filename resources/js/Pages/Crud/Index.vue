@@ -155,7 +155,7 @@ const salvarEdicao = () => {
         <template #header>
             <h1 class="h3 mb-0">Listagem de Projetos</h1>
         </template>
-        <Menu/>
+       
         <FlashMessage />
 
         <div class="card shadow-sm">
