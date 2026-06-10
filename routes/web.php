@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\Auth\PasswordController;
 
+Route::get('/teste', [CrudController::class, 'teste'])->name('crud.teste');
 
 // Rota pública para onde o usuário será enviado após se cadastrar
 Route::get('/em-analise', function () {

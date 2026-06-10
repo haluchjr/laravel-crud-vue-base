@@ -12,10 +12,23 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 use App\Models\Projeto;
+use App\Repositories\UserRepository;
 
 class CrudController extends Controller
 {
-    
+
+    // Para o codigo todo...
+    //public function __construct(protected UserRepository $userRepo) {}
+
+    // Ou com injecao de dependencia direto na metodo especifico.
+    public function teste(UserRepository $rep){
+        //$rep = new UserRepository();
+        $usuarios = $rep->findById(2);
+        dump($usuarios);
+
+    }    
+
+
     public function index()
     {
         // 1. Buscamos os dados do banco (trazendo o ID, Nome e Status)
