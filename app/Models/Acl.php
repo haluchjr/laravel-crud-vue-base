@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Acl extends Model
 {
+    protected $table = 'acl';
     protected $fillable = ['id','perfil','descricao'];
 
 }

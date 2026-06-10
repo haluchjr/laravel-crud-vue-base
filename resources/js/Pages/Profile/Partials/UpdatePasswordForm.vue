@@ -3,7 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm , Link} from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const passwordInput = ref(null);
@@ -115,6 +115,12 @@ const updatePassword = () => {
                         Salvo.
                     </p>
                 </Transition>
+                <Link 
+                    :href="route('crud.index')" 
+                    class="text-base font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+                            Voltar para o sistema 
+                    <span aria-hidden="true"> &rarr;</span>
+                </Link>
             </div>
         </form>
     </section>

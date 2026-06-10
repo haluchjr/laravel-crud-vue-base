@@ -1,10 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-///import AuthenticatedLayout from '@/Layouts/CrudLayout.vue';
-
-
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
 
 defineProps({
@@ -35,10 +31,10 @@ defineProps({
                 <div
                     class="bg-white p-4 shadow sm:rounded-lg sm:p-8"
                 >
-                    <UpdatePasswordForm class="max-w-xl" />
+                <UpdatePasswordForm class="max-w-xl" />
+            </div> 
                 </div>
 
             </div>
-        </div>
     </AuthenticatedLayout>
 </template>
