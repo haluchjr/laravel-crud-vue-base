@@ -10,10 +10,10 @@ echo -e "${AMARELO}Iniciando a limpeza do ambiente...${NC}"
 echo ""
 
 # 1. Limpa o Laravel Telescope antes de derrubar (apenas se o container estiver rodando)
-if [ "$(docker ps -q -f name=^app$)" ]; then
+if [ "$(docker ps -q -f name=^backend$)" ]; then
     echo "Limpando dados antigos do Telescope..."
     # Removeu-se o -t para evitar erros de "the input device is not a TTY"
-    docker exec -i app php artisan telescope:prune
+    docker exec -i backend php artisan telescope:prune
 else
     echo -e "${AMARELO}Container 'app' não está rodando. Pulando o prune do Telescope.${NC}"
 fi

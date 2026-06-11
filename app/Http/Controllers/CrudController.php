@@ -23,7 +23,8 @@ class CrudController extends Controller
     // Ou com injecao de dependencia direto na metodo especifico.
     public function teste(UserRepository $rep){
         //$rep = new UserRepository();
-        $usuarios = $rep->findById(2);
+        //$usuarios = $rep->findById(2);
+        $usuarios = $rep->getUsuariosPaginados();
         dump($usuarios);
 
     }    

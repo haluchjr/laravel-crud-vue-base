@@ -53,6 +53,7 @@ echo "----------------------------------------"
 
 # 4. Exibe a tabela de status formatada
 OUTPUT=$(docker compose ps --format "{{.Name}}\t{{.Status}}\t{{.Ports}}\t{{.Service}}" | column -t -s $'\t')
+echo "$OUTPUT"
 
 echo ""
 echo -e "${AZUL}========================================${NC}"
