@@ -29,7 +29,7 @@ class UserRepository
     
         return DB::table('users')
             // 1. O select agora precisa dizer de qual tabela vem cada campo para não dar conflito (ambas podem ter 'id' ou 'name')
-            ->  (
+            ->select(
                 'users.id', 
                 'users.name as usuario_nome', 
                 'users.email', 

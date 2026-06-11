@@ -6,7 +6,13 @@ use Inertia\Inertia;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\Auth\PasswordController;
 
+
+
+
+// Rotas pra testar somente exemplos.
 Route::get('/teste', [CrudController::class, 'teste'])->name('crud.teste');
+Route::get('/cep', [CrudController::class, 'consultaCep'])->name('crud.cep');
+Route::get('/teste1', [CrudController::class, 'gorest']);
 
 // Rota pública para onde o usuário será enviado após se cadastrar
 Route::get('/em-analise', function () {

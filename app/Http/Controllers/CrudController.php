@@ -13,6 +13,8 @@ use Carbon\Carbon;
 
 use App\Models\Projeto;
 use App\Repositories\UserRepository;
+use App\Services\ViaCepService;
+use App\Services\ConsultaFilmeService;
 
 class CrudController extends Controller
 {
@@ -25,10 +27,22 @@ class CrudController extends Controller
         //$rep = new UserRepository();
         //$usuarios = $rep->findById(2);
         $usuarios = $rep->getUsuariosPaginados();
-        dump($usuarios);
+        dd($usuarios['cep']);
+    }
+    
+    public function consultaCep(ViaCepService $viaCepService){
+        $cep = '80330380';
+        $retorno = $viaCepService->consultar($cep);
+        dd($retorno['cep']);
 
-    }    
+    }
 
+
+    // Api pra brincar com verbos.
+    public function gorest(ConsultaFilmeService $api){
+        $api->teste1();
+
+    }
 
     public function index()
     {
