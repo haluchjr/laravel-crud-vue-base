@@ -9,10 +9,23 @@ use App\Http\Controllers\Auth\PasswordController;
 
 
 
-// Rotas pra testar somente exemplos.
+// Rotas pra testar somente exemplos, uso de api.
 Route::get('/teste', [CrudController::class, 'teste'])->name('crud.teste');
 Route::get('/cep', [CrudController::class, 'consultaCep'])->name('crud.cep');
 Route::get('/teste1', [CrudController::class, 'gorest']);
+
+
+// Teste de vue...
+Route::get('/estudo/teste',[CrudController::class,'testeVue'])->name('estudo.teste');
+Route::post('/estudo/teste',[CrudController::class,'salvarTesteVue'])->name('estudo.teste.salvar');
+Route::post('/estudo/teste-axios',[CrudController::class,'salvarTesteVueAxios'])->name('estudo.teste.axios'); 
+
+// Crud Teste
+Route::get('/crud1/teste-insert',[CrudController::class,'testeView'])->name('crud.teste.insert');
+route::post('/crud1/teste-insert',[CrudController::class,'testeInsert'])->name('crud.teste.insert.salvar');
+route::post('/crud1/teste-update',[CrudController::class,'testeUpdate'])->name('crud.teste.update');
+route::post('/crud1/teste-delete',[CrudController::class,'testeDelete'])->name('crud.teste.delete');
+
 
 // Rota pública para onde o usuário será enviado após se cadastrar
 Route::get('/em-analise', function () {

@@ -13,11 +13,79 @@ use Carbon\Carbon;
 
 use App\Models\Projeto;
 use App\Repositories\UserRepository;
+use App\Repositories\UsuarioRepository;
+
+
 use App\Services\ViaCepService;
 use App\Services\ConsultaFilmeService;
 
 class CrudController extends Controller
 {
+
+    // Crud teste - Carregar tela.
+    public function testeView(UsuarioRepository $rep){
+            //dd($rep->findAll())
+        return Inertia::render('Estudo/Index',[
+            'dados' => $rep->findAll()
+        ]);
+    }
+
+    // Crud teste - Insert POST
+    public function testeInsert(UsuarioRepository $rep, Request $request){
+        $dadosValidados = $request->validate([
+            'nome'   => 'required|string|max:150',
+            'email'  => 'required|string|email|unique:usuarios_models,email',
+        ], [
+            'nome.required' => 'O nome do projeto é obrigatório.',
+            'email.required' => 'O email do projeto é obrigatório.',
+            'email.email' => 'O email do projeto deve ser um email válido.',
+            'email.unique' => 'O email do projeto já está em uso.',
+        ]);
+
+       
+
+        if ($rep->salvar($dadosValidados)) {
+            return redirect()->back()->with('sucesso', 'Projeto atualizado com sucesso!');
+        } else {
+            //return redirect()->back()->with('erro', 'Erro ao salvar usuário.');
+            return redirect()->back()->with('sucesso', 'Projeto atualizado com sucesso!');
+        }
+
+    }
+
+    public function testeUpdate(UsuarioRepository $rep, Request $request){
+    
+        
+        $dadosValidados = $request->validate([
+            'id'    => 'required|integer|exists:usuarios_models,id',
+            'nome'   => 'required|string|max:150',
+            'email'  => 'required|string|email|unique:usuarios_models,email,' . $request->input('id'),
+        ], [
+            'id.required' => 'O ID do usuário é obrigatório.',
+            'id.integer' => 'O ID do usuário deve ser um número inteiro.',
+            'id.exists' => 'O ID do usuário não existe.',
+            'nome.required' => 'O nome do projeto é obrigatório.',
+            'email.required' => 'O email do projeto é obrigatório.',
+            'email.email' => 'O email do projeto deve ser um email válido.',
+            'email.unique' => 'O email do projeto já está em uso por outro usuário.',
+        ]);
+
+        if ($rep->atualizar($request->id,$dadosValidados)) {
+            return redirect()->back()->with('sucesso', 'Projeto atualizado com sucesso!');
+        } else {
+            return redirect()->back()->with('erro', 'Erro ao atualizar usuário.');
+        }
+    }
+
+
+
+    public function testeDelete(UsuarioRepository $rep, Request $request){
+        if ($rep->deletar($request->input('id'))){
+            return redirect()->back()->with('sucesso', 'Projeto atualizado com sucesso!');
+        }
+        return redirect()->back()->with('erro', 'Erro ao deletar usuário.');
+    }
+
 
     // Para o codigo todo...
     //public function __construct(protected UserRepository $userRepo) {}
@@ -41,8 +109,46 @@ class CrudController extends Controller
     // Api pra brincar com verbos.
     public function gorest(ConsultaFilmeService $api){
         $api->teste1();
-
     }
+
+    public function testeVue(){
+        return Inertia::render('Estudo/Index',[
+            'nome' => Auth::user()->name ?? 'Desenvolvedor',
+            'tecnologias' => ['PHP', 'Laravel', 'Vue.js', 'Inertia.js']
+        ]);
+    }
+
+    public function salvarTesteVue(Request $request){
+        $dados = $request->validate([
+            'nome' => 'required|string|max:100',
+        ]);
+
+        // Aqui você poderia salvar no banco, enviar email, etc.
+        // Por enquanto, vamos só logar os dados recebidos:
+        Log::info("Dados recebidos do Vue:", $dados);
+
+        // Redireciona de volta para a página de teste com uma mensagem de sucesso
+        return redirect()->route('estudo.teste')->with('sucesso', 'Dados salvos com sucesso!');
+    }
+
+    public function salvarTesteVueAxios(Request $request){
+        // 1. Validação normal do Laravel
+        $dados = $request->validate([
+            'nome' => 'required|string|max:100',
+        ]);
+
+        // Loga os dados recebidos no arquivo laravel.log
+        Log::info("Dados recebidos via Axios:", $dados);
+
+        // 2. A MUDANÇA AQUI: Retornamos um JSON com status 200 (Sucesso)
+        return response()->json([
+            'sucesso' => true,
+            'mensagem' => 'Dados processados com sucesso pelo Laravel!',
+            'dado_recebido' => $dados['nome']
+        ], 200); 
+    }
+
+
 
     public function index()
     {
