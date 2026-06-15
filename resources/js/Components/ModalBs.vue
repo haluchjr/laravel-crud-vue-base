@@ -1,4 +1,6 @@
 <script setup>
+import { Teleport } from 'vue';
+
 defineProps({
     show: {
         type: Boolean,
@@ -11,31 +13,34 @@ defineProps({
 });
 
 defineEmits(['close']);
+
 </script>
 
 <template>
-    <div v-if="show" class="meu-modal-wrapper">
-        <div class="meu-modal-backdrop" @click="$emit('close')"></div>
-        
-        <div class="modal-dialog modal-dialog-centered meu-modal-caixa">
-            <div class="modal-content shadow-lg bg-white rounded">
-                
-                <div class="modal-header p-3 border-bottom">
-                    <h5 class="modal-title fw-bold m-0">{{ title }}</h5>
-                    <button type="button" class="btn-close" @click="$emit('close')" aria-label="Close"></button>
-                </div>
+    <teleport to="body">
+        <div v-if="show" class="meu-modal-wrapper">
+            <div class="meu-modal-backdrop" @click="$emit('close')"></div>
+            
+            <div class="modal-dialog modal-dialog-centered meu-modal-caixa">
+                <div class="modal-content shadow-lg bg-white rounded">
+                    
+                    <div class="modal-header p-3 border-bottom">
+                        <h5 class="modal-title fw-bold m-0">{{ title }}</h5>
+                        <button type="button" class="btn-close" @click="$emit('close')" aria-label="Close"></button>
+                    </div>
 
-                <div class="modal-body p-3">
-                    <slot></slot>
-                </div>
+                    <div class="modal-body p-3">
+                        <slot></slot>
+                    </div>
 
-                <div class="modal-footer p-3 bg-light border-top" v-if="$slots.actions">
-                    <slot name="actions"></slot>
-                </div>
+                    <div class="modal-footer p-3 bg-light border-top" v-if="$slots.actions">
+                        <slot name="actions"></slot>
+                    </div>
 
+                </div>
             </div>
         </div>
-    </div>
+    </teleport>
 </template>
 
 <style scoped>

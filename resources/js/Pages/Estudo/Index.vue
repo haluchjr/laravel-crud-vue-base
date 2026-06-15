@@ -4,11 +4,7 @@ import { ref, computed } from 'vue';
 import { router, useForm,usePage} from '@inertiajs/vue3'; 
 
 // Meus Imports
-import CrudLayout from '@/Layouts/CrudLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
-import ModalBootstrap from '@/Components/ModalBs.vue';
-
-const teste = ref('Teste');
+import CrudLayout from '@/Layouts/CrudLayoutNoMenu.vue';
 
 </script>
 
@@ -17,13 +13,14 @@ const teste = ref('Teste');
         <template #header>
             <h1 class="h3 mb-0">Listagem de Projetos</h1>
         </template>
-        <FlashMessage />
-
+        
         <div>
             PRINCIPAL
         </div>
-
-
+        
+        
+        
+        
         <template #sistema>Ambiente de Desenvolvimento</template>
     </CrudLayout>
 </template>
