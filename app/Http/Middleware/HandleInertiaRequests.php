@@ -36,7 +36,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user() ? [
                     'id' => $menuUser = $request->user()->id,
                     'name' => $request->user()->name,
-                    'email' => $request->user()->email, // 👈 Aqui só entra se não for null
+                    'email' => $request->user()->email, 
                     'nivel' => $request->user()->nivel,
                 ] : null, // Se não tiver logado, envia null com segurança
             ],

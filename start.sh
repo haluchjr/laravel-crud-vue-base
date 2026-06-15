@@ -17,6 +17,8 @@ if [ ! -f .env ]; then
     echo -e "${VERMELHO}[ERRO] Arquivo .env não encontrado na raiz!${NC}"
     echo -e "${AMARELO}Por favor, crie o arquivo .env antes de subir os containers.${NC}"
     exit 1
+else
+    export $(grep -v '^#' .env | xargs )
 fi
 
 # 2. Sobe os containers em background
@@ -55,6 +57,9 @@ echo "----------------------------------------"
 OUTPUT=$(docker compose ps --format "{{.Name}}\t{{.Status}}\t{{.Ports}}\t{{.Service}}" | column -t -s $'\t')
 echo "$OUTPUT"
 
+echo "----------------------------------------------"
+echo -e "Acesse em : ${VERDE} ${APP_URL} ${NC}"
+echo "----------------------------------------------"
 echo ""
 echo -e "${AZUL}========================================${NC}"
 echo -e "${VERDE} Ambiente online! Boa codificação. ${NC}"

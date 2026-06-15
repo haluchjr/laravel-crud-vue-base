@@ -26,6 +26,10 @@ route::post('/crud1/teste-insert',[CrudController::class,'testeInsert'])->name('
 route::post('/crud1/teste-update',[CrudController::class,'testeUpdate'])->name('crud.teste.update');
 route::post('/crud1/teste-delete',[CrudController::class,'testeDelete'])->name('crud.teste.delete');
 
+Route::get('/diretivas', function () {
+    return Inertia::render('Estudo/Index'); 
+});
+
 
 // Rota pública para onde o usuário será enviado após se cadastrar
 Route::get('/em-analise', function () {
