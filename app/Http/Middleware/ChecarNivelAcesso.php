@@ -22,7 +22,7 @@ class ChecarNivelAcesso
             abort(403, 'Você não tem permissão para acessar esta página.');
         }
 
-        // ⚡ FORÇA O VALOR A SER UM INTEIRO (Evita bug de String vs Int)
+        // FORÇA O VALOR A SER UM INTEIRO (Evita bug de String vs Int)
         $nivelUsuario = (int) auth()->user()->nivel;
 
         // Se o nível for 99, ele é o Super Admin master e acessa QUALQUER rota do sistema

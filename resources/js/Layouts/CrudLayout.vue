@@ -49,7 +49,7 @@ defineProps({
 
             <footer class="bg-white py-3 text-center border-top text-muted small px-4 mt-auto">
                 <div class="container-fluid p-0 d-flex justify-content-between align-items-center">
-                    <span>&copy; {{ ano }} - Painel Administrativo</span>
+                    <span>{{ $page.props.dataAtual }}</span>
                     <slot name="sistema" />
                 </div>
             </footer>

@@ -4,14 +4,14 @@ import { ref, computed } from 'vue';
 import { router, useForm,usePage} from '@inertiajs/vue3'; 
 
 // Meus Imports
-import CrudLayout from '@/Layouts/CrudLayoutNoMenu.vue';
+import CrudLayoutNoMenu from '@/Layouts/CrudLayoutNoMenu.vue';
 
 </script>
 
 <template>
-     <CrudLayout title="----">
+     <CrudLayoutNoMenu title="----">
         <template #header>
-            <h1 class="h3 mb-0">Listagem de Projetos</h1>
+            <h1 class="h3 mb-0">--- </h1>
         </template>
         
         <div>
@@ -22,7 +22,7 @@ import CrudLayout from '@/Layouts/CrudLayoutNoMenu.vue';
         
         
         <template #sistema>Ambiente de Desenvolvimento</template>
-    </CrudLayout>
+    </CrudLayoutNoMenu>
 </template>
 
 <style scoped>

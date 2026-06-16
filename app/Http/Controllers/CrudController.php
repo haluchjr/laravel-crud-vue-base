@@ -15,13 +15,12 @@ use App\Models\Projeto;
 use App\Repositories\UserRepository;
 use App\Repositories\UsuarioRepository;
 
-
 use App\Services\ViaCepService;
 use App\Services\ConsultaFilmeService;
 
 class CrudController extends Controller
 {
-
+    
     // Crud teste - Carregar tela.
     public function testeView(UsuarioRepository $rep){
             //dd($rep->findAll())

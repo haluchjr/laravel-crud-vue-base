@@ -86,6 +86,7 @@ class HandleInertiaRequests extends Middleware
                 return $filtrarMenu($menus);
             },
             'appName' => config('app.name'),
+            'dataAtual' => now()->format('d/m/Y'),
             'flash' => [
                 'sucesso' => fn () => $request->session()->get('sucesso'),
                 'erro'    => fn () => $request->session()->get('erro'),

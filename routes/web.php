@@ -4,9 +4,15 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\CrudController;
+use App\Http\Controllers\WikiController;
 use App\Http\Controllers\Auth\PasswordController;
 
 
+// ler documentacao.
+// travar com  validacao de autenticacao, somente usuarios autenticados podem acessar a wiki.
+Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
+Route::get('/markdown/conteudo/{nomeDocumento}', [WikiController::class, 'getConteudo'])->name('markdown.conteudo');//->middleware('nivel:99');
+Route::get('/markdown/img/{nomeImagem}', [WikiController::class, 'getImagem'])->name('markdown.imagem')->where('nomeImagem', '.*'); // Aceita subpastas e exten
 
 
 // Rotas pra testar somente exemplos, uso de api.
@@ -40,6 +46,9 @@ Route::middleware('auth')->group(function () {
     // Alteracoes de senha.
     Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
     Route::get('/profile', [PasswordController::class, 'edit'])->name('profile.edit');
+
+
+  
     
     
     // localhost:8080/crud/

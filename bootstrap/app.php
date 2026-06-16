@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
-        // 🔥 ADICIONADO: Registra o apelido para o seu middleware genérico de ACL
+        // ADICIONADO: Registra o apelido para o seu middleware genérico de ACL
         $middleware->alias([
             'nivel' => \App\Http\Middleware\ChecarNivelAcesso::class,
         ]);
