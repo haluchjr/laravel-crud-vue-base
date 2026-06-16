@@ -30,6 +30,7 @@ class WikiController extends Controller
             'Instalando certificado localmente'                             => '00005.md', 
             'Guia de Referência: Imports Essenciais 1(Vue 3 + Inertia.js)'  => '00006.md', 
             'Git' => '00007.md',
+            'Migrations' => '00008.md',
         ];
         
         return Inertia::render('Markdown/Index',[

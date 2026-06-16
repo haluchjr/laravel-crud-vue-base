@@ -76,11 +76,11 @@ const fecharModal = () => {
             </div>
         </div>
         
-        <div v-if="modalAberto" class="modal-backdrop" @click="fecharModal">
+        <div v-if="modalAberto" class="modal-backdrop">
             <div class="modal-content" @click.stop>
                 <button class="modal-close-btn" @click="fecharModal">&times;</button>
                 <div class="modal-markdown-container">
-                    <article class="markdown-body" v-html="htmlDoMarkdown"></article>
+                    <span class="markdown-body" v-html="htmlDoMarkdown"></span>
                 </div>
             </div>
         </div>

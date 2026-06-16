@@ -8,6 +8,15 @@ use App\Http\Controllers\WikiController;
 use App\Http\Controllers\Auth\PasswordController;
 
 
+use App\Http\Controllers\CadastroController;
+Route::get('cadastro', [CadastroController::class, 'index'])->name('cadastro.index');
+Route::post('cadastro', [CadastroController::class, 'store'])->name('cadastro.store');
+Route::get('cadastro/{id}', [CadastroController::class, 'show'])->name('cadastro.show');
+Route::put('cadastro/{id}', [CadastroController::class, 'update'])->name('cadastro.update');
+Route::delete('cadastro/{id}', [CadastroController::class, 'destroy'])->name('cadastro.destroy');
+
+
+
 // ler documentacao.
 // travar com  validacao de autenticacao, somente usuarios autenticados podem acessar a wiki.
 Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
