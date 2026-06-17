@@ -6,6 +6,8 @@ AMARELO='\033[1;33m'
 VERMELHO='\033[0;31m'
 NC='\033[0m' # No Color
 
+echo ""
+echo ""
 echo -e "${AMARELO}Iniciando a limpeza do ambiente...${NC}"
 echo ""
 
@@ -51,3 +53,4 @@ echo ""
 echo "----------------------------------------"
 echo -e "${VERDE}Tudo desligado com sucesso! Seus dados do MySQL/Redis estão salvos.${NC}"
 echo "----------------------------------------"
+echo ""
