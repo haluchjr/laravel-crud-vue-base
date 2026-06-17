@@ -3,10 +3,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-use App\Http\Controllers\CrudController;
-use App\Http\Controllers\WikiController;
 use App\Http\Controllers\Auth\PasswordController;
-
 
 use App\Http\Controllers\CadastroController;
 Route::get('cadastro', [CadastroController::class, 'index'])->name('cadastro.index');
@@ -19,6 +16,7 @@ Route::delete('cadastro/{id}', [CadastroController::class, 'destroy'])->name('ca
 
 // ler documentacao.
 // travar com  validacao de autenticacao, somente usuarios autenticados podem acessar a wiki.
+use App\Http\Controllers\WikiController;
 Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
 Route::get('/markdown/conteudo/{nomeDocumento}', [WikiController::class, 'getConteudo'])->name('markdown.conteudo');//->middleware('nivel:99');
 Route::get('/markdown/img/{nomeImagem}', [WikiController::class, 'getImagem'])->name('markdown.imagem')->where('nomeImagem', '.*'); // Aceita subpastas e exten
@@ -35,6 +33,7 @@ Route::get('/estudo/teste',[CrudController::class,'testeVue'])->name('estudo.tes
 Route::post('/estudo/teste',[CrudController::class,'salvarTesteVue'])->name('estudo.teste.salvar');
 Route::post('/estudo/teste-axios',[CrudController::class,'salvarTesteVueAxios'])->name('estudo.teste.axios'); 
 
+use App\Http\Controllers\CrudController;
 // Crud Teste
 Route::get('/crud1/teste-insert',[CrudController::class,'testeView'])->name('crud.teste.insert');
 route::post('/crud1/teste-insert',[CrudController::class,'testeInsert'])->name('crud.teste.insert.salvar');
@@ -55,10 +54,6 @@ Route::middleware('auth')->group(function () {
     // Alteracoes de senha.
     Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
     Route::get('/profile', [PasswordController::class, 'edit'])->name('profile.edit');
-
-
-  
-    
     
     // localhost:8080/crud/
     Route::prefix('crud')->group(function(){

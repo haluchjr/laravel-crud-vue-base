@@ -1,46 +1,69 @@
 <script setup>
-import { computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue'
+import { Head, Link } from '@inertiajs/vue3'
 
 const props = defineProps({
-    status: Number,
-});
+  status: {
+    type: Number,
+    required: true
+  }
+})
 
-const title = computed(() => {
-    return {
-        503: '503: Serviço Indisponível',
-        500: '500: Erro Interno do Servidor',
-        404: '404: Página Não Encontrada',
-        403: '403: Acesso Proibido',
-    }[props.status];
-});
-
-const description = computed(() => {
-    return {
-        503: 'Desculpe, estamos fazendo uma manutenção rápida. Voltamos já!',
-        500: 'Oops, algo deu errado em nossos servidores.',
-        404: 'A página que você está procurando não pôde ser encontrada.',
-        403: 'Você não tem permissão para acessar esta página.',
-    }[props.status];
-});
+// Define os títulos e descrições com base no código do erro
+const errorContent = computed(() => {
+  return {
+    503: {
+      title: '503: Serviço Indisponível',
+      description: 'Desculpe, estamos em manutenção. Voltamos logo!',
+    },
+    500: {
+      title: '500: Erro Interno do Servidor',
+      description: 'Ops, algo deu errado nos nossos servidores. Já estamos verificando.',
+    },
+    404: {
+      title: '404: Página Não Encontrada',
+      description: 'A página que você está procurando não existe ou foi movida.',
+    },
+    403: {
+      title: '403: Acesso Proibido',
+      description: 'Você não tem permissão para acessar esta página.',
+    },
+    401: {
+      title: '401: Não Autorizado',
+      description: 'Você precisa estar logado para acessar esta página.',
+    },
+  }[props.status] || {
+    title: `${props.status}: Erro Inesperado`,
+    description: 'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+  }
+})
 </script>
 
 <template>
-    <div class="flex min-h-screen flex-col bg-white dark:bg-gray-900 pt-16 pb-12">
-        <main class="mx-auto flex w-full max-w-7xl flex-grow flex-col justify-center px-6 lg:px-8">
-            <div class="py-16 text-center">
-                <h1 class="text-4xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400 sm:text-5xl">
-                    {{ title }}
-                </h1>
-                <p class="mt-4 text-base text-gray-500 dark:text-gray-400">
-                    {{ description }}
-                </p>
-                <div class="mt-6">
-                    <Link :href="route('profile.edit')" class="text-base font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
-                        Voltar para o sistema <span aria-hidden="true"> &rarr;</span>
-                    </Link>
-                </div>
-            </div>
-        </main>
+  <Head :title="errorContent.title" />
+
+  <div class="flex min-h-screen flex-col items-center justify-center bg-gray-100 p-6 text-center dark:bg-gray-900">
+    <div class="max-w-md">
+      <h1 class="text-6xl font-extrabold text-red-500 drop-shadow">
+        {{ props.status }}
+      </h1>
+      
+      <h2 class="mt-4 text-2xl font-bold text-gray-800 dark:text-gray-100">
+        {{ errorContent.title }}
+      </h2>
+      
+      <p class="mt-2 text-gray-600 dark:text-gray-400">
+        {{ errorContent.description }}
+      </p>
+      
+      <div class="mt-6">
+        <Link 
+          href="/" 
+          class="rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 transition"
+        >
+          Voltar para a Home
+        </Link>
+      </div>
     </div>
+  </div>
 </template>

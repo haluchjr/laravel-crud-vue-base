@@ -11,12 +11,17 @@ use App\Repositories\CadastroRepository;
 
 class CadastroController extends Controller
 {
+    public function __construct(protected CadastroRepository $cadastroRepository) {
+        $this->cadastroRepository = $cadastroRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-         return Inertia::render('Cadastro/Index');
+        $dados = $this->cadastroRepository->paginate(15);
+        return Inertia::render('Cadastro/Index',['dados'=> $dados]);
     }
 
     /**

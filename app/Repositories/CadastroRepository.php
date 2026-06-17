@@ -2,6 +2,7 @@
 namespace App\Repositories;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 use App\Models\Cadastro;
 
@@ -54,11 +55,19 @@ class CadastroRepository
 
     public function findById($id)
     {
-        return $this->usuario->find($id);
+        return $this->model->find($id);
     }
 
     public function findAll()
     {
-        return $this->usuario->all();
+        return $this->model->all();
     }
+    
+
+    public function paginate(int $perPage = 15): LengthAwarePaginator
+    {
+        // O Laravel já resolve toda a mágica da URL (?page=2) sozinho aqui por trás
+        return $this->model->paginate($perPage);
+    }
+
 }

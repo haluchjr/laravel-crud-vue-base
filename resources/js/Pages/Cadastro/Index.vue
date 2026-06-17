@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import InputCep from '@/Components/InputCep.vue'; // Ajuste o caminho conforme seu projeto
 import CrudLayout from '@/Layouts/CrudLayoutNoMenu.vue';
+import Paginacao from '@/Components/Paginacao.vue';
 /*
 ====================================================================================================
            EXPLICAÇÃO DO FLUXO: COMUNICAÇÃO ENTRE COMPONENTES (VUE 3)
@@ -86,7 +87,9 @@ Quando o botão "Salvar Cadastro" é acionado, o formulário dispara o evento de
  Controller do Laravel, que por sua vez acionará o seu Repository (com o método .create() e proteção do $fillable) para salvar definitivamente no banco de dados.
 ====================================================================================================
 */
-
+defineProps({
+    dados: Array,
+});
 // O seu formulário do cadastro (que depois você enviará para o seu Repository)
 const formulario = ref({
     nome: '',
@@ -113,7 +116,7 @@ const preencherEndereco = (dados) => {
 
 const enviarCadastro = () => {
     // Aqui você enviaria o formulario.value via axios ou Inertia para o seu Controller/Repository
-    console.log('Enviando dados para o Laravel:', formulario.value);
+    console.log('Enviando dados para o Laravel:', formulario);
 };
 </script>
 
@@ -134,7 +137,7 @@ const enviarCadastro = () => {
             <div class="row">
                 <div class="col-md-8 mb-3">
                     <label>Endereço</label>
-                    <input type="text" v-model="formulario.endereco" class="form-control" readonly>
+                    <input type="text" v-model="formulario.endereco" class="form-control" >
                 </div>
                 <div class="col-md-4 mb-3">
                     <label>Número</label>
@@ -145,19 +148,43 @@ const enviarCadastro = () => {
             <div class="row">
                 <div class="col-md-5 mb-3">
                     <label>Bairro</label>
-                    <input type="text" v-model="formulario.bairro" class="form-control" readonly>
+                    <input type="text" v-model="formulario.bairro" class="form-control" >
                 </div>
                 <div class="col-md-5 mb-3">
                     <label>Cidade</label>
-                    <input type="text" v-model="formulario.cidade" class="form-control" readonly>
+                    <input type="text" v-model="formulario.cidade" class="form-control" >
                 </div>
                 <div class="col-md-2 mb-3">
                     <label>Estado</label>
-                    <input type="text" v-model="formulario.estado" class="form-control" readonly>
+                    <input type="text" v-model="formulario.estado" class="form-control" >
                 </div>
             </div>
-
             <button type="submit" class="btn btn-success">Salvar Cadastro</button>
         </form>
+        <table class="tabela-cadastros">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Cidade/UF</th>
+                    <th>Acao</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in dados.data" :key="item.id">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.nome }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.cidade }} - {{ item.estado }}</td>
+                    <td>Excluir / Editar</td>
+
+                </tr>
+            </tbody>
+        </table>
+        <Paginacao :links="dados.links" />
+        <pre>
+            {{ $page.props }}
+        </pre>
     </CrudLayout>
 </template>

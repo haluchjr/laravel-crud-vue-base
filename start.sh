@@ -7,9 +7,9 @@ AZUL='\033[0;34m'
 VERMELHO='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${AZUL}========================================${NC}"
-echo -e "${AZUL}    INICIANDO AMBIENTE DE DESENVOLVIMENTO${NC}"
-echo -e "${AZUL}========================================${NC}"
+echo -e "${AZUL}==============================================================================${NC}"
+echo -e "${AZUL}             INICIANDO AMBIENTE DE DESENVOLVIMENTO${NC}"
+echo -e "${AZUL}==============================================================================${NC}"
 echo ""
 
 # 1. Validação de segurança: Verifica se o .env existe
@@ -27,7 +27,6 @@ docker compose up -d
 
 echo ""
 echo -e "${AMARELO}Aguardando os serviços estabilizarem...${NC}"
-echo "----------------------------------------"
 
 # 3. Loop rápido para esperar o MySQL aceitar conexões (opcional, mas evita erro de Connection Refused no Artisan)
 # Ele tenta rodar um 'mysqladmin ping' de dentro do container até dar boa
@@ -49,17 +48,13 @@ else
 fi
 
 echo ""
-echo "----------------------------------------"
 echo -e "${VERDE}Status atual dos serviços:${NC}"
-echo "----------------------------------------"
 
 # 4. Exibe a tabela de status formatada
 OUTPUT=$(docker compose ps --format "{{.Name}}\t{{.Status}}\t{{.Ports}}\t{{.Service}}" | column -t -s $'\t')
 echo "$OUTPUT"
 
-echo "----------------------------------------------"
 echo -e "Acesse em : ${VERDE} ${APP_URL} ${NC}"
-echo "----------------------------------------------"
 echo ""
 echo -e "${AZUL}========================================${NC}"
 echo -e "${VERDE} Ambiente online! Boa codificação. ${NC}"

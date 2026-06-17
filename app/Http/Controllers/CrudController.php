@@ -24,6 +24,7 @@ class CrudController extends Controller
     // Crud teste - Carregar tela.
     public function testeView(UsuarioRepository $rep){
             //dd($rep->findAll())
+            // Inertia::render lê em Pages em diante.
         return Inertia::render('Estudo/Index',[
             'dados' => $rep->findAll()
         ]);
