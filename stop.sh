@@ -18,6 +18,21 @@ else
     echo -e "${AMARELO}Container 'app' não está rodando. Pulando o prune do Telescope.${NC}"
 fi
 
+# ----------------------------------------------------------------------
+# NOVO: Limpeza do arquivo de log do Laravel
+# ----------------------------------------------------------------------
+LOG_FILE="storage/logs/laravel.log"
+
+if [ -f "$LOG_FILE" ]; then
+    echo -e "${AMARELO}Zerando o arquivo de log do Laravel...${NC}"
+    # O comando : > limpa o conteúdo mantendo o arquivo e suas permissões intactos
+    : > "$LOG_FILE"
+    echo -e "${VERDE}Log limpo com sucesso!${NC}"
+else
+    echo -e "${AMARELO}Arquivo laravel.log não encontrado. Pulando limpeza de log.${NC}"
+fi
+# ----------------------------------------------------------------------
+
 echo ""
 echo -e "${VERMELHO}Desligando os containers (Mantendo os volumes intactos)...${NC}"
 # 2. Derruba os containers e remove a rede virtual (sem mexer nos volumes!)

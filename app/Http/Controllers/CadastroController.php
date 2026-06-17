@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Cadastro;
 use Illuminate\Http\Request;
-
 use Inertia\Inertia;
+
+use App\Http\Requests\NovoUsuarioRequest;
 
 use App\Repositories\CadastroRepository;
 
@@ -25,19 +26,12 @@ class CadastroController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(NovoUsuarioRequest $request)
     {
-        //
+        $validados  = $request->validated();
+        //return redirect()->route('/');
     }
 
     /**
@@ -67,8 +61,11 @@ class CadastroController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cadastro $cadastro)
+    public function destroy($id)
     {
-        //
+        if ($this->cadastroRepository->deletar($id)){
+            return redirect()->back()->with('sucesso', "Registro ID {$id} excluído com sucesso!");
+        }
+        return redirect()->back()->with('erro', "Registro ID {$id} excluído com sucesso!");
     }
 }

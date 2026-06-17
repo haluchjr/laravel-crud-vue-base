@@ -2,12 +2,15 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
 use App\Http\Controllers\Auth\PasswordController;
+
+use App\Services\BaseService;
+//Route::get('/',[BaseService::class,'main']);
+
 
 use App\Http\Controllers\CadastroController;
 Route::get('cadastro', [CadastroController::class, 'index'])->name('cadastro.index');
-Route::post('cadastro', [CadastroController::class, 'store'])->name('cadastro.store');
+Route::post('cadastro', [CadastroController::class, 'store'])->name('cadastro.store'); // novo
 Route::get('cadastro/{id}', [CadastroController::class, 'show'])->name('cadastro.show');
 Route::put('cadastro/{id}', [CadastroController::class, 'update'])->name('cadastro.update');
 Route::delete('cadastro/{id}', [CadastroController::class, 'destroy'])->name('cadastro.destroy');

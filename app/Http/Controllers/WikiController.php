@@ -22,16 +22,15 @@ class WikiController extends Controller
         
         // Localizacao: docs/Md/
         $docs = [
-            'Estrutura projeto'                                             => '00002.md',
-            'Comandos Artisan'                                              => '00003.md',
-            'Migrations'                                                    => '00008.md',
-            'Git'                                                           => '00007.md',
-            'Guia de Referência: Imports Essenciais (Vue 3 + Inertia.js)'   => '00001.md',
-            'Docker Explicado em Imagem'                                    => '00000.md',
-            'Padraoes-Aliases'                                              => '00004.md',
-            'Instalando certificado localmente'                             => '00005.md', 
-            'Guia de Referência: Imports Essenciais 1(Vue 3 + Inertia.js)'  => '00006.md',
-            'Props'  => '00009.md',
+            'Estrutura projeto'                                             => 'estrutura_projeto.md',
+            'Comandos Artisan'                                              => 'comandos_artisan.md',
+            'Migrations'                                                    => 'migrations.md',
+            'Git'                                                           => 'git.md',
+            'Guia de Referência: Imports Essenciais (Vue 3 + Inertia.js)'   => 'guia_referencia_imports.md',
+            'Docker Explicado em Imagem'                                    => 'docker_explicado.md',
+            'Padraoes-Aliases'                                              => 'padroes_alias.md',
+            'Instalando certificado localmente'                             => 'certificado_local.md', 
+            'Props'                                                         => 'entendendo_objeto_global_inertia.md',
         ];
         
         return Inertia::render('Markdown/Index',[

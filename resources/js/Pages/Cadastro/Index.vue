@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import InputCep from '@/Components/InputCep.vue'; // Ajuste o caminho conforme seu projeto
 import CrudLayout from '@/Layouts/CrudLayoutNoMenu.vue';
 import Paginacao from '@/Components/Paginacao.vue';
+import { useForm } from '@inertiajs/vue3'; // 1. Certifique-se de importar o useForm
+import Debug from '@/Components/Debug.vue';
 /*
 ====================================================================================================
            EXPLICAÇÃO DO FLUXO: COMUNICAÇÃO ENTRE COMPONENTES (VUE 3)
@@ -88,10 +90,10 @@ Quando o botão "Salvar Cadastro" é acionado, o formulário dispara o evento de
 ====================================================================================================
 */
 defineProps({
-    dados: Array,
+    dados: Object,
 });
 // O seu formulário do cadastro (que depois você enviará para o seu Repository)
-const formulario = ref({
+const formulario = useForm({
     nome: '',
     email: '',
     cep: '',
@@ -104,29 +106,51 @@ const formulario = ref({
 
 // Esta função será executada assim que o componente de CEP achar o endereço
 const preencherEndereco = (dados) => {
-    formulario.value.cep = dados.cep;
-    formulario.value.endereco = dados.endereco;
-    formulario.value.bairro = dados.bairro;
-    formulario.value.cidade = dados.cidade;
-    formulario.value.estado = dados.estado;
+    formulario.cep = dados.cep;
+    formulario.endereco = dados.endereco;
+    formulario.bairro = dados.bairro;
+    formulario.cidade = dados.cidade;
+    formulario.estado = dados.estado;
     
     // Opcional: Colocar o foco automaticamente no input de "Número" para o usuário continuar digitando
     document.getElementById('nr')?.focus();
 };
 
-const enviarCadastro = () => {
-    // Aqui você enviaria o formulario.value via axios ou Inertia para o seu Controller/Repository
-    console.log('Enviando dados para o Laravel:', formulario);
+const enviar = () => {
+    formulario.post(route('cadastro.store'), {
+        onSuccess: () => {
+            console.log('Formulário enviado com sucesso!');
+            formulario.reset(); // Limpa o formulário após o envio bem-sucedido
+        },
+        onError: (errors) => {
+            console.error('Erro ao enviar formulário:', errors);
+        },
+    });
 };
+
+const excluir = (id) =>{
+    formulario.delete(route('cadastro.destroy',{id:id}),{
+        onSuccess:()=>{
+            alert('foi...');
+        },
+        onError: (errors) =>{
+            alert(errors);
+        }
+    });
+};
+
 </script>
 
 <template>
     <CrudLayout>
-        <form @submit.prevent="enviarCadastro" class="container mt-4">
+        <form @submit.prevent="enviar" class="container mt-4">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label>Nome</label>
                     <input type="text" v-model="formulario.nome" class="form-control">
+                    <span v-if="formulario.errors.nome" style="color: red;">
+                        <small>{{ formulario.errors.nome }}</small>
+                    </span>
                 </div>
 
                 <div class="col-md-6 mb-3">
@@ -160,9 +184,14 @@ const enviarCadastro = () => {
                 </div>
             </div>
             <button type="submit" class="btn btn-success">Salvar Cadastro</button>
+            <ul v-for="erro in formulario.errors" :key="erro">
+                <li>{{ erro }}</li>
+            </ul>
+            {{ formulario.errors }}
         </form>
-        <table class="tabela-cadastros">
-            <thead>
+        <hr>
+        <table class="table table-striped">
+            <thead class="thead-dark">
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
@@ -177,14 +206,15 @@ const enviarCadastro = () => {
                     <td>{{ item.nome }}</td>
                     <td>{{ item.email }}</td>
                     <td>{{ item.cidade }} - {{ item.estado }}</td>
-                    <td>Excluir / Editar</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger" @click="excluir(item.id)">Excluir</button>
+                        <button class="btn btn-sm btn-outline-warning">Editar</button>
+                    </td>
 
                 </tr>
             </tbody>
         </table>
         <Paginacao :links="dados.links" />
-        <pre>
-            {{ $page.props }}
-        </pre>
+       <Debug/>
     </CrudLayout>
 </template>

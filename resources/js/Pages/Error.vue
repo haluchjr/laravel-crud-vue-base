@@ -42,28 +42,30 @@ const errorContent = computed(() => {
 <template>
   <Head :title="errorContent.title" />
 
-  <div class="flex min-h-screen flex-col items-center justify-center bg-gray-100 p-6 text-center dark:bg-gray-900">
-    <div class="max-w-md">
-      <h1 class="text-6xl font-extrabold text-red-500 drop-shadow">
+  <div class="d-flex min-vh-100 flex-column align-items-center justify-content-center bg-dark text-light p-4 text-center">
+    <div style="max-width: 450px;">
+      
+      <h1 class="display-1 fw-bold text-danger">
         {{ props.status }}
       </h1>
       
-      <h2 class="mt-4 text-2xl font-bold text-gray-800 dark:text-gray-100">
+      <h2 class="h4 my-3 fw-bold text-white">
         {{ errorContent.title }}
       </h2>
       
-      <p class="mt-2 text-gray-600 dark:text-gray-400">
+      <p class="text-muted mb-4">
         {{ errorContent.description }}
       </p>
       
-      <div class="mt-6">
+      <div>
         <Link 
           href="/" 
-          class="rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 transition"
+          class="btn btn-success px-4 py-2"
         >
           Voltar para a Home
         </Link>
       </div>
+
     </div>
   </div>
 </template>
