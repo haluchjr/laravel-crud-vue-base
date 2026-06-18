@@ -3,10 +3,13 @@ import { ref, computed, watch } from 'vue';
 import { usePage, Head } from '@inertiajs/vue3';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; 
-import { useToast } from 'vue-toastification';
+import ToastBs from '@/Components/ToastBs.vue';
+
+import { useToastHandler } from '@/Composables/useToastHandler'; // <-- IMPORTA
+const { msgToast, tipoToast, limparToast } = useToastHandler();
 
 const page = usePage();
-const toast = useToast();
+
 
 defineProps({
     title: {
@@ -15,30 +18,18 @@ defineProps({
     },
 });
 
-// Monitora as respostas do Laravel/Inertia
-watch(() => page.props.flash, (flash) => {
-    if (flash?.success) toast.success(flash.success);
-    if (flash?.error) toast.error(flash.error);
-    if (flash?.warning) toast.warning(flash.warning);
-}, { deep: true, immediate: true });
 
-// 2. NOVO: Monitora erros de validação de formulários
-watch(() => page.props.errors, (errors) => {
-    if (errors && Object.keys(errors).length > 0) {
-        
-        Object.values(errors).forEach((mensagemErro) => {
-            toast.error(mensagemErro);
-        });
-        
-    }
-}, { deep: true });
 </script>
 
 <template>
     <Head :title="title" />
 
     <div class="d-flex min-vh-100 bg-light align-items-stretch">
-
+        <ToastBs 
+            :mensagem="msgToast" 
+            :tipo="tipoToast" 
+            @fechar="limparToast" 
+        />
         <div class="d-flex flex-column flex-grow-1 min-w-0 bg-light">
             
             <header v-if="$slots.header" class="bg-white py-3 border-bottom shadow-sm px-4">

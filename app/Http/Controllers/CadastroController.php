@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests\NovoUsuarioRequest;
+use Illuminate\Support\Facades\Crypt;
 
 use App\Repositories\CadastroRepository;
 
@@ -94,9 +95,14 @@ class CadastroController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cadastro $cadastro)
+    public function edit($id)
     {
-        //
+        $id = Crypt::decryptString($id);
+        $dados = $this->cadastroRepository->findById($id);
+        //return Inertia::render('Cadastro/Index',['dados'=> $dados]);
+        return inertia('Cadastro/Index', [
+            'dados' => $dados
+        ]);
     }
 
     /**
@@ -104,11 +110,23 @@ class CadastroController extends Controller
      */
     public function update(NovoUsuarioRequest $request, $id)
     {
+        try {
+            // 0. DESCRIPTOGRAFIA: Transforma a hash da URL de volta no ID real do banco (ex: 16)
+            $idReal = Crypt::decryptString($id);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return redirect()->back()->with('error', 'Código de identificação inválido.');
+        }
+
         // 1. Pega os dados validados pelo seu Form Request
         $dados = $request->validated();
         
-        // 2. Busca o registro atual no banco pelo repositório para checar se ele já tinha foto
-        $usuario = $this->cadastroRepository->findById($id); 
+        // 2. CORRIGIDO: Busca o registro usando o ID REAL descriptografado
+        $usuario = $this->cadastroRepository->findById($idReal); 
+
+        // Segurança extra: Se mesmo com o ID real o repositório não achar o usuário
+        if (!$usuario) {
+            return redirect()->back()->with('error', 'Usuário não encontrado para atualização.');
+        }
 
         // 3. Verifica se um NOVO arquivo de foto foi enviado
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
@@ -129,15 +147,15 @@ class CadastroController extends Controller
             $dados['foto'] = 'usuarios/' . $nomeArquivo;
 
         } else {
-            // 💡 TRUQUE DO INERTIA: Se não veio um arquivo novo, o Vue enviou a string do caminho antigo.
-            // Para o Laravel não tentar atualizar a coluna com lixo ou dar erro, removemos o campo do array.
-            // Assim, o banco mantém a foto que já estava lá intacta.
+            // 💡 TRUQUE DO INERTIA: Se não veio um arquivo novo, removemos do array para manter a antiga intacta
             unset($dados['foto']);
         }
 
-        // 4. Envia os dados tratados para o repositório atualizar no MySQL
-        if ($this->cadastroRepository->atualizar($id, $dados)) {
-            return redirect()->back()->with('success', 'Cadastro atualizado com sucesso!');
+        // 4. CORRIGIDO: Envia o ID REAL para o repositório atualizar no MySQL
+        if ($this->cadastroRepository->atualizar($idReal, $dados)) {
+            // Como você está usando telas separadas, o ideal é redirecionar de volta para a LISTAGEM (.list)
+            // Mas se quiser ficar na mesma tela limpando a sessão, mantém o back()
+            return redirect()->route('cadastro.list')->with('success', 'Cadastro atualizado com sucesso!');
         }
         
         return redirect()->back()->with('error', 'Erro ao atualizar cadastro.');
@@ -148,7 +166,13 @@ class CadastroController extends Controller
      */
     public function destroy($id)
     {
+        $id = Crypt::decryptString($id);
+
         if ($this->cadastroRepository->deletar($id)){
+            // Usar log...
+            // Quem apagou.
+            // Usar regra do soft delete, flag pra tirar da consulta porem manter o dado no banco, recuperar facil.
+            
             return redirect()->back()->with('success', "Registro ID {$id} excluído com sucesso!");
         }
         return redirect()->back()->with('error', "Registro ID {$id} excluído com sucesso!");

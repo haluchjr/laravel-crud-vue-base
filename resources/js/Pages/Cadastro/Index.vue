@@ -8,37 +8,31 @@ import ModalBs from '@/Components/ModalBs.vue';
 
 import Debug from '@/Components/Debug.vue';
 import { useCep } from '@/Composables/useCep';
+import { useEventBus } from '@/Utils/eventBus'; // <-- IMPORTA O BUS em cada pagina que precisar.
 
-import { useToast } from "vue-toastification";
-const toast = useToast();
-
-defineProps({
-    dados: Object,
+const { emit } = useEventBus();
+const props = defineProps({
+    dados: Object, // se tiver dados da listagem
 });
 // O seu formulário do cadastro (que depois você enviará para o seu Repository)
 
 // Modo completo e verboso.
+
 const formulario = useForm({
-    id: null,
-    nome: '',     email: '',    cep: '',    endereco: '',    bairro: '',    cidade: '',
-    estado: '',    nr: '',    ddd_telefone: '',    ddd_celular: '',    cpf_cnpj: '', foto: '',
+    id_criptografado: props.dados?.id_criptografado || null,
+    nome: props.dados?.nome || '',
+    email: props.dados?.email || '',
+    cep: props.dados?.cep || '',
+    endereco: props.dados?.endereco || '',
+    bairro: props.dados?.bairro || '',
+    cidade: props.dados?.cidade || '',
+    estado: props.dados?.estado || '',
+    nr: props.dados?.nr || '',
+    ddd_telefone: props.dados?.ddd_telefone || '',
+    ddd_celular: props.dados?.ddd_celular || '',
+    cpf_cnpj: props.dados?.cpf_cnpj || '',
+    foto: props.dados?.foto || '',
 });
-
-const dadosForm = (item) => {
-    formulario.id = item.id;
-    formulario.nome = item.nome;
-    formulario.email = item.email;
-    formulario.cep = item.cep;
-    formulario.endereco = item.endereco;
-    formulario.bairro = item.bairro;
-    formulario.cidade = item.cidade;
-    formulario.estado = item.estado;
-    formulario.nr = item.nr;
-    formulario.ddd_telefone = item.ddd_telefone;
-    formulario.ddd_celular = item.ddd_celular;
-    formulario.cpf_cnpj = item.cpf_cnpj;
-};
-
 
 // Controla situacao de imagem
 // Se usuario vai upar foto preciso carregar no formulario.
@@ -74,8 +68,10 @@ const tratarBuscaCep = async () => {
             formulario.bairro = dadosEndereco.bairro;
             formulario.cidade = dadosEndereco.cidade;
             formulario.estado = dadosEndereco.estado;
+            emit('toast', { tipo: 'danger', mensagem: 'Endereço localizado!' });
         } else if (erro.value) {
-            toast.error(erro.value);
+            emit('toast', { tipo: 'error', mensagem: erro.value });
+
         }
     }
 };
@@ -89,20 +85,23 @@ formulario.post(route('cadastro.update', { id: idFormulario }), {
 
 */
 
+
 const enviar = () => {
-    const idFormulario = formulario.data().id;
+    // Busca a chave correta que você declarou no useForm
+    const idFormulario = formulario.id_criptografado; 
+    
     if (idFormulario) {
-        // Injeta o _method dentro dos dados do formulário manualmente
+        // Envia via POST fingindo ser PUT (Necessário para upload de arquivos no Laravel)
         formulario.transform((data) => ({
             ...data,
             _method: 'PUT',
-        })).post(route('cadastro.update', { id: idFormulario }), {
+        })).post(route('cadastro.update', idFormulario), {
             forceFormData: true,
         });
     } else {
         formulario.post(route('cadastro.store'));
-    };
-}
+    }
+};
 
 const excluir = (id) =>{
     formulario.delete(route('cadastro.destroy',{id:id}));
@@ -202,7 +201,7 @@ const excluir = (id) =>{
 
             </div>
             <button type="submit" class="btn btn-success" @click.prevent="enviar">
-                <span>{{ formulario.id ? 'Atualizar' : 'Salvar Cadastro' }}</span>
+                <span>{{ formulario.id_criptografado ? 'Atualizar' : 'Salvar Cadastro' }}</span>
             </button>
         </form>
         

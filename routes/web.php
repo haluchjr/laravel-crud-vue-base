@@ -12,7 +12,7 @@ use App\Http\Controllers\CadastroController;
 Route::get('cadastro', [CadastroController::class, 'index'])->name('cadastro.index');
 Route::get('cadastro/tabela', [CadastroController::class, 'list'])->name('cadastro.list');
 Route::post('cadastro', [CadastroController::class, 'store'])->name('cadastro.store'); // novo
-Route::get('cadastro/{id}', [CadastroController::class, 'show'])->name('cadastro.show');
+Route::get('cadastro/edit/{id}', [CadastroController::class, 'edit'])->name('cadastro.edit'); // novo
 Route::put('cadastro/{id}', [CadastroController::class, 'update'])->name('cadastro.update');
 Route::delete('cadastro/{id}', [CadastroController::class, 'destroy'])->name('cadastro.destroy');
 

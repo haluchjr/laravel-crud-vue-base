@@ -47,6 +47,29 @@ watch(busca, (novoValor) => {
         );
     }, 300);
 });
+//
+
+
+// Excluir...
+const exibirModalExcluir = ref(false);
+const usuarioParaExcluir = ref(null);
+
+const abrirConfirmacao = (item) => {
+    usuarioParaExcluir.value = item;
+    exibirModalExcluir.value = true;
+};
+
+const executarExclusao = () => {
+    if (usuarioParaExcluir.value) {
+        router.delete(route('cadastro.destroy', usuarioParaExcluir.value.id_criptografado), {
+            onSuccess: () => {
+                exibirModalExcluir.value = false;
+                usuarioParaExcluir.value = null;
+            }
+        });
+    }
+};
+
 </script>
 
 <template>
@@ -103,10 +126,24 @@ watch(busca, (novoValor) => {
                         <button 
                             class="btn btn-sm btn-outline-primary me-1" 
                             @click="verFoto(item)"
-                            title="Visualizar Foto"
+                            title="Visualizar"
                         >
                             <i class="bi bi-eye"></i> 
                         </button>
+                        <Link
+                            class="btn btn-sm btn-outline-dark me-1" 
+                            :href="route('cadastro.edit', item.id_criptografado)"
+                            title="Editar"
+                        >
+                            <i class="bi bi-pencil"></i>
+                        </Link>
+                       
+
+                        <button type="button" class="btn btn-sm btn-outline-danger" @click="abrirConfirmacao(item)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
+
                     </td>
 
                 </tr>
@@ -154,6 +191,29 @@ watch(busca, (novoValor) => {
             <template #actions>
                 <button type="button" class="btn btn-secondary" @click="exibirModalFoto = false">
                     Fechar
+                </button>
+            </template>
+        </ModalBs>
+
+        <ModalBs 
+            :show="exibirModalExcluir" 
+            title="Confirmar Exclusão" 
+            @close="exibirModalExcluir = false"
+        >
+            <div class="p-3 text-center">
+                <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                <p class="mt-3">
+                    Tem certeza que deseja excluir o cadastro de 
+                    <strong>{{ usuarioParaExcluir?.nome }}</strong>?
+                </p>
+            </div>
+            
+            <template #actions>
+                <button type="button" class="btn btn-secondary" @click="exibirModalExcluir = false">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" @click="executarExclusao">
+                    Sim, Excluir
                 </button>
             </template>
         </ModalBs>
