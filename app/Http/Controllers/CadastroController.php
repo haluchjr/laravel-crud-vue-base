@@ -28,9 +28,17 @@ class CadastroController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(NovoUsuarioRequest $request)
+    public function store(NovoUsuarioRequest $request,)
     {
         $validados  = $request->validated();
+
+        if ($this->cadastroRepository->salvar($request->all() )) {
+            return redirect()->back()->with('success', 'Projeto atualizado com sucesso!');
+        } else {
+            //return redirect()->back()->with('erro', 'Erro ao salvar usuário.');
+            return redirect()->back()->with('error', 'Projeto atualizado com sucesso!');
+        }
+
         //return redirect()->route('/');
     }
 
@@ -55,7 +63,12 @@ class CadastroController extends Controller
      */
     public function update(Request $request, Cadastro $cadastro)
     {
-        //
+        if ($this->cadastroRepository->atualizar($request->id,$request->all() )) {
+            return redirect()->back()->with('success', 'Projeto atualizado com sucesso!');
+        } else {
+            //return redirect()->back()->with('erro', 'Erro ao salvar usuário.');
+            return redirect()->back()->with('error', 'Projeto atualizado com sucesso!');
+        }
     }
 
     /**
@@ -64,8 +77,8 @@ class CadastroController extends Controller
     public function destroy($id)
     {
         if ($this->cadastroRepository->deletar($id)){
-            return redirect()->back()->with('sucesso', "Registro ID {$id} excluído com sucesso!");
+            return redirect()->back()->with('success', "Registro ID {$id} excluído com sucesso!");
         }
-        return redirect()->back()->with('erro', "Registro ID {$id} excluído com sucesso!");
+        return redirect()->back()->with('error', "Registro ID {$id} excluído com sucesso!");
     }
 }

@@ -85,11 +85,13 @@ class HandleInertiaRequests extends Middleware
                 // 3. Rodamos a nossa função na coleção inicial
                 return $filtrarMenu($menus);
             },
+
             'appName' => config('app.name'),
             'dataAtual' => now()->format('d/m/Y'),
             'flash' => [
-                'sucesso' => fn () => $request->session()->get('sucesso'),
-                'erro'    => fn () => $request->session()->get('erro'),
+                'success' => fn () => $request->session()->get('success'),
+                'error'   => fn () => $request->session()->get('error'),
+                'warning' => fn () => $request->session()->get('warning'),
             ],
         ];
     }

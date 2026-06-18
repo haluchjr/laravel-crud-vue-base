@@ -45,10 +45,10 @@ class CrudController extends Controller
        
 
         if ($rep->salvar($dadosValidados)) {
-            return redirect()->back()->with('sucesso', 'Projeto atualizado com sucesso!');
+            return redirect()->back()->with('success', 'Projeto atualizado com sucesso!');
         } else {
             //return redirect()->back()->with('erro', 'Erro ao salvar usuário.');
-            return redirect()->back()->with('sucesso', 'Projeto atualizado com sucesso!');
+            return redirect()->back()->with('error', 'Projeto atualizado com sucesso!');
         }
 
     }
@@ -71,9 +71,9 @@ class CrudController extends Controller
         ]);
 
         if ($rep->atualizar($request->id,$dadosValidados)) {
-            return redirect()->back()->with('sucesso', 'Projeto atualizado com sucesso!');
+            return redirect()->back()->with('success', 'Projeto atualizado com sucesso!');
         } else {
-            return redirect()->back()->with('erro', 'Erro ao atualizar usuário.');
+            return redirect()->back()->with('error', 'Erro ao atualizar usuário.');
         }
     }
 
@@ -81,9 +81,9 @@ class CrudController extends Controller
 
     public function testeDelete(UsuarioRepository $rep, Request $request){
         if ($rep->deletar($request->input('id'))){
-            return redirect()->back()->with('sucesso', 'Projeto atualizado com sucesso!');
+            return redirect()->back()->with('success', 'Projeto atualizado com sucesso!');
         }
-        return redirect()->back()->with('erro', 'Erro ao deletar usuário.');
+        return redirect()->back()->with('error', 'Erro ao deletar usuário.');
     }
 
 
@@ -128,7 +128,7 @@ class CrudController extends Controller
         Log::info("Dados recebidos do Vue:", $dados);
 
         // Redireciona de volta para a página de teste com uma mensagem de sucesso
-        return redirect()->route('estudo.teste')->with('sucesso', 'Dados salvos com sucesso!');
+        return redirect()->route('estudo.teste')->with('success', 'Dados salvos com sucesso!');
     }
 
     public function salvarTesteVueAxios(Request $request){
@@ -211,7 +211,7 @@ class CrudController extends Controller
         $projeto->save();
 
         // 3. Redireciona de volta com a Flash Message de sucesso!
-        return redirect()->back()->with('sucesso', 'Projeto cadastrado com sucesso!');
+        return redirect()->back()->with('success', 'Projeto cadastrado com sucesso!');
     }
 
     /**
@@ -244,7 +244,7 @@ class CrudController extends Controller
 
         $projeto->save();
 
-        return redirect()->back()->with('sucesso', 'Projeto atualizado com sucesso!');
+        return redirect()->back()->with('success', 'Projeto atualizado com sucesso!');
     }
 
 
@@ -283,7 +283,7 @@ class CrudController extends Controller
 
         // 3. Redireciona de volta para a listagem
         // O Inertia intercepta isso, recarrega o index() e atualiza a prop 'teste1' no Vue
-        return redirect()->back()->with('sucesso', "Registro ID {$id} excluído com sucesso!");
+        return redirect()->back()->with('warning', "Registro ID {$id} excluído com sucesso!");
     }
 
 
@@ -322,7 +322,7 @@ class CrudController extends Controller
        // dump($id); // -Direto pro telescope -> aba Dumps ( tem que ta com a aba aberta, debug em tempo real)
 
         // Redireciona de volta para a listagem enviando o flash de sucesso
-        return redirect('/crud')->with('sucesso', "Registro ID {$id} excluído com sucesso!");
+        return redirect('/crud')->with('success', "Registro ID {$id} excluído com sucesso!");
 
     }
 }

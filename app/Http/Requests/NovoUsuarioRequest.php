@@ -25,7 +25,7 @@ class NovoUsuarioRequest extends FormRequest
     {
         return [
             'nome'          => ['required'],
-            //'email'         => ['required'],
+            'email'         => ['required'],
             //'ddd_telefone'  => ['required'],
             //'ddd_celular'   => ['required'],
             //'cpf_cnpj'      => ['required'],
@@ -44,6 +44,7 @@ class NovoUsuarioRequest extends FormRequest
     {
         return [
                 'nome.required'  => 'Ei! Você esqueceu de digitar o nome.',
+                'email.required' => 'Falto email.',
             ];
     }
 

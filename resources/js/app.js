@@ -9,6 +9,10 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
+// Notificacao ( GLOBAL )
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
+
 import 'bootstrap';
 
 // Inibe o F12 e exibe um aviso no console para usuários comuns, mas apenas em produção
@@ -45,6 +49,12 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(Toast, {
+                position: "top-right", // Onde vai aparecer (ex: top-right, bottom-center)
+                timeout: 3000,         // Tempo ativa (3 segundos)
+                closeOnClick: true,    // Fecha se o usuário clicar em cima
+                pauseOnHover: true     // Pausa o tempo se o mouse estiver em cima
+            })
             .use(ZiggyVue)
             .mount(el);
     },

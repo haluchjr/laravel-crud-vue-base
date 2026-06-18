@@ -5,7 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Auth\PasswordController;
 
 use App\Services\BaseService;
-//Route::get('/',[BaseService::class,'main']);
+Route::get('/',[BaseService::class,'main']);
 
 
 use App\Http\Controllers\CadastroController;

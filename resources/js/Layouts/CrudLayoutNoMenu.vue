@@ -1,16 +1,12 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { usePage, Head } from '@inertiajs/vue3';
-import FlashMessage from '@/Components/FlashMessage.vue';
-import MenuLateral from '@/Components/MenuLateral.vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; 
+import { useToast } from 'vue-toastification';
 
-const hoje = new Date();
-const ano = ref(hoje.getFullYear());
-
-const inertiaPage = usePage();
-const flashProps = computed(() => inertiaPage.props.flash);
+const page = usePage();
+const toast = useToast();
 
 defineProps({
     title: {
@@ -18,6 +14,24 @@ defineProps({
         default: 'Sistema'
     },
 });
+
+// Monitora as respostas do Laravel/Inertia
+watch(() => page.props.flash, (flash) => {
+    if (flash?.success) toast.success(flash.success);
+    if (flash?.error) toast.error(flash.error);
+    if (flash?.warning) toast.warning(flash.warning);
+}, { deep: true, immediate: true });
+
+// 2. NOVO: Monitora erros de validação de formulários
+watch(() => page.props.errors, (errors) => {
+    if (errors && Object.keys(errors).length > 0) {
+        
+        Object.values(errors).forEach((mensagemErro) => {
+            toast.error(mensagemErro);
+        });
+        
+    }
+}, { deep: true });
 </script>
 
 <template>
@@ -32,8 +46,6 @@ defineProps({
                     <slot name="header" />
                 </div>
             </header>
-
-            <FlashMessage :flash="flashProps" />
 
             <main class="p-4 flex-grow-1">
                 <div class="container-fluid p-0">
