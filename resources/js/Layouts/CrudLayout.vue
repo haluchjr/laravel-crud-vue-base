@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { usePage, Head } from '@inertiajs/vue3';
 import MenuLateral from '@/Components/MenuLateral.vue';
 import 'bootstrap/dist/css/bootstrap.min.css';

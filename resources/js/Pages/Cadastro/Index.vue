@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3'; // 1. Certifique-se de importar o useForm
+import { useForm,Link } from '@inertiajs/vue3'; // 1. Certifique-se de importar o useForm
 
-import CrudLayout from '@/Layouts/CrudLayoutNoMenu.vue';
+import CrudLayout from '@/Layouts/CrudLayout.vue';
 import Paginacao from '@/Components/Paginacao.vue';
+import ModalBs from '@/Components/ModalBs.vue';
+
 import Debug from '@/Components/Debug.vue';
 import { useCep } from '@/Composables/useCep';
 
@@ -19,7 +21,7 @@ defineProps({
 const formulario = useForm({
     id: null,
     nome: '',     email: '',    cep: '',    endereco: '',    bairro: '',    cidade: '',
-    estado: '',    nr: '',    ddd_telefone: '',    ddd_celular: '',    cpf_cnpj: '',
+    estado: '',    nr: '',    ddd_telefone: '',    ddd_celular: '',    cpf_cnpj: '', foto: '',
 });
 
 const dadosForm = (item) => {
@@ -36,6 +38,24 @@ const dadosForm = (item) => {
     formulario.ddd_celular = item.ddd_celular;
     formulario.cpf_cnpj = item.cpf_cnpj;
 };
+
+
+// Controla situacao de imagem
+// Se usuario vai upar foto preciso carregar no formulario.
+const SelecionarFoto = (event) => {
+    formulario.foto = event.target.files[0];
+}
+// Estados para controlar o modal de visualização da foto
+const usuarioSelecionado = ref(null);
+const exibirModalFoto = ref(false);
+
+// Função para disparar a abertura do modal
+const verFoto = (item) => {
+    usuarioSelecionado.value = item; // Guarda o objeto completo do usuário
+    exibirModalFoto.value = true;
+};
+// Fim controle de situacao de imagem.
+
 
 
 const {buscarCepNoViaCep, erro} = useCep();
@@ -72,7 +92,13 @@ formulario.post(route('cadastro.update', { id: idFormulario }), {
 const enviar = () => {
     const idFormulario = formulario.data().id;
     if (idFormulario) {
-        formulario.put(route('cadastro.update', { id: idFormulario }));
+        // Injeta o _method dentro dos dados do formulário manualmente
+        formulario.transform((data) => ({
+            ...data,
+            _method: 'PUT',
+        })).post(route('cadastro.update', { id: idFormulario }), {
+            forceFormData: true,
+        });
     } else {
         formulario.post(route('cadastro.store'));
     };
@@ -82,10 +108,18 @@ const excluir = (id) =>{
     formulario.delete(route('cadastro.destroy',{id:id}));
 };
 
+
+
 </script>
 
 <template>
     <CrudLayout>
+    <Link 
+      :href="route('cadastro.list')"
+      class="btn btn-outline-primary btn-sm"
+    >
+    Tabela
+    </Link>
         <form @submit.prevent="enviar" class="container mt-4">
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -148,42 +182,74 @@ const excluir = (id) =>{
                     <label>DDD Telefone celular</label>
                     <input type="text" v-model="formulario.ddd_celular" class="form-control" >
                 </div>
-                   <div class="col-md-4 mb-3">
+                <div class="col-md-4 mb-3">
                     <label>CPF CNPJ</label>
                     <input type="text" v-model="formulario.cpf_cnpj" class="form-control" >
                 </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Imagem</label>
+                    <input 
+                        type="file"
+                        class="form-control"
+                        id="foto"
+                        @change="SelecionarFoto"
+                        accept="image/*"
+                    >
+
+                </div>
+
 
             </div>
             <button type="submit" class="btn btn-success" @click.prevent="enviar">
                 <span>{{ formulario.id ? 'Atualizar' : 'Salvar Cadastro' }}</span>
             </button>
         </form>
-        <hr>
-        <table class="table table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>E-mail</th>
-                    <th>Cidade/UF</th>
-                    <th>Acao</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in dados.data" :key="item.id">
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.nome }}</td>
-                    <td>{{ item.email }}</td>
-                    <td>{{ item.cidade }} - {{ item.estado }}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-danger" @click="excluir(item.id)">Excluir</button>
-                        <button class="btn btn-sm btn-outline-warning" @click="dadosForm(item)">Editar</button>
-                    </td>
-
-                </tr>
-            </tbody>
-        </table>
-        <Paginacao :links="dados.links" />
+        
        <!-- <Debug/> -->
+
+
+        <ModalBs 
+            :show="exibirModalFoto" 
+            title="Visualizar Detalhes do Cadastro" 
+            @close="exibirModalFoto = false"
+        >
+            <div v-if="usuarioSelecionado" class="p-3">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-3">
+                        <img 
+                            v-if="usuarioSelecionado.foto"
+                            :src="`/${usuarioSelecionado.foto}`" 
+                            class="img-fluid rounded border shadow-sm mb-2" 
+                            style="max-height: 150px; width: 100%; object-fit: cover;" 
+                            alt="Foto"
+                        >
+                        <div v-else class="text-muted p-4 border rounded bg-light">Sem foto</div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <h5>{{ usuarioSelecionado.nome }}</h5>
+                        <p class="mb-1"><strong>E-mail:</strong> {{ usuarioSelecionado.email }}</p>
+                        <p class="mb-1"><strong>CPF/CNPJ:</strong> {{ usuarioSelecionado.cpf_cnpj }}</p>
+                        <p class="mb-1"><strong>Telefone:</strong> ({{ usuarioSelecionado.ddd_telefone }})</p>
+                        <p class="mb-1"><strong>Celular:</strong> ({{ usuarioSelecionado.ddd_celular }})</p>
+                        
+                        <hr class="my-2">
+                        
+                        <p class="mb-1"><strong>CEP:</strong> {{ usuarioSelecionado.cep }}</p>
+                        <p class="mb-1"><strong>Endereço:</strong> {{ usuarioSelecionado.endereco }}, nº {{ usuarioSelecionado.nr }}</p>
+                        <p class="mb-1"><strong>Bairro:</strong> {{ usuarioSelecionado.bairro }}</p>
+                        <p class="mb-0"><strong>Cidade:</strong> {{ usuarioSelecionado.cidade }} - {{ usuarioSelecionado.estado }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <template #actions>
+                <button type="button" class="btn btn-secondary" @click="exibirModalFoto = false">
+                    Fechar
+                </button>
+            </template>
+        </ModalBs>
+
     </CrudLayout>
 </template>

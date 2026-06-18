@@ -10,6 +10,7 @@ Route::get('/',[BaseService::class,'main']);
 
 use App\Http\Controllers\CadastroController;
 Route::get('cadastro', [CadastroController::class, 'index'])->name('cadastro.index');
+Route::get('cadastro/tabela', [CadastroController::class, 'list'])->name('cadastro.list');
 Route::post('cadastro', [CadastroController::class, 'store'])->name('cadastro.store'); // novo
 Route::get('cadastro/{id}', [CadastroController::class, 'show'])->name('cadastro.show');
 Route::put('cadastro/{id}', [CadastroController::class, 'update'])->name('cadastro.update');

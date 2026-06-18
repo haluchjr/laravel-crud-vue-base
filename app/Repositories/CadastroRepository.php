@@ -9,9 +9,18 @@ use App\Models\Cadastro;
 
 class CadastroRepository
 {
-    public function __construct(protected Cadastro $model) {
-        $this->model = $model;
+    public function __construct(protected Cadastro $model) {}
+
+    public function findById($id)
+    {
+        return $this->model->find($id);
     }
+
+    public function findAll()
+    {
+        return $this->model->all();
+    }
+
 
     public function salvar(array $dados)
     {
@@ -27,9 +36,9 @@ class CadastroRepository
     public function atualizar($id, array $dados)
     {
         try{
-            $usuario = $this->model->find($id);
-            if ($usuario) {
-                $usuario->update($dados);
+            $atualizar = $this->model->find($id);
+            if ($atualizar) {
+                $atualizar->update($dados);
                 return true;
             }
             return false;
@@ -42,9 +51,9 @@ class CadastroRepository
     public function deletar($id)
     {
         try{
-            $usuario = $this->model->find($id);
-            if ($usuario) {
-                $usuario->delete();
+            $deletar = $this->model->find($id);
+            if ($deletar) {
+                $deletar->delete();
                 return true;
             }
             return false;
@@ -54,21 +63,29 @@ class CadastroRepository
         }
     }
 
-    public function findById($id)
+    /**
+     * Localiza e pagina os cadastros ativos no sistema.
+     * * @param int $perPage Quantidade de registros por página.
+     * @param string|null $busca Termo para filtrar nome ou e-mail.
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginate($perPage = 15, $busca = null)
     {
-        return $this->model->find($id);
-    }
+        $query = $this->model->query();
 
-    public function findAll()
-    {
-        return $this->model->all();
-    }
-    
+        if (!empty($busca)) {
+            $query->where(function ($q) use ($busca) {
+                $q->where('nome', 'like', "%{$busca}%")
+                ->orWhere('email', 'like', "%{$busca}%")
+                ->orWhere('cidade', 'like', "%{$busca}%");
+                if (is_numeric($busca)) {
+                    $q->orWhere('id', $busca);
+                }
 
-    public function paginate(int $perPage = 15): LengthAwarePaginator
-    {
-        // O Laravel já resolve toda a mágica da URL (?page=2) sozinho aqui por trás
-        return $this->model->paginate($perPage);
+            });
+        }
+
+        return $query->orderBy('id', 'asc')->paginate($perPage);
     }
 
 }

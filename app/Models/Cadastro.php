@@ -21,7 +21,8 @@ class Cadastro extends Model
         'nr',
         'bairro',
         'cidade',
-        'estado'
+        'estado',
+        'foto',
     ];
 
     // Proibidos no insert, update
