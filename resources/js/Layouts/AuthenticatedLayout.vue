@@ -4,7 +4,6 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { usePage, Head } from '@inertiajs/vue3';
-import FlashMessage from '@/Components/FlashMessage.vue';
 import MenuLateral from '@/Components/MenuLateral.vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; 
@@ -14,6 +13,10 @@ const ano = ref(hoje.getFullYear());
 
 const inertiaPage = usePage();
 const flashProps = computed(() => inertiaPage.props.flash);
+
+import ToastBs from '@/Components/ToastBs.vue';
+import { useToastHandler } from '@/Composables/useToastHandler'; // <-- IMPORTA
+const { msgToast, tipoToast, limparToast } = useToastHandler();
 
 defineProps({
     title: {
@@ -27,7 +30,12 @@ defineProps({
     <Head :title="title" />
 
     <div class="d-flex min-vh-100 bg-light align-items-stretch">
-        
+         <ToastBs 
+            :mensagem="msgToast" 
+            :tipo="tipoToast" 
+            @fechar="limparToast" 
+        />
+
 
         <div class="d-flex flex-column flex-grow-1 min-w-0 bg-light">
             
@@ -37,7 +45,6 @@ defineProps({
                 </div>
             </header>
 
-            <FlashMessage :flash="flashProps" />
 
             <main class="p-4 flex-grow-1">
                 <div class="container-fluid p-0">

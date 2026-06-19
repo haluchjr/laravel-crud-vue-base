@@ -2,7 +2,6 @@
 import { ref ,computed} from 'vue'
 import { usePage, Head , useForm} from '@inertiajs/vue3';
 
-import FlashMessage from '@/Components/FlashMessage.vue';
 
 const form = useForm({
     // Define your form fields here
@@ -81,7 +80,6 @@ const atualizar = () => {
 
 <template>
 <Head title=""/>
-<FlashMessage :flash="flashProps" />
 
 <input type="text" v-model="form.nome" placeholder="Digite seu nome" /><br>
 <span v-if="form.errors.nome" class="error-msg">{{ form.errors.nome }}</span>

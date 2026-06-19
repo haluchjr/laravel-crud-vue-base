@@ -53,9 +53,11 @@ echo -e "${VERDE}Status atual dos serviços:${NC}"
 # 4. Exibe a tabela de status formatada
 OUTPUT=$(docker compose ps --format "{{.Name}}\t{{.Status}}\t{{.Ports}}\t{{.Service}}" | column -t -s $'\t')
 echo "$OUTPUT"
-
+echo ""
 echo -e "Acesse em : ${VERDE} ${APP_URL} ${NC}"
 echo ""
 echo -e "${AZUL}========================================${NC}"
 echo -e "${VERDE} Ambiente online! Boa codificação. ${NC}"
 echo -e "${AZUL}========================================${NC}"
+echo ""
+echo ""

@@ -1,9 +1,8 @@
 <script setup>
 import { ref } from 'vue';
-import { useForm,Link } from '@inertiajs/vue3'; // 1. Certifique-se de importar o useForm
+import { useForm,Link, router } from '@inertiajs/vue3'; // 1. Certifique-se de importar o useForm
 
 import CrudLayout from '@/Layouts/CrudLayout.vue';
-import Paginacao from '@/Components/Paginacao.vue';
 import ModalBs from '@/Components/ModalBs.vue';
 
 import Debug from '@/Components/Debug.vue';
@@ -107,18 +106,30 @@ const excluir = (id) =>{
     formulario.delete(route('cadastro.destroy',{id:id}));
 };
 
-
-
+const voltarSemRastro = () => {
+  router.visit(route('cadastro.list'), {
+    replace: true, // Substitui a URL atual no histórico em vez de adicionar uma nova
+    preserveState: true // Mantém o estado dos componentes se necessário
+  })
+}
 </script>
 
 <template>
     <CrudLayout>
-    <Link 
-      :href="route('cadastro.list')"
-      class="btn btn-outline-primary btn-sm"
-    >
-    Tabela
-    </Link>
+        <Link 
+        :href="route('cadastro.list')"
+        class="btn btn-outline-primary btn-sm"
+        >
+        Tabela
+        </Link>
+
+        <button 
+            v-if="formulario.id_criptografado" 
+            @click="voltarSemRastro" 
+            class="btn btn-outline-primary btn-sm"
+        >
+            Voltar
+        </button>
         <form @submit.prevent="enviar" class="container mt-4">
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -203,8 +214,10 @@ const excluir = (id) =>{
             <button type="submit" class="btn btn-success" @click.prevent="enviar">
                 <span>{{ formulario.id_criptografado ? 'Atualizar' : 'Salvar Cadastro' }}</span>
             </button>
+
         </form>
         
+       
        <!-- <Debug/> -->
 
 

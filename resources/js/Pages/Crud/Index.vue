@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { router, useForm,usePage} from '@inertiajs/vue3'; 
 
 import CrudLayout from '@/Layouts/CrudLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
+//import FlashMessage from '@/Components/FlashMessage.vue';
 import ModalBootstrap from '@/Components/ModalBs.vue';
 import Paginacao from '@/Components/Paginacao.vue';
 import Status from '@/Components/Status.vue'; 
@@ -156,7 +156,7 @@ const salvarEdicao = () => {
             <h1 class="h3 mb-0">Listagem de Projetos</h1>
         </template>
        
-        <FlashMessage />
+       
 
         <div class="card shadow-sm">
             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">

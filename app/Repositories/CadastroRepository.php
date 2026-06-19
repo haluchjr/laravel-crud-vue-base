@@ -21,7 +21,6 @@ class CadastroRepository
         return $this->model->all();
     }
 
-
     public function salvar(array $dados)
     {
         try{
