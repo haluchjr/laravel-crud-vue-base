@@ -1,2 +1,2 @@
 #!/bin/bash
-docker exec frontend npm run dev
+docker compose exec frontend npm run dev

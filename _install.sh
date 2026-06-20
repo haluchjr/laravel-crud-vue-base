@@ -7,13 +7,9 @@ SEM_COR='\033[0m'
 
 echo -e "${AZUL}==> Iniciando a preparação do ambiente Laravel + Inertia/Vue...${SEM_COR}"
 
-# 1. Cria o .env se ele não existir
-if [ ! -f .env ]; then
-    echo -e "${AZUL}==> Criando arquivo .env a partir do exemplo...${SEM_COR}"
-    cp .env.example .env
-else
-    echo -e "${VERDE}==> Arquivo .env já existe. Pulando...${SEM_COR}"
-fi
+# 1. Cria o .env independente.
+echo -e "${AZUL}==> Criando arquivo .env a partir do exemplo...${SEM_COR}"
+cp .env.example .env
 
 # 2. Limpa contêineres e resíduos antigos
 echo -e "${AZUL}==> Limpando contêineres e volumes antigos...${SEM_COR}"

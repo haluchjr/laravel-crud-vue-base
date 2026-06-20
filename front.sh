@@ -1,3 +1,4 @@
 #!/bin/bash
-
-docker exec -it frontend sh
+echo ""
+echo "=============================="
+docker compose exec -it frontend sh

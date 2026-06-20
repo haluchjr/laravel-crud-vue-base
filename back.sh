@@ -1,2 +1,2 @@
 #!/bin/bash
-docker exec -it  backend bash
+docker compose exec -it backend bash

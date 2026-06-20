@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker exec -it app php artisan telescope:prune
+docker compose exec -it backend php artisan telescope:prune
