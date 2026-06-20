@@ -17,14 +17,28 @@ class BaseService
         // Lendo o package.json para pegar dependências do Vue/Inertia Frontend
         $packagePath = base_path('package.json');
         $packageData = file_exists($packagePath) ? json_decode(file_get_contents($packagePath), true) : [];
-
+        ob_start();
+        phpinfo(INFO_GENERAL | INFO_MODULES); // Você pode filtrar o que quer para não vir um HTML gigante com <style> e tudo
+        $phpinfoText = ob_get_clean();
+$ambiente = App::environment();
         return Inertia::render('Welcome', [
             'info' => [
                 'environment' => [
                     'php_version' => PHP_VERSION,
+                    'ambiente' => $ambiente,
                     'laravel_version' => App::version(),
                     'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? 'N/A',
                     'os' => PHP_OS,
+                    // Em vez do phpinfo(), trazemos extensões importantes:
+            'loaded_extensions' => [
+                'pdo' => extension_loaded('pdo'),
+                'mbstring' => extension_loaded('mbstring'),
+                'openssl' => extension_loaded('openssl'),
+                'curl' => extension_loaded('curl'),
+                'redis' => extension_loaded('redis'),
+            ],
+            'memory_limit' => ini_get('memory_limit'),
+            'post_max_size' => ini_get('post_max_size'),
                 ],
                 'backend_deps' => [
                     'inertia_laravel' => $composerData['require']['inertiajs/inertia-laravel'] ?? 'Não instalado',
