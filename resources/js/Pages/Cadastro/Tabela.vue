@@ -7,9 +7,6 @@ import Paginacao from '@/Components/Paginacao.vue';
 import ModalBs from '@/Components/ModalBs.vue';
 import Debug from '@/Components/Debug.vue';
 
-import { useToast } from "vue-toastification";
-const toast = useToast();
-
 // 1. ANTES: apenas defineProps({...})
 //    AGORA: guardando na constante 'props' e corrigindo o tipo de 'filtros'
 const props = defineProps({
