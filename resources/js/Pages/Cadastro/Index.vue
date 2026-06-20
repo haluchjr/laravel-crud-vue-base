@@ -218,7 +218,7 @@ const voltarSemRastro = () => {
         </form>
         
        
-       <!-- <Debug/> -->
+       <Debug/>
 
 
         <ModalBs 
