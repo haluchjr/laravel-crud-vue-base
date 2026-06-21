@@ -7,7 +7,9 @@ SEM_COR='\033[0m'
 
 echo -e "${AZUL}==> Iniciando a preparação do ambiente Laravel + Inertia/Vue...${SEM_COR}"
 
+# Arquivos de ambiente
 DOCKER_ENV=".env.docker"
+
 # Verifica se o arquivo NÃO existe
 if [ ! -f "$DOCKER_ENV" ]; then
     echo "❌ ERRO CRÍTICO: O arquivo '$DOCKER_ENV' não foi encontrado!"
@@ -21,6 +23,14 @@ echo -e "${AZUL}==> Criando arquivo .env a partir do exemplo...${SEM_COR}"
 # mescla env-docker com env-example
 cat .env-docker env-example > .env.tmp
 mv .env.tmp .env
+
+ENV_FILE=".env"
+if [ ! -f "$ENV_FILE" ]; then
+    echo "❌ Erro: O arquivo $ENV_FILE não existe!"
+    exit 1
+fi
+
+export $(grep -v '^#' "$ENV_FILE" | xargs)
 
 
 # 2. Limpa contêineres e resíduos antigos
@@ -72,10 +82,10 @@ docker compose exec backend php artisan config:clear
 docker compose exec backend php artisan cache:clear
 
 echo -e "${AZUL}==> Blindando MYSQL ...${SEM_COR}"
-docker compose exec -T db_mysql mysql -u root -pr00t -e "
-  CREATE USER IF NOT EXISTS 'user'@'172.%.%.%' IDENTIFIED BY 'user123';
-  GRANT ALL PRIVILEGES ON sistema.* TO 'user'@'172.%.%.%';
-  DROP USER IF EXISTS 'user'@'%';
+docker compose exec -T db_mysql mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "
+  CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'172.%.%.%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+  GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'172.%.%.%';
+  DROP USER IF EXISTS '${MYSQL_USER}'@'%';
   FLUSH PRIVILEGES;
 "
 
