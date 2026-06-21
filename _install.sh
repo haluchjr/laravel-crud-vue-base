@@ -32,7 +32,6 @@ fi
 
 export $(grep -v '^#' "$ENV_FILE" | xargs)
 
-
 # 2. Limpa contêineres e resíduos antigos
 echo -e "${AZUL}==> Limpando contêineres e volumes antigos...${SEM_COR}"
 docker compose down -v --remove-orphans
@@ -82,12 +81,12 @@ docker compose exec backend php artisan config:clear
 docker compose exec backend php artisan cache:clear
 
 echo -e "${AZUL}==> Blindando MYSQL ...${SEM_COR}"
-docker compose exec -T db_mysql mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "
+eval "docker compose exec -T db_mysql mysql -u root -p\"${MYSQL_ROOT_PASSWORD}\" -e \"
   CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'172.%.%.%' IDENTIFIED BY '${MYSQL_PASSWORD}';
   GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'172.%.%.%';
   DROP USER IF EXISTS '${MYSQL_USER}'@'%';
   FLUSH PRIVILEGES;
-"
+\""
 
 echo "--------------------------------------------------------"
 echo -e "${VERDE}TUDO PRONTO! O ecossistema está rodando perfeitamente. 🚀${SEM_COR}"
