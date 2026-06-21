@@ -66,11 +66,14 @@ services:
       #- "3306:3306"
       - "${PORTA_MYSQL}:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: r00t
+      #MYSQL_ROOT_PASSWORD: r00t
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       #MYSQL_DATABASE: sistema
       MYSQL_DATABASE: ${COMPOSE_PROJECT_NAME}_sistema
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user123
+      MYSQL_USER: ${MYSQL_USER}
+      #MYSQL_USER: user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      #MYSQL_PASSWORD: user123
     volumes:
       - db_data:/var/lib/mysql
     networks:

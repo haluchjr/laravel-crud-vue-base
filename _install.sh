@@ -7,9 +7,21 @@ SEM_COR='\033[0m'
 
 echo -e "${AZUL}==> Iniciando a preparação do ambiente Laravel + Inertia/Vue...${SEM_COR}"
 
+DOCKER_ENV=".env.docker"
+# Verifica se o arquivo NÃO existe
+if [ ! -f "$DOCKER_ENV" ]; then
+    echo "❌ ERRO CRÍTICO: O arquivo '$DOCKER_ENV' não foi encontrado!"
+    echo "Abortando a inicialização para evitar que o seu .env seja danificado."
+    exit 1
+fi
+
 # 1. Cria o .env independente.
 echo -e "${AZUL}==> Criando arquivo .env a partir do exemplo...${SEM_COR}"
-cp .env.example .env
+# cp .env.example .env
+# mescla env-docker com env-example
+cat .env-docker env-example > .env.tmp
+mv .env.tmp .env
+
 
 # 2. Limpa contêineres e resíduos antigos
 echo -e "${AZUL}==> Limpando contêineres e volumes antigos...${SEM_COR}"
@@ -59,6 +71,13 @@ echo -e "${AZUL}==> Limpando caches internos do Laravel...${SEM_COR}"
 docker compose exec backend php artisan config:clear
 docker compose exec backend php artisan cache:clear
 
+echo -e "${AZUL}==> Blindando MYSQL ...${SEM_COR}"
+docker compose exec -T db_mysql mysql -u root -pr00t -e "
+  CREATE USER IF NOT EXISTS 'user'@'172.%.%.%' IDENTIFIED BY 'user123';
+  GRANT ALL PRIVILEGES ON sistema.* TO 'user'@'172.%.%.%';
+  DROP USER IF EXISTS 'user'@'%';
+  FLUSH PRIVILEGES;
+"
 
 echo "--------------------------------------------------------"
 echo -e "${VERDE}TUDO PRONTO! O ecossistema está rodando perfeitamente. 🚀${SEM_COR}"

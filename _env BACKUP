@@ -1,12 +1,28 @@
-#APP_NAME="NOME SISTEMA"
+#-----------------------------------
+# Docker 
+COMPOSE_PROJECT_NAME=crud11base
+# Portas externas
+PORTA_HTTP=8080
+PORTA_VITE=5173
+PORTA_REDIS=6379
+PORTA_MYSQL=3306
+# MYSQL
+MYSQL_ROOT_PASSWORD="kP9vL2mX7Z4wQ8"
+MYSQL_DATABASE=${COMPOSE_PROJECT_NAME}_sistema
+MYSQL_USER="laravel_user"
+MYSQL_PASSWORD="mK2vB9pX4wQ7xZ9"
+#-----------------------------------
+USER_ID=1000
+GROUP_ID=1000
+TELESCOPE_ENABLED=false
+#-----------------------------------
+
+APP_NAME="NOME SISTEMA"
 APP_ENV=local
 APP_KEY=base64:fpHynMfoxhW4XPps9N76UfBNUQvzeLpuv6ohNC4+CHE=
 APP_DEBUG=true
 APP_URL=http://localhost:8080
 APP_TIMEZONE=America/Sao_Paulo
-
-USER_ID=1000
-GROUP_ID=1000
 
 APP_LOCALE=pt_BR
 APP_FALLBACK_LOCALE=en
