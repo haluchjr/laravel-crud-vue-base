@@ -19,5 +19,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        $this->call([
+            AclSeeder::class,
+            MenuSeeder::class,
+            // Outras seeders que precisar rodar ao rodar o projeto a primeira vez.
+        ]);
     }
 }

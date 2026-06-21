@@ -34,7 +34,8 @@ export $(grep -v '^#' "$ENV_FILE" | xargs)
 
 # 2. Limpa contêineres e resíduos antigos
 echo -e "${AZUL}==> Limpando contêineres e volumes antigos...${SEM_COR}"
-docker compose down -v --remove-orphans
+#docker compose down -v --remove-orphans
+docker compose down -v --rmi all --remove-orphans
 
 # Remove pastas locais para garantir instalação limpa (sem travas de permissão)
 rm -rf node_modules package-lock.json vendor
@@ -74,6 +75,8 @@ docker compose exec backend php artisan migrate
 # 9.1 Rodar as seeders
 echo -e "${AZUL}==> Rodando as seeders...${SEM_COR}"
 docker compose exec backend php artisan db:seed
+# Caso ficou alguma seeder de lado, ver em : database/seeders/DatabaseSeeder.php
+# docker compose exec backend php artisan db:seed --class=MenuSeeder
 
 # 10. Limpa caches internos do framework
 echo -e "${AZUL}==> Limpando caches internos do Laravel...${SEM_COR}"
@@ -81,7 +84,7 @@ docker compose exec backend php artisan config:clear
 docker compose exec backend php artisan cache:clear
 
 echo -e "${AZUL}==> Blindando MYSQL ...${SEM_COR}"
-eval "docker compose exec -T db_mysql mysql -u root -p\"${MYSQL_ROOT_PASSWORD}\" -e \"
+eval "docker compose exec -T -e MYSQL_PWD=\"${MYSQL_ROOT_PASSWORD}\" db_mysql mysql -u root -e \"
   CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'172.%.%.%' IDENTIFIED BY '${MYSQL_PASSWORD}';
   GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'172.%.%.%';
   DROP USER IF EXISTS '${MYSQL_USER}'@'%';
