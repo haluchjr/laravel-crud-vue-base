@@ -50,13 +50,21 @@ echo -e "${VERDE}==> MySQL está pronto!${SEM_COR}"
 echo -e "${AZUL}==> Rodando as migrations no MySQL...${SEM_COR}"
 docker compose exec backend php artisan migrate
 
+# 9.1 Rodar as seeders
+echo -e "${AZUL}==> Rodando as seeders...${SEM_COR}"
+docker compose exec backend php artisan db:seed
+
 # 10. Limpa caches internos do framework
 echo -e "${AZUL}==> Limpando caches internos do Laravel...${SEM_COR}"
 docker compose exec backend php artisan config:clear
 docker compose exec backend php artisan cache:clear
 
+
 echo "--------------------------------------------------------"
 echo -e "${VERDE}TUDO PRONTO! O ecossistema está rodando perfeitamente. 🚀${SEM_COR}"
+echo ""
 echo "Acesse a aplicação em: http://localhost:8080"
+echo ""
 echo "O servidor do Vite (Frontend) está ativo na porta 5173"
+echo "Ou Rode caso não com ./rundev.sh"
 echo "--------------------------------------------------------"

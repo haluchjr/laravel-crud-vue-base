@@ -1,13 +1,13 @@
 <?php
-namespace App\Services;
 
+namespace App\Http\Controllers;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Http;
-use App\Models\Cadastro;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
+use App\Helpers\Helpers;
 
-class BaseService 
+class BaseController extends Controller
 {
     public function main(){
 
@@ -19,7 +19,7 @@ class BaseService
         $packagePath = base_path('package.json');
         $packageData = file_exists($packagePath) ? json_decode(file_get_contents($packagePath), true) : [];
         ob_start();
-        phpinfo(INFO_GENERAL | INFO_MODULES); // Você pode filtrar o que quer para não vir um HTML gigante com <style> e tudo
+        phpinfo(INFO_GENERAL | INFO_MODULES); 
         $phpinfoText = ob_get_clean();
         $ambiente = App::environment();
         if ($ambiente == 'local'){
@@ -54,8 +54,8 @@ class BaseService
                 ]
             ]);
         }else{
-            abort(404);
+           echo "Ajuste a rota.";
+           log::error('sdfsd');
         }
     }
-
 }

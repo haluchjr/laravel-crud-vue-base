@@ -2,12 +2,21 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+require __DIR__.'/auth.php'; // Tava no final do codigo.
+
+use App\Http\Controllers\BaseController;
+Route::get('/',[BaseController::class,'main']); // AJustar depois...senao em producao da erro.
+
+
+// Modulo Loja
+
+// Modulo Administrativo
+
+// Modulo PreImpressao(producao)
+
+/*
 use App\Http\Controllers\Auth\PasswordController;
-
-use App\Services\BaseService;
-Route::get('/',[BaseService::class,'main']); // AJustar depois...senao em producao da erro.
-
-
 use App\Http\Controllers\CadastroController;
 Route::get('cadastro', [CadastroController::class, 'index'])->name('cadastro.index');
 Route::get('cadastro/tabela', [CadastroController::class, 'list'])->name('cadastro.list');
@@ -77,6 +86,5 @@ Route::middleware('auth')->group(function () {
     });
 
 });
-        
+        */
 
-require __DIR__.'/auth.php'; // Tava no final do codigo.
