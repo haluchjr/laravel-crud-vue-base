@@ -21,7 +21,7 @@ fi
 echo -e "${AZUL}==> Criando arquivo .env a partir do exemplo...${SEM_COR}"
 # cp .env.example .env
 # mescla env-docker com env-example
-cat .env.docker env.example > .env.tmp
+cat .env.docker .env.example > .env.tmp
 mv .env.tmp .env
 
 ENV_FILE=".env"
