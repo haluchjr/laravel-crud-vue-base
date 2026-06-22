@@ -15,7 +15,7 @@ Route::get('/',[BaseController::class,'main']); // AJustar depois...senao em pro
 
 // Modulo PreImpressao(producao)
 
-/*
+
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CadastroController;
 Route::get('cadastro', [CadastroController::class, 'index'])->name('cadastro.index');
@@ -25,7 +25,7 @@ Route::get('cadastro/edit/{id}', [CadastroController::class, 'edit'])->name('cad
 Route::put('cadastro/{id}', [CadastroController::class, 'update'])->name('cadastro.update');
 Route::delete('cadastro/{id}', [CadastroController::class, 'destroy'])->name('cadastro.destroy');
 
-
+/*
 
 // ler documentacao.
 // travar com  validacao de autenticacao, somente usuarios autenticados podem acessar a wiki.

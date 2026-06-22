@@ -215,5 +215,47 @@ const executarExclusao = () => {
             </template>
         </ModalBs>
 
+         <ModalBs 
+            :show="exibirModalFoto" 
+            title="Visualizar Detalhes do Cadastro" 
+            @close="exibirModalFoto = false"
+        >
+            <div v-if="usuarioSelecionado" class="p-3">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-3">
+                        <img 
+                            v-if="usuarioSelecionado.foto"
+                            :src="`/${usuarioSelecionado.foto}`" 
+                            class="img-fluid rounded border shadow-sm mb-2" 
+                            style="max-height: 150px; width: 100%; object-fit: cover;" 
+                            alt="Foto"
+                        >
+                        <div v-else class="text-muted p-4 border rounded bg-light">Sem foto</div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <h5>{{ usuarioSelecionado.nome }}</h5>
+                        <p class="mb-1"><strong>E-mail:</strong> {{ usuarioSelecionado.email }}</p>
+                        <p class="mb-1"><strong>CPF/CNPJ:</strong> {{ usuarioSelecionado.cpf_cnpj }}</p>
+                        <p class="mb-1"><strong>Telefone:</strong> ({{ usuarioSelecionado.ddd_telefone }})</p>
+                        <p class="mb-1"><strong>Celular:</strong> ({{ usuarioSelecionado.ddd_celular }})</p>
+                        
+                        <hr class="my-2">
+                        
+                        <p class="mb-1"><strong>CEP:</strong> {{ usuarioSelecionado.cep }}</p>
+                        <p class="mb-1"><strong>Endereço:</strong> {{ usuarioSelecionado.endereco }}, nº {{ usuarioSelecionado.nr }}</p>
+                        <p class="mb-1"><strong>Bairro:</strong> {{ usuarioSelecionado.bairro }}</p>
+                        <p class="mb-0"><strong>Cidade:</strong> {{ usuarioSelecionado.cidade }} - {{ usuarioSelecionado.estado }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <template #actions>
+                <button type="button" class="btn btn-secondary" @click="exibirModalFoto = false">
+                    Fechar
+                </button>
+            </template>
+        </ModalBs>
+
     </CrudLayout>
 </template>

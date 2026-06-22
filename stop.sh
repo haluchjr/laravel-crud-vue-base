@@ -6,6 +6,9 @@ AMARELO='\033[1;33m'
 VERMELHO='\033[0;31m'
 NC='\033[0m' # No Color
 
+#ENV_FILE=".env"
+#export $(grep -v '^#' "$ENV_FILE" | xargs)
+
 echo ""
 echo ""
 echo -e "${AMARELO}Iniciando a limpeza do ambiente...${NC}"

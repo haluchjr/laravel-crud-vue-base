@@ -8,15 +8,14 @@ import ModalBs from '@/Components/ModalBs.vue';
 import Debug from '@/Components/Debug.vue';
 import { useCep } from '@/Composables/useCep';
 import { useEventBus } from '@/Utils/eventBus'; // <-- IMPORTA O BUS em cada pagina que precisar.
+import { mask } from 'vue-the-mask';
 
 const { emit } = useEventBus();
 const props = defineProps({
     dados: Object, // se tiver dados da listagem
 });
-// O seu formulário do cadastro (que depois você enviará para o seu Repository)
 
 // Modo completo e verboso.
-
 const formulario = useForm({
     id_criptografado: props.dados?.id_criptografado || null,
     nome: props.dados?.nome || '',
@@ -49,7 +48,10 @@ const verFoto = (item) => {
 };
 // Fim controle de situacao de imagem.
 
-
+// Cuida da mascara do formulario
+const vMask = mask;
+const documentoMasks = ['###.###.###-##', '##.###.###/####-##'];
+// ----------------------------
 
 const {buscarCepNoViaCep, erro} = useCep();
 const tratarBuscaCep = async () => {
@@ -74,15 +76,6 @@ const tratarBuscaCep = async () => {
         }
     }
 };
-
-/* 
-// Se o formulário tiver arquivos, essa é a ÚNICA alternativa que funciona sempre:
-formulario.post(route('cadastro.update', { id: idFormulario }), {
-    query: { _method: 'put' } 
-    // Ou adicionando '_method: "PUT"' direto nos campos do seu useForm
-});
-
-*/
 
 
 const enviar = () => {
@@ -185,16 +178,16 @@ const voltarSemRastro = () => {
                 
                 <div class="col-md-3 mb-3">
                     <label>DDD Telefone Fixo</label>
-                    <input type="text" v-model="formulario.ddd_telefone" class="form-control" >
+                    <input type="text" v-mask="'## ####-####'" v-model="formulario.ddd_telefone" class="form-control" >
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <label>DDD Telefone celular</label>
-                    <input type="text" v-model="formulario.ddd_celular" class="form-control" >
+                    <input type="text" v-mask="'## #####-####'" v-model="formulario.ddd_celular" class="form-control" >
                 </div>
                 <div class="col-md-4 mb-3">
                     <label>CPF CNPJ</label>
-                    <input type="text" v-model="formulario.cpf_cnpj" class="form-control" >
+                    <input type="text" v-mask="documentoMasks" placeholder="000.000.000-00 ou 00.000.000/0000-00" v-model="formulario.cpf_cnpj" class="form-control" >
                 </div>
 
                 <div class="col-md-4 mb-3">
@@ -219,49 +212,6 @@ const voltarSemRastro = () => {
         
        
        <Debug/>
-
-
-        <ModalBs 
-            :show="exibirModalFoto" 
-            title="Visualizar Detalhes do Cadastro" 
-            @close="exibirModalFoto = false"
-        >
-            <div v-if="usuarioSelecionado" class="p-3">
-                <div class="row">
-                    <div class="col-md-4 text-center mb-3">
-                        <img 
-                            v-if="usuarioSelecionado.foto"
-                            :src="`/${usuarioSelecionado.foto}`" 
-                            class="img-fluid rounded border shadow-sm mb-2" 
-                            style="max-height: 150px; width: 100%; object-fit: cover;" 
-                            alt="Foto"
-                        >
-                        <div v-else class="text-muted p-4 border rounded bg-light">Sem foto</div>
-                    </div>
-
-                    <div class="col-md-8">
-                        <h5>{{ usuarioSelecionado.nome }}</h5>
-                        <p class="mb-1"><strong>E-mail:</strong> {{ usuarioSelecionado.email }}</p>
-                        <p class="mb-1"><strong>CPF/CNPJ:</strong> {{ usuarioSelecionado.cpf_cnpj }}</p>
-                        <p class="mb-1"><strong>Telefone:</strong> ({{ usuarioSelecionado.ddd_telefone }})</p>
-                        <p class="mb-1"><strong>Celular:</strong> ({{ usuarioSelecionado.ddd_celular }})</p>
-                        
-                        <hr class="my-2">
-                        
-                        <p class="mb-1"><strong>CEP:</strong> {{ usuarioSelecionado.cep }}</p>
-                        <p class="mb-1"><strong>Endereço:</strong> {{ usuarioSelecionado.endereco }}, nº {{ usuarioSelecionado.nr }}</p>
-                        <p class="mb-1"><strong>Bairro:</strong> {{ usuarioSelecionado.bairro }}</p>
-                        <p class="mb-0"><strong>Cidade:</strong> {{ usuarioSelecionado.cidade }} - {{ usuarioSelecionado.estado }}</p>
-                    </div>
-                </div>
-            </div>
-            
-            <template #actions>
-                <button type="button" class="btn btn-secondary" @click="exibirModalFoto = false">
-                    Fechar
-                </button>
-            </template>
-        </ModalBs>
 
     </CrudLayout>
 </template>
