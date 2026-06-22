@@ -40,6 +40,13 @@ class HandleInertiaRequests extends Middleware
                     'nivel' => $request->user()->nivel,
                 ] : null, // Se não tiver logado, envia null com segurança
             ],
+            /* 
+            Arvore do menu é baseada no nivel do usuario.
+            Na tb_menu, cada elemento eh montado individualmente com base no nivel
+            nivel_permissao = [1] 
+            Se uma linha tiver nivel_permissao 1 => vai montar somente pro usuario
+            
+            */
             'menu_sistema' => function (Request $request) {
                 if (! $request->user()) return [];
 
@@ -52,7 +59,6 @@ class HandleInertiaRequests extends Middleware
                     ->with(['filhosRecursivos'])
                     ->orderBy('ordem')
                     ->get();
-
                 // 2. Criamos uma função interna para filtrar recursivamente no PHP
                 $filtrarMenu = function ($menusColecao) use (&$filtrarMenu, $nivelUsuario, $isSuperAdmin) {
                     return $menusColecao->filter(function ($menu) use ($nivelUsuario, $isSuperAdmin) {
@@ -81,8 +87,7 @@ class HandleInertiaRequests extends Middleware
                         ];
                     })->values()->toArray(); // .values() reseta os índices do array pro Vue não ler como objeto
                 };
-
-                // 3. Rodamos a nossa função na coleção inicial
+            // 3. Rodamos a nossa função na coleção inicial
                 return $filtrarMenu($menus);
             },
 

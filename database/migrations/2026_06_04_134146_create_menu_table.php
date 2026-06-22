@@ -11,21 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menus', function (Blueprint $table) {
+        Schema::create('tb_menus', function (Blueprint $table) {
         $table->id();
         $table->string('nome');
         $table->string('url')->default('#');
         $table->string('icon')->nullable();
         $table->integer('ordem')->default(0); // Para ordenar o que vem primeiro
         
-        // Relacionamento com o nível de acesso (pode ser string ou chave estrangeira da sua ACL)
-        $table->string('nivel_permissao')->default('usuario'); // 'usuario', 'admin', etc.
+        // Montagem do menu baseado em array, por nivel.
+        // tb_acl
+        $table->string('nivel_permissao')->default('[1]'); // [ 1 , 99 .... ]
 
-        // 🪄 A MÁGICA RECURSIVA: Chave estrangeira para ela mesma!
+        // A MÁGICA RECURSIVA: Chave estrangeira para ela mesma!
         // nullable() significa que se for NULL, é um menu principal (SISTEMA, PEDIDOS)
         $table->foreignId('menu_pai_id')
               ->nullable()
-              ->constrained('menus')
+              ->constrained('tb_menus')
               ->onDelete('cascade'); 
 
         $table->timestamps();

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Menu extends Model
 {
+    protected $table = "tb_menus";
+
     protected $fillable = ['nome', 'url', 'icon', 'ordem', 'nivel_permissao', 'menu_pai_id'];
 
     protected $casts = [

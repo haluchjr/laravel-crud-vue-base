@@ -28,17 +28,17 @@ const fecharToast = () => {
 </script>
 
 <template>
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1080">
+    <div class="position-fixed top-0 end-0 p-3 " style="z-index: 1080">
         <div 
             v-if="visivel && mensagem" 
-            class="toast show align-items-center text-white border-0 shadow"
+            class="toast show align-items-center text-white border-0 shadow "
             :class="`bg-${tipo === 'error' ? 'danger' : tipo}`"
             role="alert" 
             aria-live="assertive" 
             aria-atomic="true"
         >
             <div class="d-flex">
-                <div class="toast-body d-flex align-items-center gap-2">
+                <div class="toast-body d-flex align-items-center gap-2" style="white-space: pre-line;">
                     <i v-if="tipo === 'success'" class="bi bi-check-circle-fill"></i>
                     <i v-if="tipo === 'error'" class="bi bi-exclamation-triangle-fill"></i>
                     <span>{{ mensagem }}</span>

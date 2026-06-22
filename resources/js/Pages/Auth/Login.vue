@@ -1,11 +1,10 @@
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import Checkbox from '@/Components/Checkbox.vue';
+import Debug from '@/Components/Debug.vue';
+
+import { useEventBus } from '@/Utils/eventBus'; // <-- IMPORTA O BUS em cada pagina que precisar.
+const { emit } = useEventBus();
 
 defineProps({
     canResetPassword: {
@@ -32,75 +31,81 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Acessar Sistema" />
-
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
+        <div v-if="status" class="alert alert-success mb-3 text-sm" role="alert">
             {{ status }}
         </div>
 
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="E-mail" />
-
-                <TextInput
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.email }"
                     v-model="form.email"
                     required
                     autofocus
                     autocomplete="username"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <div v-if="form.errors.email" class="invalid-feedback">
+                    {{ form.errors.email }}
+                </div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Senha" />
-
-                <TextInput
+            <div class="mb-3">
+                <label for="password" class="form-label">Senha</label>
+                <input
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.password }"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
                 />
-
-                <InputError class="mt-2" :message="form.errors.password" />
+                <div v-if="form.errors.password" class="invalid-feedback">
+                    {{ form.errors.password }}
+                </div>
             </div>
 
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600">Lembrar-me</span>
-                </label>
+            <div class="mb-3 form-check">
+                <input
+                    id="remember"
+                    type="checkbox"
+                    class="form-check-input"
+                    v-model="form.remember"
+                />
+                <label class="form-check-label" for="remember">Lembrar-me</label>
             </div>
 
-            <div class="mt-4 flex items-center justify-between">
+            <div class="d-flex align-items-center justify-content-between mt-4">
                 <div>
                     <Link
                         :href="route('register')"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        class="text-decoration-underline text-secondary small"
                     >
                         Criar Conta
                     </Link>
                 </div>
 
-                <div class="flex items-center gap-3">
+                <div class="d-flex align-items-center gap-3">
                     <Link
                         v-if="canResetPassword"
                         :href="route('password.request')"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        class="text-decoration-underline text-secondary small"
                     >
                         Esqueceu a senha?
                     </Link>
 
-                    <PrimaryButton
-                        :class="{ 'opacity-25': form.processing }"
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        :class="{ 'opacity-50': form.processing }"
                         :disabled="form.processing"
                     >
                         Entrar
-                    </PrimaryButton>
+                    </button>
                 </div>
             </div>
         </form>

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cadastro', function (Blueprint $table) {
+        Schema::create('tb_cadastro', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
             $table->string('email')->unique();
@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('bairro');
             $table->string('cidade');
             $table->string('estado',2);
+            $table->string('foto')->nullable();
+            $table->uuid('uuid')->unique();
             $table->timestamps();
         });
     }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
+use App\Models\Usuarios;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class NovoUsuarioRequest extends FormRequest
 {
@@ -14,6 +16,25 @@ class NovoUsuarioRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+
+    // Sanitizar antes.
+    protected function prepareForValidation()
+    {
+        $camposParaLimpar = ['ddd_telefone', 'ddd_celular', 'cpf_cnpj'];
+        $dadosLimpos = [];
+
+        foreach ($camposParaLimpar as $campo) {
+            if ($this->has($campo)) {
+                // preg_replace('/\D/', ...) remove absolutamente tudo que não for número (0-9)
+                $dadosLimpos[$campo] = preg_replace('/\D/', '', $this->{$campo});
+            }
+        }
+
+        // Faz o merge dos dados limpos de volta na Request
+        $this->merge($dadosLimpos);
+
     }
 
     /**
@@ -25,9 +46,9 @@ class NovoUsuarioRequest extends FormRequest
     {
         return [
             'nome'          => ['required'],
-            'email'         => ['required'],
-            //'ddd_telefone'  => ['required'],
-            //'ddd_celular'   => ['required'],
+            'email'         => ['required', 'string', 'email', 'unique:tb_usuarios,email'],
+            'ddd_telefone'  => ['required','digits:10'],
+            'ddd_celular'   => ['required','digits:11'],
             //'cpf_cnpj'      => ['required'],
             //'cep'           => ['required'],
             //'endereco'      => ['required'],
@@ -63,6 +84,19 @@ class NovoUsuarioRequest extends FormRequest
                 'foto.max' => 'A imagem não pode ser maior que 2MB.',
                 'foto.dimensions' => 'A imagem deve ter entre 100x100 e 2000x2000 pixels.',
             ];
+    }
+
+
+    /**
+     * Se a validação falhar, intercepta e dá um dd nos erros
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        // Mostra os erros de validação e os dados que tentaram ser validados
+        dd([
+            'erros' => $validator->errors()->toArray(),
+            'dados_recebidos' => $this->all()
+        ]);
     }
 
 

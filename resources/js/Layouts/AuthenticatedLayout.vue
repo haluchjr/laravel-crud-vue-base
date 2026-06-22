@@ -4,7 +4,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { usePage, Head } from '@inertiajs/vue3';
-import MenuLateral from '@/Components/MenuLateral.vue';
+import Tela from '@/Layouts/CrudLayoutNoMenu.vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; 
 
@@ -27,6 +27,7 @@ defineProps({
 </script>
 
 <template>
+    <Tela>
     <Head :title="title" />
 
     <div class="d-flex min-vh-100 bg-light align-items-stretch">
@@ -63,6 +64,7 @@ defineProps({
 
         </div>
     </div>
+    </Tela>
 </template>
 
 <style>

@@ -3,7 +3,7 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
+use App\Models\Usuarios;
 use Illuminate\Support\Facades\DB;
 
 class UserRepository

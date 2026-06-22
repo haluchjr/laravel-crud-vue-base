@@ -8,10 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Validation\ValidationException;
 
-class User extends Authenticatable
+class Usuarios extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+
+    protected $table = "tb_usuarios";
+        
     /**
      * The attributes that are mass assignable.
      *

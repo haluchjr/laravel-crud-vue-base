@@ -5,8 +5,8 @@ use Inertia\Inertia;
 
 require __DIR__.'/auth.php'; // Tava no final do codigo.
 
-use App\Http\Controllers\BaseController;
-Route::get('/',[BaseController::class,'main']); // AJustar depois...senao em producao da erro.
+ use App\Http\Controllers\BaseController;
+ Route::get('/',[BaseController::class,'main']); // AJustar depois...senao em producao da erro.
 
 
 // Modulo Loja
@@ -25,7 +25,7 @@ Route::get('cadastro/edit/{id}', [CadastroController::class, 'edit'])->name('cad
 Route::put('cadastro/{id}', [CadastroController::class, 'update'])->name('cadastro.update');
 Route::delete('cadastro/{id}', [CadastroController::class, 'destroy'])->name('cadastro.destroy');
 
-/*
+
 
 // ler documentacao.
 // travar com  validacao de autenticacao, somente usuarios autenticados podem acessar a wiki.
@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('crud')->group(function(){
         
         // URL: localhost:8020/crud
-        Route::get('/', [CrudController::class, 'index'])->name('crud.index');
+        Route::get('/', [CrudController::class, 'index'])->name('crud.index'); // direcionar para um novo layouyt..
         
         // Novo registro
         Route::post('/', [CrudController::class, 'store'])->name('crud.store');
@@ -86,5 +86,5 @@ Route::middleware('auth')->group(function () {
     });
 
 });
-        */
+        
 

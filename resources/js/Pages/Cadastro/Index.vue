@@ -11,6 +11,7 @@ import { useEventBus } from '@/Utils/eventBus'; // <-- IMPORTA O BUS em cada pag
 import { mask } from 'vue-the-mask';
 
 const { emit } = useEventBus();
+
 const props = defineProps({
     dados: Object, // se tiver dados da listagem
 });

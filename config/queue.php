@@ -37,7 +37,7 @@ return [
         'database' => [
             'driver' => 'database',
             'connection' => env('DB_QUEUE_CONNECTION', null),
-            'table' => env('DB_QUEUE_TABLE', 'jobs'),
+            'table' => env('DB_QUEUE_TABLE', 'tb_jobs'),
             'queue' => env('DB_QUEUE', 'default'),
             'retry_after' => env('DB_QUEUE_RETRY_AFTER', 90),
             'after_commit' => false,
@@ -106,7 +106,7 @@ return [
     'failed' => [
         'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
         'database' => env('DB_CONNECTION', 'sqlite'),
-        'table' => 'failed_jobs',
+        'table' => 'tb_failed_jobs',
     ],
 
 ];

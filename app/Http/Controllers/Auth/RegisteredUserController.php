@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Usuarios;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,22 +35,24 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name'      => 'required|string|max:255',
+            'email'     => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:tb_usuarios,email'],
+            'password'  => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        $user = Usuarios::create([
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'password'  => Hash::make($request->password),
+            'status'    => 1, // 1=Ativo / 0=Inativo / 2=Analise
+            'nivel'     => 1, // Cliente (automaticamente todo cadastro é cliente ) // tb_acl define qual nivel dele.
         ]);
-        Mail::to('seu-email@teste.com')->send(new CadastroEmail($request->name));
-        event(new Registered($user));
+        
+        //Mail::to('seu-email@teste.com')->send(new CadastroEmail($request->name));
+        //event(new Registered($user));
 
 
-        //Auth::login($user);
-
-        return redirect()->route('em-analise');
+        Auth::login($user);
+        return redirect()->route('crud.index')->with('success', 'Registrado.'); 
     }
 }

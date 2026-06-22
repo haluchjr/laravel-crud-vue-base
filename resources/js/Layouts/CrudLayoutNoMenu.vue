@@ -3,8 +3,8 @@ import { ref, computed, watch } from 'vue';
 import { usePage, Head } from '@inertiajs/vue3';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; 
-import ToastBs from '@/Components/ToastBs.vue';
 
+import ToastBs from '@/Components/ToastBs.vue';
 import { useToastHandler } from '@/Composables/useToastHandler'; // <-- IMPORTA
 const { msgToast, tipoToast, limparToast } = useToastHandler();
 

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate; // Não esqueça de importar o Gate no topo!
 
 use App\Models\Projeto;
 use App\Repositories\UserRepository;
@@ -270,20 +271,25 @@ class CrudController extends Controller
 
     public function destroy($id)
     {
-        // 1. Busca o projeto pelo ID ou estoura um erro 404 caso não encontre
-        $projeto = Projeto::findOrFail($id);
-
-        if ($projeto->arquivo) {
-        // O Laravel já sabe que deve procurar dentro de 'storage/app/public/' por causa do disco 'public'
-            Storage::disk('public')->delete($projeto->arquivo);
+        try{
+            Gate::authorize('deletar-usuarios');
+            // 1. Busca o projeto pelo ID ou estoura um erro 404 caso não encontre
+            $projeto = Projeto::findOrFail($id);
+            
+            if ($projeto->arquivo) {
+                // O Laravel já sabe que deve procurar dentro de 'storage/app/public/' por causa do disco 'public'
+                Storage::disk('public')->delete($projeto->arquivo);
+                }
+                
+                // 2. Deleta o registro do banco
+                $projeto->delete();
+                
+                // 3. Redireciona de volta para a listagem
+                // O Inertia intercepta isso, recarrega o index() e atualiza a prop 'teste1' no Vue
+                return redirect()->back()->with('warning', "Registro ID {$id} excluído com sucesso!");
+        } catch ( \Illuminate\Auth\Access\AuthorizationException $e) {
+            return redirect()->back()->with('error', $e->getmessage());
         }
-
-        // 2. Deleta o registro do banco
-        $projeto->delete();
-
-        // 3. Redireciona de volta para a listagem
-        // O Inertia intercepta isso, recarrega o index() e atualiza a prop 'teste1' no Vue
-        return redirect()->back()->with('warning', "Registro ID {$id} excluído com sucesso!");
     }
 
 

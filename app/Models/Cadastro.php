@@ -13,8 +13,8 @@ class Cadastro extends Model
 
     protected $appends = ['id_criptografado'];
 
+    protected $table = "tb_cadastro";
 
-    protected $table = "cadastro";
     protected $fillable = [
         'nome',
         'email',

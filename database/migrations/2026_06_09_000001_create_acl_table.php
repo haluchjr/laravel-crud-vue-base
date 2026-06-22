@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('acl', function (Blueprint $table) {
+        Schema::create('tb_nivel', function (Blueprint $table) {
             $table->id();
             $table->string('perfil');
             $table->string('descricao');
@@ -26,7 +26,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('acl');
+        Schema::dropIfExists('tb_acl');
         
     }
 };

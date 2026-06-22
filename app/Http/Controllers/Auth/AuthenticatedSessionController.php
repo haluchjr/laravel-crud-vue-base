@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
 
         // 3. 💡 Verificamos se ele está com o status de análise 
         // (Ajuste o nome da coluna/status conforme você criou na sua tabela users)
-        if ($user->status === 'analise') {
+        if ($user->status === '2') {
             
             // Desloga o usuário na hora para ele não ter acesso a nada
             Auth::guard('web')->logout();
@@ -57,7 +57,10 @@ class AuthenticatedSessionController extends Controller
         // 4. Se ele NÃO estiver em análise, o fluxo padrão do Breeze continua normalmente:
         $request->session()->regenerate();
 
-        return redirect()->intended(route('crud.index')); // Sua rota padrão pós-login
+        /* 
+
+        */
+        return redirect()->intended(route('crud.index'))->with('success', "Olá, {$user->name}"); // Sua rota padrão pós-login
     }
 
     /**

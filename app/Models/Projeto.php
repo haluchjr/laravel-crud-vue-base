@@ -12,7 +12,7 @@ class Projeto extends Model
     use HasFactory;
 
     // 1. Define o nome da tabela explicitamente (boa prática)
-    protected $table = 'projetos';
+    protected $table = 'tb_projetos';
 
     // 2. Campos que o Laravel vai permitir salvar em massa (Mass Assignment)
     protected $fillable = [

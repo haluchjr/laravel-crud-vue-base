@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projetos', function (Blueprint $table) {
+        Schema::create('tb_projetos', function (Blueprint $table) {
             $table->id();
             $table->string('nome',150);
             $table->string('status',50)->default('ativo');
+             $table->string('arquivo')->nullable();
             $table->timestamps();
         });
     }

@@ -13,30 +13,39 @@ class AclSeeder extends Seeder
     public function run(): void
     {
         $perfis = [
-            [
+            [   'id' => 99,
                 'Perfil' => 'Admin',
-                'Descricao' => 'Administrador',
+                'Descricao' => 'Administrador/Desenvolvedor',
             ],
             [
+                'id' => 1,
                 'Perfil' => 'Usuario',
                 'Descricao' => 'Usuário comum',
             ],
             [
+                'id'=> 2,
                 'Perfil' => 'Baixa',
                 'Descricao' => 'Operador Baixa',
             ],
             [
-                'Perfil' => 'Bureau',
-                'Descricao' => 'Operador Bureau',
+                'id'=> 3,
+                'Perfil' => 'Comercial',
+                'Descricao' => 'Comercial',
             ],
             [
-                'Perfil' => 'Orcamentista',
-                'Descricao' => 'Pessoa Orçamentista',
+                'id'=> 4,
+                'Perfil' => 'Financeiro',
+                'Descricao' => 'Financeiro',
+            ],
+            [
+                'id'=> 5,
+                'Perfil' => 'Bureau',
+                'Descricao' => 'Operador Bureau',
             ],
         ];
 
         foreach ($perfis as $perfil) {
-            DB::table('acl')->updateOrCreate(
+            DB::table('tb_acl')->updateOrInsert(
                 ['Perfil' => $perfil['Perfil']], // Chave de busca para evitar duplicados
                 ['Descricao' => $perfil['Descricao']]
             );

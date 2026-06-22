@@ -34,94 +34,106 @@ const updatePassword = () => {
 </script>
 
 <template>
-    <section>
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">
+    <section class="card shadow-sm p-4">
+        <header class="mb-4">
+            <h2 class="h5 fw-bold text-dark mb-1">
                 Atualizar senha
             </h2>
-
-            <p class="mt-1 text-sm text-gray-600">
+            <p class="small text-muted mb-0">
                 Certifique-se de que sua conta está usando uma senha longa e aleatória para se manter segura.
             </p>
         </header>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
-            <div>
-                <InputLabel for="current_password" value="Senha atual" />
-
+        <form @submit.prevent="updatePassword" class="row g-3 max-width-form">
+            <div class="col-12">
+                <InputLabel for="current_password" value="Senha atual" class="form-label fw-semibold small text-secondary" />
+                
                 <TextInput
                     id="current_password"
                     ref="currentPasswordInput"
                     v-model="form.current_password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.current_password }"
                     autocomplete="current-password"
                 />
 
                 <InputError
                     :message="form.errors.current_password"
-                    class="mt-2"
+                    class="invalid-feedback d-block"
                 />
             </div>
 
-            <div>
-                <InputLabel for="password" value="Nova senha" />
+            <div class="col-12">
+                <InputLabel for="password" value="Nova senha" class="form-label fw-semibold small text-secondary" />
 
                 <TextInput
                     id="password"
                     ref="passwordInput"
                     v-model="form.password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.password }"
                     autocomplete="new-password"
                 />
 
-                <InputError :message="form.errors.password" class="mt-2" />
+                <InputError :message="form.errors.password" class="invalid-feedback d-block" />
             </div>
 
-            <div>
+            <div class="col-12">
                 <InputLabel
                     for="password_confirmation"
                     value="Confirmar nova senha"
+                    class="form-label fw-semibold small text-secondary"
                 />
 
                 <TextInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.password_confirmation }"
                     autocomplete="new-password"
                 />
 
                 <InputError
                     :message="form.errors.password_confirmation"
-                    class="mt-2"
+                    class="invalid-feedback d-block"
                 />
             </div>
 
-            <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Salvar</PrimaryButton>
+            <div class="col-12 d-flex align-items-center gap-3 pt-2">
+                <PrimaryButton :disabled="form.processing" class="btn btn-primary px-4">
+                    Salvar
+                </PrimaryButton>
 
                 <Transition
-                    enter-active-class="transition ease-in-out"
+                    enter-active-class="translate duration-300 ease-in-out"
                     enter-from-class="opacity-0"
-                    leave-active-class="transition ease-in-out"
+                    leave-active-class="translate duration-300 ease-in-out"
                     leave-to-class="opacity-0"
                 >
                     <p
                         v-if="form.recentlySuccessful"
-                        class="text-sm text-gray-600"
+                        class="small text-success fw-medium mb-0 me-auto animate-fade"
                     >
-                        Salvo.
+                        <i class="bi bi-check-circle-fill me-1"></i> Salvo.
                     </p>
                 </Transition>
+
                 <Link 
                     :href="route('crud.index')" 
-                    class="text-base font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
-                            Voltar para o sistema 
-                    <span aria-hidden="true"> &rarr;</span>
+                    class="btn btn-link link-primary p-0 text-decoration-none small fw-medium ms-auto">
+                    Voltar para o sistema <span aria-hidden="true">&rarr;</span>
                 </Link>
             </div>
         </form>
     </section>
 </template>
+
+<style scoped>
+/* Opcional: Apenas para limitar a largura máxima do formulário para não esticar em telas gigantes */
+.max-width-form {
+    max-width: 500px;
+}
+</style>

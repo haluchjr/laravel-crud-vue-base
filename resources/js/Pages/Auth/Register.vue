@@ -1,10 +1,11 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Debug from '@/Components/Debug.vue';
+
+import { useEventBus } from '@/Utils/eventBus'; // <-- IMPORTA O BUS em cada pagina que precisar.
+const { emit } = useEventBus();
+
 
 const form = useForm({
     name: '',
@@ -22,91 +23,89 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
-
+        <Head title="Cadastro" />
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Nome" />
-
-                <TextInput
+            <div class="mb-3">
+                <label for="name" class="form-label">Nome</label>
+                <input
                     id="name"
                     type="text"
-                    class="mt-1 block w-full"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.name }"
                     v-model="form.name"
                     required
                     autofocus
                     autocomplete="name"
                 />
-
-                <InputError class="mt-2" :message="form.errors.name" />
+                <div v-if="form.errors.name" class="invalid-feedback">
+                    {{ form.errors.name }}
+                </div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.email }"
                     v-model="form.email"
                     required
                     autocomplete="username"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <div v-if="form.errors.email" class="invalid-feedback">
+                    {{ form.errors.email }}
+                </div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Senha" />
-
-                <TextInput
+            <div class="mb-3">
+                <label for="password" class="form-label">Senha</label>
+                <input
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.password }"
                     v-model="form.password"
                     required
                     autocomplete="new-password"
                 />
-
-                <InputError class="mt-2" :message="form.errors.password" />
+                <div v-if="form.errors.password" class="invalid-feedback">
+                    {{ form.errors.password }}
+                </div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirme a senha"
-                />
-
-                <TextInput
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">Confirme a senha</label>
+                <input
                     id="password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.password_confirmation }"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
                 />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
+                <div v-if="form.errors.password_confirmation" class="invalid-feedback">
+                    {{ form.errors.password_confirmation }}
+                </div>
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
+            <div class="d-flex align-items-center justify-content-end mt-4 gap-3">
                 <Link
                     :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="text-decoration-underline text-secondary small"
                 >
                     Já está registrado?
                 </Link>
 
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    :class="{ 'opacity-50': form.processing }"
                     :disabled="form.processing"
                 >
-                    Registro
-                </PrimaryButton>
+                    Cadastrar
+                </button>
             </div>
         </form>
     </GuestLayout>
