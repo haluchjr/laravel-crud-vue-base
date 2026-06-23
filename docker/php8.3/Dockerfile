@@ -1,37 +1,28 @@
-FROM php:8.3-apache-alpine
-# Baseado no ALPINE ver a diferença entre eles.
+FROM php:8.3-apache
+#Baseado no DEBIAN
 
 WORKDIR /var/www/html
 
-# No Alpine, o Apache usa o httpd.conf direto (não tem sites-available/*.conf)
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri -e "s!/var/www/localhost/htdocs!${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/httpd.conf \
-    && sed -ri -e "s!AllowOverride None!AllowOverride All!g" /etc/apache2/httpd.conf \
-    && sed -ri -e 's!^#\(LoadModule rewrite_module\)!\1!' /etc/apache2/httpd.conf
+RUN sed -ri -e "s!/var/www/html!${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/sites-available/*.conf
+RUN sed -ri -e "s!AllowOverride None!AllowOverride All!g" /etc/apache2/apache2.conf
+RUN a2enmod rewrite
 
-# Instala dependências do sistema e ferramentas de compilação temporárias
-RUN apk add --no-cache \
+# Instala dependências do sistema e extensões PHP
+RUN apt-get update && apt-get install -y \
     libzip-dev \
-    zlib-dev \
-    openldap-dev \
-    mysql-client \
+    zlib1g-dev \
+    libldap2-dev \
+    default-mysql-client \
     curl \
     unzip \
     zip \
     git \
-    bash \
-    shadow \
-    # Dependências virtuais (só servem para compilar o pecl/extensions e depois são apagadas)
-    && apk add --no-cache --virtual .build-deps \
-    $PHPIZE_DEPS \
-    # Configura e instala extensões nativas
-    && docker-php-ext-configure ldap \
+    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
     && docker-php-ext-install pdo_mysql zip bcmath pcntl ldap \
-    # Instala o Redis via PECL
     && pecl install redis \
     && docker-php-ext-enable redis \
-    # Faxina: apaga as ferramentas de build que não são mais necessárias em runtime
-    && apk del .build-deps
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV TMPDIR=/tmp
 ENV TMP=/tmp
@@ -42,7 +33,7 @@ COPY ./php.ini /usr/local/etc/php/
 # Instala o Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Usuário com UID fixo em 1000 (shadow instalado no apk add permite o groupadd/useradd)
+# Usuário com UID fixo em 1000 para desenvolvimento local estável
 ARG USER_ID=1000
 ARG GROUP_ID=1000
 

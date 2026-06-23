@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 
 # Cores para o terminal
 VERDE='\033[0;32m'
@@ -9,6 +10,26 @@ SEM_COR='\033[0m'
 echo -e "${VERMELHO}===========================================================================${SEM_COR}"
 echo -e "${VERMELHO}=== SE VOCE JA RODOU ESTE SCRIPT UMA VEZ, ABORTE POIS VAI ZERAR O BANCO ===${SEM_COR}"
 echo -e "${VERMELHO}===========================================================================${SEM_COR}"
+
+total=10
+echo -e "${VERMELHO} Você tem ${total} segundos para abortar...${SEM_COR}"
+
+for ((i=0; i<=total; i++)); do
+    percent=$((i * 100 / total))
+    printf "\rProgresso: ["
+    for ((j=0; j<i; j++)); do
+        printf "#"
+    done
+
+    for ((j=i; j<total; j++)); do
+        printf " "
+    done
+
+    printf "] %3d%%" "$percent"
+    sleep 1
+done
+
+echo
 
 echo -e "${AZUL}==> Iniciando a preparação do ambiente Laravel + Inertia/Vue...${SEM_COR}"
 
@@ -24,7 +45,7 @@ if [ ! -f "$DOCKER_ENV" ]; then
 fi
 
 # 1. Cria o .env independente.
-echo -e "${AZUL}==> Criando arquivo .env a partir do exemplo...${SEM_COR}"
+echo -e "${AZUL}==> Criando arquivo .env a partir do .env.example...${SEM_COR}"
 # cp .env.example .env
 # mescla env-docker com env-example
 cat .env.docker .env.example > .env.tmp
@@ -45,7 +66,7 @@ if [ "$APP_ENV" != "local" ]; then
     echo -e "${VERMELHO}===========================================================================${SEM_COR}"
     exit 1
 fi
-sleep 50
+
 
 # 2. Limpa contêineres e resíduos antigos
 echo -e "${AZUL}==> Limpando contêineres e volumes antigos...${SEM_COR}"

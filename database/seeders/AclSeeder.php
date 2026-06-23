@@ -45,7 +45,7 @@ class AclSeeder extends Seeder
         ];
 
         foreach ($perfis as $perfil) {
-            DB::table('tb_acl')->updateOrInsert(
+            DB::table('tb_nivel')->updateOrInsert(
                 ['Perfil' => $perfil['Perfil']], // Chave de busca para evitar duplicados
                 ['Descricao' => $perfil['Descricao']]
             );
