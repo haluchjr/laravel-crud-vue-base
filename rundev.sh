@@ -1,2 +1,6 @@
 #!/bin/bash
-docker compose exec frontend npm run dev
+# Terminal visivel
+echo "Rodando Servidor interno do NPM"
+ docker compose exec frontend npm run dev
+
+
