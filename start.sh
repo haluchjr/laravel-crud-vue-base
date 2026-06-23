@@ -25,23 +25,27 @@ fi
 echo -e "${AMARELO}Subindo os containers...${NC}"
 docker compose up -d
 
+sleep 2
+echo -e "${VERMELHO}Apagando redes inuteis.${NC}"
+docker network prune -f
+
 echo ""
 echo -e "${AMARELO}Aguardando os serviços estabilizarem...${NC}"
 
 # 3. Loop rápido para esperar o MySQL aceitar conexões (opcional, mas evita erro de Connection Refused no Artisan)
 # Ele tenta rodar um 'mysqladmin ping' de dentro do container até dar boa
-MYSQ_READY=0
+MYSQL_READY=0
 for i in {1..15}; do
     if docker exec db_mysql mysqladmin ping -h"localhost" -u"root" -p"${DB_ROOT_PASSWORD}" --silent &> /dev/null; then
-        MYSQ_READY=1
+        MYSQL_READY=1
         break
     fi
-    echo -n "."
+    echo -n "#"
     sleep 1
 done
 
 echo ""
-if [ $MYSQ_READY -eq 1 ]; then
+if [ $MYSQL_READY -eq 1 ]; then
     echo -e "${VERDE}[OK] MySQL está pronto para conexões!${NC}"
 else
     echo -e "${AMARELO}[AVISO] MySQL demorando mais que o esperado para iniciar. Verifique os logs se necessário.${NC}"

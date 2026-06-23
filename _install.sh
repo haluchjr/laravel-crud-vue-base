@@ -2,10 +2,16 @@
 
 # Cores para o terminal
 VERDE='\033[0;32m'
+VERMELHO='\033[0;31m'
 AZUL='\033[0;34m'
 SEM_COR='\033[0m'
 
+echo -e "${VERMELHO}===========================================================================${SEM_COR}"
+echo -e "${VERMELHO}=== SE VOCE JA RODOU ESTE SCRIPT UMA VEZ, ABORTE POIS VAI ZERAR O BANCO ===${SEM_COR}"
+echo -e "${VERMELHO}===========================================================================${SEM_COR}"
+
 echo -e "${AZUL}==> Iniciando a preparação do ambiente Laravel + Inertia/Vue...${SEM_COR}"
+
 
 # Arquivos de ambiente
 DOCKER_ENV=".env.docker"
@@ -31,6 +37,15 @@ if [ ! -f "$ENV_FILE" ]; then
 fi
 
 export $(grep -v '^#' "$ENV_FILE" | xargs)
+
+if [ "$APP_ENV" != "local" ]; then
+    echo -e "${VERMELHO}===========================================================================${SEM_COR}"
+    echo -e "${VERMELHO}=== ERRO: Este script só pode ser executado em ambiente 'local'         ===${NC}"
+    echo -e "${VERMELHO}=== Ambiente atual detectado: ${APP_ENV}                                ===${NC}"
+    echo -e "${VERMELHO}===========================================================================${SEM_COR}"
+    exit 1
+fi
+sleep 50
 
 # 2. Limpa contêineres e resíduos antigos
 echo -e "${AZUL}==> Limpando contêineres e volumes antigos...${SEM_COR}"
@@ -90,6 +105,9 @@ eval "docker compose exec -T -e MYSQL_PWD=\"${MYSQL_ROOT_PASSWORD}\" db_mysql my
   DROP USER IF EXISTS '${MYSQL_USER}'@'%';
   FLUSH PRIVILEGES;
 \""
+
+echo -e "${AZUL}==> Rodando scripts base do banco de dados ...${SEM_COR}"
+docker compose exec backend php artisan db:install
 
 echo "--------------------------------------------------------"
 echo -e "${VERDE}TUDO PRONTO! O ecossistema está rodando perfeitamente. 🚀${SEM_COR}"
