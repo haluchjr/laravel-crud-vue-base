@@ -26,6 +26,7 @@ class BaseController extends Controller
             return Inertia::render('Welcome', [
                 'info' => [
                     'environment' => [
+                        'build_project' => config('app.build_version'),
                         'php_version' => PHP_VERSION,
                         'ambiente' => $ambiente,
                         'laravel_version' => App::version(),

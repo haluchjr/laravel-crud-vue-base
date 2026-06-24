@@ -13,11 +13,11 @@ defineProps({
                 <h1 class="text-3xl font-bold mb-6 text-indigo-400 border-b border-gray-800 pb-4">
                     Infos
                 </h1>
-
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700">
                         <h2 class="text-xl font-semibold mb-4 text-emerald-400">Ambiente</h2>
                         <ul class="space-y-2 text-sm">
+                            <li><strong>Build projeto Docker:</strong> <span class="text-gray-400">{{ info.environment.build_project }}</span></li>
                             <li><strong>Ambiente:</strong> <span class="text-gray-400">{{ info.environment.ambiente }}</span></li>
                             <li><strong>PHP:</strong> <span class="text-gray-400">{{ info.environment.php_version }}</span></li>
                             <li><strong>Laravel:</strong> <span class="text-gray-400">{{ info.environment.laravel_version }}</span></li>

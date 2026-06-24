@@ -1,26 +1,24 @@
+#DEV
 services:
   backend:
     container_name: ${COMPOSE_PROJECT_NAME}_backend
     build:
-      context: ./docker/php8.3
-      network: host
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/php8.3/Dockerfile
+      target: development # Para aqui!
       args:
         USER_ID: 1000
         GROUP_ID: 1000
     restart: unless-stopped
     ports:
       - "${PORTA_HTTP}:80"
-    environment:
-      - TMPDIR=/tmp
-      - TMP=/tmp
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www/html # Espelha sua pasta
     depends_on:
       - cache
       - db_mysql
     extra_hosts:
-      - host.docker.internal:host-gateway
+      - "host.docker.internal:host-gateway"
     networks:
       - app-net
 

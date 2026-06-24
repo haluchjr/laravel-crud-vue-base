@@ -1,6 +1,5 @@
 services:
   backend:
-    # container_name: backend
     container_name: ${COMPOSE_PROJECT_NAME}_backend
     build:
       context: ./docker/php8.3
@@ -11,7 +10,6 @@ services:
         GROUP_ID: 1000
     restart: unless-stopped
     ports:
-      #- "8080:80"
       - "${PORTA_HTTP}:80"
     environment:
       - TMPDIR=/tmp
@@ -26,13 +24,26 @@ services:
     networks:
       - app-net
 
+  frontend:
+    image: node:20-alpine
+    container_name: ${COMPOSE_PROJECT_NAME}_frontend
+    user: "1000:1000"
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    ports:
+      - "${PORTA_VITE}:5173"
+    command: tail -f /dev/null
+    depends_on:
+      - backend
+    networks:
+      - app-net
+
   cache:
     image: redis:7-alpine
-    #container_name: cache
     container_name: ${COMPOSE_PROJECT_NAME}_cache
     restart: unless-stopped
     ports:
-      #- "6379:6379"
       - "${PORTA_REDIS}:6379"
     volumes:
       - cache_redis:/data
@@ -41,22 +52,16 @@ services:
 
   db_mysql:
     image: mysql:8.0
-    #container_name: db_mysql
     container_name: ${COMPOSE_PROJECT_NAME}_db_mysql
     restart: unless-stopped
     command: --authentication_policy=mysql_native_password
     ports:
-      #- "3306:3306"
       - "${PORTA_MYSQL}:3306"
     environment:
-      #MYSQL_ROOT_PASSWORD: r00t
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      #MYSQL_DATABASE: sistema
       MYSQL_DATABASE: ${COMPOSE_PROJECT_NAME}_sistema
       MYSQL_USER: ${MYSQL_USER}
-      #MYSQL_USER: user
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      #MYSQL_PASSWORD: user123
     volumes:
       - db_data:/var/lib/mysql
     networks:

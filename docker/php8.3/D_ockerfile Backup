@@ -1,7 +1,4 @@
-# ===================================================
-# STAGE 1: BASE (O coração com as extensões Debian)
-# ===================================================
-FROM php:8.3-apache AS base
+FROM php:8.3-apache
 
 WORKDIR /var/www/html
 
@@ -30,14 +27,7 @@ ENV TMPDIR=/tmp
 ENV TMP=/tmp
 
 # Copia o php.ini
-# COPY ./php.ini /usr/local/etc/php/
-COPY ./docker/php8.3/php.ini /usr/local/etc/php/
-
-
-# ===============================================================
-# STAGE 2: DEVELOPMENT (Para você usar no dia a dia com volumes)
-# ===============================================================
-FROM base AS development
+COPY ./php.ini /usr/local/etc/php/
 
 # Instala o Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -58,16 +48,3 @@ RUN mkdir -p storage bootstrap/cache && \
 USER appuser
 
 ENV PATH="/home/appuser/.composer/vendor/bin:$PATH"
-
-# ============================================================
-# STAGE 3: PRODUCTION (A Build blindada que vai para PRODUCAO)
-# ============================================================
-FROM base AS production
-
-# Copia o código final do projeto para dentro da imagem
-COPY . /var/www/html
-
-# No Debian de produção, quem roda o Apache é o usuário www-data
-RUN mkdir -p storage bootstrap/cache && \
-    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache && \
-    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
