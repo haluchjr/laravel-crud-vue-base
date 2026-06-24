@@ -28,11 +28,11 @@ echo "=========================================================="
 echo ""
 
 # 1. GERANDO A TAG DINÂMICA
-# Opção A: Por Data e Hora (Fica ex: 2026.06.24-1122)
-TAG=$(date +%Y.%m.%d-%H%M)
+# tag por data
+#TAG=$(date +%Y.%m.%d-%H%M)
 
-# Opção B: Por Hash do Git (Se você usa Git, descomente a linha abaixo e comente a de cima)
-# TAG=$(git rev-parse --short HEAD)
+# tag por hash do git
+TAG=$(git rev-parse --short HEAD)
 
 IMAGE_NAME="sistema:$TAG"
 OUTPUT_FILE="sistema-$TAG.tar"

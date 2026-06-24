@@ -9,7 +9,10 @@ SEM_COR='\033[0m'
 
 ENV_FILE=".env"
 if [ ! -f "$ENV_FILE" ]; then
-    echo "Erro: O arquivo $ENV_FILE não existe!"
+    echo -e "${VERMELHO}==========================================================================="
+	echo -e "Erro: O arquivo $ENV_FILE não existe!"
+	echo -e "      Verifique se ele nao ta com o nome original .env.example"
+	echo -e "===========================================================================${SEM_COR}"
     exit 1
 fi
 
