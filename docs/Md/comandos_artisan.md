@@ -7,3 +7,4 @@
 | **Model + Migration + Controller com Resource** | `php artisan make:model Post -mcr` |
 | **Model + Migration + Controller + Seeder + Factory (Combo!)** | `php artisan make:model Post -a` |
 | **Rodar Migrate** | `php artisan migrate` |
+| **Criar um novo Comando** | `php artisan make:command <nome>` - app\console\commands|

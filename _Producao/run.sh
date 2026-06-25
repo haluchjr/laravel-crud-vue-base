@@ -7,6 +7,7 @@ VERMELHO='\033[0;31m'
 AZUL='\033[0;34m'
 SEM_COR='\033[0m'
 
+
 ENV_FILE=".env"
 if [ ! -f "$ENV_FILE" ]; then
     echo -e "${VERMELHO}==========================================================================="
@@ -19,7 +20,7 @@ fi
 export $(grep -v '^#' "$ENV_FILE" | xargs)
 
 echo -e "${VERMELHO}===========================================================================${SEM_COR}"
-echo -e "${VERMELHO}SCRIPT PARA INICIAR A NOVA RELEASE meu-app-${TAG} ${SEM_COR}"
+echo -e "${VERMELHO}SCRIPT PARA INICIAR A NOVA RELEASE sistema-${TAG} ${SEM_COR}"
 echo -e "${VERMELHO}===========================================================================${SEM_COR}"
 
 total=10
@@ -47,6 +48,8 @@ for ((i=0; i<=total; i++)); do
 done
 
 echo
+echo  "Desligando geral."
+docker compose down --volumes --remove-orphans
 
 echo -e "${AZUL}==> Verificando se o arquivo de build existe...${SEM_COR}"
 if [ ! -f "sistema-${TAG}.tar" ]; then
@@ -54,8 +57,8 @@ if [ ! -f "sistema-${TAG}.tar" ]; then
     exit 1
 fi
 
-echo -e "${AZUL}==> Iniciando carregamento da versão...${SEM_COR}"
-docker load -i "sistema-${TAG}.tar"
+#echo -e "${AZUL}==> Iniciando carregamento da versão...${SEM_COR}"
+#docker load -i "sistema-${TAG}.tar"
 
 echo -e "${VERDE}==> Subindo os containers de produção...${SEM_COR}"
 docker compose up -d

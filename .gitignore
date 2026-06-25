@@ -19,3 +19,5 @@ yarn-error.log
 /.vscode
 /public/usuarios/*
 !/public/usuarios/.gitkeep
+
+_Producao/*.tar

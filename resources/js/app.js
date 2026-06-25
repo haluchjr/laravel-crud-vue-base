@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import 'bootstrap';
-
+/*
 // Inibe o F12 e exibe um aviso no console para usuários comuns, mas apenas em produção
 if (import.meta.env.MODE !== 'development') {
     const estiloTitulo = "color: red; font-size: 40px; font-weight: bold; -webkit-text-stroke: 1px black;";
@@ -30,7 +30,7 @@ if (import.meta.env.MODE !== 'development') {
     });
 }
 // -------------------------------
-
+*/
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

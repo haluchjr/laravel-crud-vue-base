@@ -24,11 +24,13 @@ clear
 case $ESCOLHA in
     1)
         echo -e "\e[31m[INFO] Colocando a aplicação em modo manutenção...\e[0m"
-        docker compose exec backend php artisan down
+        #docker compose exec backend php artisan down
+        php artisan down
         ;;
     2)
         echo -e "\e[32m[INFO] Trazendo a aplicação de volta ao ar...\e[0m"
-        docker compose exec backend php artisan up
+        #docker compose exec backend php artisan up
+        php artisan up
         ;;
     3)
         echo -e "\e[33m[INFO] Verificando pasta do framework...\e[0m"

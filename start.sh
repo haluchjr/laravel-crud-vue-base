@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 
 # Define cores para o terminal
 VERDE='\033[0;32m'
@@ -58,7 +59,7 @@ echo -e "${VERDE}Status atual dos serviços:${NC}"
 OUTPUT=$(docker compose ps --format "{{.Name}}\t{{.Status}}\t{{.Ports}}\t{{.Service}}" | column -t -s $'\t')
 echo "$OUTPUT"
 echo ""
-echo -e "Acesse em : ${VERDE} ${APP_URL} ${NC}"
+eval "echo -e \"Acesse em : ${VERDE}${APP_URL}${SEM_COR}\""
 echo ""
 echo -e "${AZUL}========================================${NC}"
 echo -e "${VERDE} Ambiente online! Boa codificação. ${NC}"

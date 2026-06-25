@@ -1,0 +1,41 @@
+Dependências e Builds de Frontend (Já compiladas)
+node_modules/
+npm-debug.log
+resources/js/
+resources/css/
+
+# Arquivos Locais e Configurações de Dev
+.env
+.env.local
+.env.*.local
+.git/
+.gitignore
+.dockerignore
+README.md
+
+# Arquivos de Teste e IDEs
+.phpunit.cache/
+tests/
+.vscode/
+.idea/
+.docker/
+
+# Cache e Logs Locais do Laravel (A produção recria esses arquivos)
+storage/logs/*.log
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*.php
+bootstrap/cache/*.php
+
+# Ignorar configurações do Vite/Tailwind
+vite.config.js
+tailwind.config.js
+postcss.config.js
+package.json
+package-lock.json
+
+# pastas especificas
+_Producao/
+_Producao
+_Docs/
+_Docs

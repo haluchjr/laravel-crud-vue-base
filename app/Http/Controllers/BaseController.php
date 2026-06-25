@@ -22,7 +22,7 @@ class BaseController extends Controller
         phpinfo(INFO_GENERAL | INFO_MODULES); 
         $phpinfoText = ob_get_clean();
         $ambiente = App::environment();
-        if ($ambiente == 'local'){
+        if ($ambiente == 'local' || true){
             return Inertia::render('Welcome', [
                 'info' => [
                     'environment' => [
