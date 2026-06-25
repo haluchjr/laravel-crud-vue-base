@@ -9,8 +9,9 @@ use App\Helpers\Helpers;
 
 class BaseController extends Controller
 {
-    public function main(){
-
+    public function main()
+    {
+        log::error('AVISO',[ __FILE__ , __line__]);
          // Lendo o composer.json para pegar dependências do PHP/Laravel
         $composerPath = base_path('composer.json');
         $composerData = file_exists($composerPath) ? json_decode(file_get_contents($composerPath), true) : [];

@@ -10,7 +10,7 @@ import { useCep } from '@/Composables/useCep';
 import { useEventBus } from '@/Utils/eventBus'; // <-- IMPORTA O BUS em cada pagina que precisar.
 import { mask } from 'vue-the-mask';
 
-const { emit } = useEventBus();
+const { emit } = useEventBus(); // Só usar se tiver algo q aconteça na tela.
 
 const props = defineProps({
     dados: Object, // se tiver dados da listagem

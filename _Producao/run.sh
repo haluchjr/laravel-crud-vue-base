@@ -20,7 +20,7 @@ fi
 export $(grep -v '^#' "$ENV_FILE" | xargs)
 
 echo -e "${VERMELHO}===========================================================================${SEM_COR}"
-echo -e "${VERMELHO}SCRIPT PARA INICIAR A NOVA RELEASE sistema-${TAG} ${SEM_COR}"
+echo -e "${VERMELHO}SCRIPT PARA INICIAR A NOVA RELEASE sistema:${TAG} ${SEM_COR}"
 echo -e "${VERMELHO}===========================================================================${SEM_COR}"
 
 total=10
@@ -48,12 +48,12 @@ for ((i=0; i<=total; i++)); do
 done
 
 echo
-echo  "Desligando geral."
-docker compose down --volumes --remove-orphans
+#echo  "Desligando geral."
+#docker compose down --volumes --remove-orphans
 
 echo -e "${AZUL}==> Verificando se o arquivo de build existe...${SEM_COR}"
 if [ ! -f "sistema-${TAG}.tar" ]; then
-    echo -e "${VERMELHO}Erro: O arquivo sistema-${TAG}.tar não foi encontrado nesta pasta!${SEM_COR}"
+    echo -e "${VERMELHO}Erro: O arquivo sistema:${TAG}.tar não foi encontrado nesta pasta!${SEM_COR}"
     exit 1
 fi
 
@@ -63,4 +63,4 @@ fi
 echo -e "${VERDE}==> Subindo os containers de produção...${SEM_COR}"
 docker compose -f docker-compose-producao.yml up -d
 
-echo -e "${VERDE}Concluído! Sistema atualizado para a versão ${TAG}.${SEM_COR}"
+echo -e "${VERDE}Concluído! Sistema atualizado para o sistema:${TAG}.${SEM_COR}"

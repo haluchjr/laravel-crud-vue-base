@@ -48,7 +48,9 @@ done
 echo -e "\n------------------------------------------------------------------------"
 
 # 1. GERANDO A TAG DINÂMICA
-TAG=$(date +%d-%m-%Y_%H-%M)
+#TAG=$(date +%d-%m-%Y_%H-%M) 
+TAG="v2"
+
 IMAGE_NAME="sistema:$TAG"
 OUTPUT_FILE="sistema-$TAG.tar"
 PROD_DIR="_Producao/"
@@ -105,7 +107,7 @@ rm -f "$OUTPUT_FILE"
 #rm -f "$PROD_DIR/$OUTPUT_FILE"
 
 echo "------------------------------------------------------------------------"
-echo -e "${VERDE} Build concluída com sucesso! 🎉${SEM_COR}"
+echo -e "${VERDE} Build concluída com sucesso!${SEM_COR}"
 echo "------------------------------------------------------------------------"
 echo "Agora vá para a pasta de produção e execute apenas:"
 echo -e "${VERDE} Qdo for pra producao de verdade ai usar RSYNC mais elaborado"

@@ -5,8 +5,13 @@ use Inertia\Inertia;
 
 require __DIR__.'/auth.php'; // Tava no final do codigo.
 
- use App\Http\Controllers\BaseController;
- Route::get('/',[BaseController::class,'main']); // AJustar depois...senao em producao da erro.
+use App\Http\Controllers\BaseController;
+Route::get('/',[BaseController::class,'main']); // AJustar depois...senao em producao da erro.
+
+use App\Http\Controllers\LogController;
+Route::get('/logs/list',[LogController::class,'list'])->name('log.list');
+Route::get('/logs/show/{id}',[LogController::class,'showLog'])->name('log.show');
+Route::get('/logs/destroy/{id}',[LogController::class,'destroy'])->name('log.destroy');
 
 
 // Modulo Loja
