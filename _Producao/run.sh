@@ -61,6 +61,6 @@ fi
 #docker load -i "sistema-${TAG}.tar"
 
 echo -e "${VERDE}==> Subindo os containers de produção...${SEM_COR}"
-docker compose up -d
+docker compose -f docker-compose-producao.yml up -d
 
 echo -e "${VERDE}Concluído! Sistema atualizado para a versão ${TAG}.${SEM_COR}"

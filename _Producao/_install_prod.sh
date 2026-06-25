@@ -43,7 +43,7 @@ docker exec prod_backend php artisan cache:clear
 echo -e "${VERMELHO}+------------------------------------------------------------------------+"
 
 echo -e "${AZUL}==> Blindando usuario laravel-user no MYSQL ...${SEM_COR}"
-docker exec prod_backend php artisan db:super-user --force
+docker exec prod_backend php artisan db:super-user
 
 #echo -e "${AZUL}==> Rodando scripts base do banco de dados ...${SEM_COR}"
 #docker compose exec backend php artisan db:install

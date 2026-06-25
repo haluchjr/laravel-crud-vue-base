@@ -120,12 +120,7 @@ docker compose exec backend php artisan config:clear
 docker compose exec backend php artisan cache:clear
 
 echo -e "${AZUL}==> Blindando MYSQL ...${SEM_COR}"
-eval "docker compose exec -T -e MYSQL_PWD=\"${MYSQL_ROOT_PASSWORD}\" db_mysql mysql -u root -e \"
-  CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'172.%.%.%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-  GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'172.%.%.%';
-  DROP USER IF EXISTS '${MYSQL_USER}'@'%';
-  FLUSH PRIVILEGES;
-\""
+docker compose exec backend php artisan db:super-user --force
 
 echo -e "${AZUL}==> Rodando scripts base do banco de dados ...${SEM_COR}"
 docker compose exec backend php artisan db:install

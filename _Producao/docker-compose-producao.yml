@@ -1,3 +1,6 @@
+############
+# PRODUCAO #
+############
 services:
   prod_backend:
     image: sistema:${TAG} # Pega a tag gerada pelo script de build
