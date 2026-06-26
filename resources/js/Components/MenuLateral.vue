@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { usePage , Link} from '@inertiajs/vue3';
-
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import MenuItemRecursivo from '@/Components/MenuItemRecursivo.vue';
 
 const page = usePage();
@@ -17,8 +17,12 @@ const usuarioLogado = computed(() => inertiaPage.props.auth?.user || null);
 <template>
   <div class="d-flex flex-column flex-shrink-0 p-3 bg-white shadow-sm h-100" style="width: 250px; min-height: 100vh;">
     
-    <span class="fs-5 fw-bold text-primary mb-3 ps-2">Painel Geral</span>
-    <hr class="mt-0 mb-3">
+    <div class="mb-4 text-center">
+            <Link href="/">
+                <ApplicationLogo style="width: 80px; height: 80px;" class="text-secondary" />
+            </Link>
+        </div>
+    <hr>
     
     <ul class="nav nav-pills flex-column mb-auto gap-2">
       <MenuItemRecursivo 

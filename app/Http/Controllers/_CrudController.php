@@ -272,7 +272,10 @@ class CrudController extends Controller
     public function destroy($id)
     {
         try{
+            // Usando GATE
+            // app/Providers/AppServiceProvider.php
             Gate::authorize('deletar-usuarios');
+
             // 1. Busca o projeto pelo ID ou estoura um erro 404 caso não encontre
             $projeto = Projeto::findOrFail($id);
             

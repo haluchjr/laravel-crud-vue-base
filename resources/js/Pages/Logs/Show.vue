@@ -39,7 +39,9 @@ onMounted(() => {
             style="max-height: 75vh;"
         ><code class="language-log font-monospace" style="font-size: 0.875rem;">{{ conteudo }}</code></pre>
     </div>
-
+ <Link :href="route('log.list')" class="btn btn-secondary">
+                Voltar
+            </Link>
 </Layout>
 </template>
 

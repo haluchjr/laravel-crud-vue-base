@@ -122,7 +122,7 @@ const updatePassword = () => {
                 </Transition>
 
                 <Link 
-                    :href="route('crud.index')" 
+                    :href="route('usuario.index')" 
                     class="btn btn-link link-primary p-0 text-decoration-none small fw-medium ms-auto">
                     Voltar para o sistema <span aria-hidden="true">&rarr;</span>
                 </Link>

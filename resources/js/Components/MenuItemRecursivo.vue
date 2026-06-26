@@ -29,7 +29,7 @@ const estaAtivo = computed(() => rotaAtual.value === item.url);
     
     <Link 
       v-if="!temFilhos"
-      :href="item.url" 
+      :href="route(item.url)" 
       class="nav-link d-flex align-items-center gap-2 text-secondary py-2 px-3 rounded"
       :class="{ 'active text-white bg-primary fw-bold': estaAtivo }"
     >

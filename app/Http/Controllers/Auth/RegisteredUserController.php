@@ -45,14 +45,15 @@ class RegisteredUserController extends Controller
             'email'     => $request->email,
             'password'  => Hash::make($request->password),
             'status'    => 1, // 1=Ativo / 0=Inativo / 2=Analise
-            'nivel'     => 1, // Cliente (automaticamente todo cadastro é cliente ) // tb_acl define qual nivel dele.
+            'nivel'     => 1, // Cliente (automaticamente todo cadastro é cliente ) // tb_nivel define qual nivel dele.
         ]);
         
         //Mail::to('seu-email@teste.com')->send(new CadastroEmail($request->name));
         //event(new Registered($user));
 
 
+        // Qdo usuario se registro, cai pra tela x.
         Auth::login($user);
-        return redirect()->route('crud.index')->with('success', 'Registrado.'); 
+        return redirect()->route('usuario.index')->with('success', "Registro feito com sucesso, bem vindo, {$request->name} ."); 
     }
 }

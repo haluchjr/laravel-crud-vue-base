@@ -60,7 +60,9 @@ const { emit } = useEventBus();
 <span v-else>
     Sem logs, ou desativado.
 </span>
-
+ <Link :href="route('log.list')" class="btn btn-secondary">
+                Voltar
+            </Link>
 </Layout>
 </template>
 

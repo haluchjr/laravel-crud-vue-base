@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
 
         return in_array((int) $user->nivel, $niveisPermitidos)
             ? Response::allow()
-            : Response::deny("Acesso negado:\nApenas usuários com nível 8 podem deletar.");
+            : Response::deny("Acesso negado:\nApenas usuários com nível 99 podem deletar.");
         });
         
         // Você pode adicionar mais Gates aqui embaixo se precisar:

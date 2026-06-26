@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
-
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
@@ -31,36 +31,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        // 1. O Laravel tenta autenticar (vê se e-mail e senha dão match)
         $request->authenticate();
-
-        // 2. 💡 Pegamos o usuário que acabou de tentar logar
         $user = Auth::user();
-
-        // 3. 💡 Verificamos se ele está com o status de análise 
-        // (Ajuste o nome da coluna/status conforme você criou na sua tabela users)
-        if ($user->status === '2') {
-            
-            // Desloga o usuário na hora para ele não ter acesso a nada
-            Auth::guard('web')->logout();
-            
-            // Invalida a sessão que o 'authenticate' tentou abrir
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            // Lança uma exceção de validação que o Inertia/Breeze joga direto no campo de erro da tela de login
-            throw ValidationException::withMessages([
-                'email' => __('Sua conta ainda está em análise pela administração. Por favor, aguarde.'),
-            ]);
-        }
-
-        // 4. Se ele NÃO estiver em análise, o fluxo padrão do Breeze continua normalmente:
         $request->session()->regenerate();
 
-        /* 
-
-        */
-        return redirect()->intended(route('crud.index'))->with('success', "Olá, {$user->name}"); // Sua rota padrão pós-login
+        $rotaPadrao = ($user->nivel == 1) ? 'usuario.index' : 'pedido.index';
+        return redirect()
+            ->intended(route($rotaPadrao))
+            ->with('success', "Olá, {$user->name}");
+        
     }
 
     /**
@@ -68,6 +47,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        if ($request->user()){
+            $nivelUsuario = (int) $request->user()->nivel;
+            $sessionId = $request->session()->getId();
+            $cacheKey = "sistema:menu:sessao:{$sessionId}:nivel:{$nivelUsuario}";
+            Cache::forget($cacheKey);
+        }
+
+
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
@@ -76,6 +64,6 @@ class AuthenticatedSessionController extends Controller
 
         //return redirect('/login');
         // ou
-        return redirect()->route('crud.index');
+        return redirect()->route('login');
     }
 }

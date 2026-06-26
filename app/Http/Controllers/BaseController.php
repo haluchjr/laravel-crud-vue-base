@@ -6,10 +6,19 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\Helpers;
+use Illuminate\Support\Facades\Auth;
 
 class BaseController extends Controller
 {
-    public function main()
+    public function main(){
+        if (Auth::user()->nivel == 1){
+            return redirect()->route('usuario.index'); // Listagem de pedidos do cliente
+        }else{
+            return redirect()->route('pedido.index'); // Listagem de Pedidos
+        }
+    }
+
+    public function mai1n()
     {
         log::error('AVISO',[ __FILE__ , __line__]);
          // Lendo o composer.json para pegar dependências do PHP/Laravel

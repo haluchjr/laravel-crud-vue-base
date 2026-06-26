@@ -36,4 +36,6 @@ class Menu extends Model
     {
         return $this->belongsTo(Menu::class, 'menu_pai_id');
     }
+
+
 }
