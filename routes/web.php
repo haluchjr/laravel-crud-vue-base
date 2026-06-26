@@ -5,22 +5,27 @@ use Inertia\Inertia;
 
 require __DIR__.'/auth.php'; // Tava no final do codigo.
 
+// Rota basica pra ter algo pra ver.
 use App\Http\Controllers\BaseController;
 Route::get('/',[BaseController::class,'main']); // AJustar depois...senao em producao da erro.
 
+// Visualizador de eventos , restringir no menu a nivel ADM/99
 use App\Http\Controllers\LogController;
 Route::get('/logs/list',[LogController::class,'list'])->name('log.list');
 Route::get('/logs/show/{id}',[LogController::class,'showLog'])->name('log.show');
 Route::get('/logs/destroy/{id}',[LogController::class,'destroy'])->name('log.destroy');
 
+// Mini Wiki, , restringir no menu a nivel ADM/99
+use App\Http\Controllers\WikiController;
+Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
+Route::get('/markdown/conteudo/{nomeDocumento}', [WikiController::class, 'getConteudo'])->name('markdown.conteudo');//->middleware('nivel:99');
+Route::get('/markdown/img/{nomeImagem}', [WikiController::class, 'getImagem'])->name('markdown.imagem')->where('nomeImagem', '.*'); // Aceita subpastas e exten
 
-// Modulo Loja
-
-// Modulo Administrativo
-
-// Modulo PreImpressao(producao)
 
 
+
+
+// exemplos
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CadastroController;
 Route::get('cadastro', [CadastroController::class, 'index'])->name('cadastro.index');
@@ -29,16 +34,6 @@ Route::post('cadastro', [CadastroController::class, 'store'])->name('cadastro.st
 Route::get('cadastro/edit/{id}', [CadastroController::class, 'edit'])->name('cadastro.edit'); // novo
 Route::put('cadastro/{id}', [CadastroController::class, 'update'])->name('cadastro.update');
 Route::delete('cadastro/{id}', [CadastroController::class, 'destroy'])->name('cadastro.destroy');
-
-
-
-// ler documentacao.
-// travar com  validacao de autenticacao, somente usuarios autenticados podem acessar a wiki.
-use App\Http\Controllers\WikiController;
-Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
-Route::get('/markdown/conteudo/{nomeDocumento}', [WikiController::class, 'getConteudo'])->name('markdown.conteudo');//->middleware('nivel:99');
-Route::get('/markdown/img/{nomeImagem}', [WikiController::class, 'getImagem'])->name('markdown.imagem')->where('nomeImagem', '.*'); // Aceita subpastas e exten
-
 
 // Rotas pra testar somente exemplos, uso de api.
 Route::get('/teste', [CrudController::class, 'teste'])->name('crud.teste');
@@ -61,6 +56,7 @@ route::post('/crud1/teste-delete',[CrudController::class,'testeDelete'])->name('
 Route::get('/diretivas', function () {
     return Inertia::render('Estudo/Index'); 
 });
+
 
 
 // Rota pública para onde o usuário será enviado após se cadastrar
@@ -93,3 +89,4 @@ Route::middleware('auth')->group(function () {
 });
         
 
+/// Fim exemplos.
