@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { Head , usePage, Link } from '@inertiajs/vue3'
 import { computed, onMounted } from 'vue';
-import Layout from '@/Layouts/CrudLayoutNoMenu.vue';
+import Layout from '@/Layouts/CrudLayout.vue';
 defineProps({
     nome: String,
     conteudo : String,
@@ -39,9 +39,6 @@ onMounted(() => {
             style="max-height: 75vh;"
         ><code class="language-log font-monospace" style="font-size: 0.875rem;">{{ conteudo }}</code></pre>
     </div>
- <Link :href="route('log.list')" class="btn btn-secondary">
-                Voltar
-            </Link>
 </Layout>
 </template>
 

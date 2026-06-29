@@ -1,6 +1,6 @@
 #!/bin/bash
 clear
-echo "+---------------------+"
+echo "+-------------------- +"
 echo "| Terminal do Backend |"
 echo "+---------------------+"
 #docker compose exec -it backend bash

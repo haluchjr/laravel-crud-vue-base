@@ -18,6 +18,17 @@ class BaseController extends Controller
         }
     }
 
+    public function loginteste(){
+         return Inertia::render('loginteste',['dados'=>'login1111']);
+    }
+    public function usuario(){
+         return Inertia::render('loginteste',['dados'=>'Pedidos do cliente']);
+    }
+    
+    public function pedido(){
+         return Inertia::render('loginteste',['dados'=>'Listar pedidos, dos clientes']);
+    }
+
     public function mai1n()
     {
         log::error('AVISO',[ __FILE__ , __line__]);

@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { Head , usePage, Link } from '@inertiajs/vue3'
 import { computed } from 'vue';
-import Layout from '@/Layouts/CrudLayoutNoMenu.vue';
+import Layout from '@/Layouts/CrudLayout.vue';
 import debug from '@/Components/Debug.vue';
 import { useEventBus } from '@/Utils/eventBus'; // <-- IMPORTA O BUS em cada pagina que precisar.
 
@@ -60,9 +60,6 @@ const { emit } = useEventBus();
 <span v-else>
     Sem logs, ou desativado.
 </span>
- <Link :href="route('log.list')" class="btn btn-secondary">
-                Voltar
-            </Link>
 </Layout>
 </template>
 

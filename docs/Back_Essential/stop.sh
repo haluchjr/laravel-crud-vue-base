@@ -9,7 +9,6 @@ NC='\033[0m' # No Color
 #ENV_FILE=".env"
 #export $(grep -v '^#' "$ENV_FILE" | xargs)
 
-
 echo ""
 echo ""
 echo -e "${AMARELO}Iniciando a limpeza do ambiente...${NC}"
@@ -38,11 +37,6 @@ else
     echo -e "${AMARELO}Arquivo laravel.log não encontrado. Pulando limpeza de log.${NC}"
 fi
 # ----------------------------------------------------------------------
-echo ""
-echo -e "${vermelho}Gerando backup antes de desligar os containers${NC}"
-source ./backup_sql.sh
-
-echo "-------------------------------------------------------------------"
 
 echo ""
 echo -e "${VERMELHO}Desligando os containers (Mantendo os volumes intactos)...${NC}"

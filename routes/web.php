@@ -2,68 +2,70 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Auth\PasswordController;
 
 // ADMIN
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\WikiController;
 
-Route::get('/teste', function () {
-    return response()->json([
-        'status' => 'sucesso',
-        'mensagem' => 'Conexão com o Laravel funcionou perfeitamente!',
-        'horario' => now()->toDateTimeString()
-    ]);
-});
-
-// CLIENTE
-use App\Http\Controllers\Cliente\PedidoController;
-//Route::get('/',[PedidoController::class,'novoPedido'])->name('pedido.novo');
-Route::get('/',[BaseController::class,'mai1n'])->name('teste');
-
-// Mini Wiki, , restringir no menu a nivel ADM/99
-    Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
-    Route::get('/markdown/conteudo/{nomeDocumento}', [WikiController::class, 'getConteudo'])->name('markdown.conteudo');//->middleware('nivel:99');
-    Route::get('/markdown/img/{nomeImagem}', [WikiController::class, 'getImagem'])->name('markdown.imagem')->where('nomeImagem', '.*'); // Aceita subpastas e exten0
-
-//Route::get('/',[BaseController::class,'main'])->name('tela.index'); // AJustar depois...senao em producao da erro.
-/*
-
+// Gerais/Genericos
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\UsuarioController;
+
+// Por Setor/Perfil
+use App\Http\Controllers\Cliente\PedidoController as PedidoCliente;
+use App\Http\Controllers\Financeiro\PedidoController as PedidoFinanceiro;
+use App\Http\Controllers\Comercial\PedidoController as PedidoComercial;
+use App\Http\Controllers\Preimpressao\PedidoController as PedidoPreimpressao;
+
+require __DIR__.'/auth.php'; // Tava no final do codigo.
+
+
+//******************************************************************** */
+
+
 Route::middleware('auth')->group(function () {
+
+    // APOST LOGAR vai pra usuario.index
+
+
     Route::get('/',[BaseController::class,'main'])->name('redirect');
+    Route::get('/1',[BaseController::class,'usuario'])->name('usuario.index');
+    Route::get('/12',[BaseController::class,'loginteste'])->name('usuario.index1');
+    Route::get('/134',[BaseController::class,'pedido'])->name('pedido.index');
 
     // Alteracoes de senha.
     Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
     Route::get('/profile', [PasswordController::class, 'edit'])->name('profile.edit');
-    
-    // MENU USUARIO
-    Route::get('/7239b827d37d653d84361615bbf75feeb5f376a6', [PedidoController::class,  'novoPedido'])->name('pedido.novo');
-    Route::get('/406223ece94e5c03170b598ca9dce09481a7f97a', [UsuarioController::class, 'index'])->name('usuario.index');
-    Route::get('/63bd6233d34eea3c1d7993ab33c0523deb75473b', [UsuarioController::class, 'alterarDados'])->name('usuario.meusdados');
-    Route::get('/dbc84778d7aed4575ba29dbbf67770ec488374d5', [PedidoController::class,  'relatorioPedidos'])->name('pedido.relatorio');
-    Route::get('/26', [PedidoController::class,  'listarPedidos'])->name('pedido.relatorio.cliente');
-    
-    // Outros perfis
-    Route::get('/23a1bf2b4836567c6092a984f7b2c15172f3d328', [PedidoController::class, 'listarPedidosClientes'])->name('adm.pedidos.pistar');
-    
 
-    
-    // Rotas Administrativo        
-    // Visualizador de eventos , restringir no menu a nivel ADM/99
-    Route::get('/logs/list',[LogController::class,'list'])->name('log.list');
-    Route::get('/logs/show/{id}',[LogController::class,'showLog'])->name('log.show');
-    Route::get('/logs/destroy/{id}',[LogController::class,'destroy'])->name('log.destroy');
+    Route::prefix('cliente')->group(function(){    });
 
-    // Mini Wiki, , restringir no menu a nivel ADM/99
-    Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('wiki.docs');
-    Route::get('/markdown/conteudo/{nomeDocumento}', [WikiController::class, 'getConteudo'])->name('markdown.conteudo');//->middleware('nivel:99');
-    Route::get('/markdown/img/{nomeImagem}', [WikiController::class, 'getImagem'])->name('markdown.imagem')->where('nomeImagem', '.*'); // Aceita subpastas e exten0
+    Route::prefix('comercial')->group(function(){    });
+
+    Route::prefix('financeiro')->group(function(){    });
+
+    Route::prefix('preimpressao')->group(function(){    });
+
+
+    Route::prefix('docs')->group(function(){
+        Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
+        Route::get('/markdown/conteudo/{nomeDocumento}', [WikiController::class, 'getConteudo'])->name('markdown.conteudo');//->middleware('nivel:99');
+        Route::get('/markdown/img/{nomeImagem}', [WikiController::class, 'getImagem'])->name('markdown.imagem')->where('nomeImagem', '.*'); // Aceita subpastas e exten0
+    });
+
+    Route::prefix('logs')->group(function(){
+        Route::get('/show/{id}',[LogController::class,'showLog'])->name('log.show');
+        Route::get('/destroy/{id}',[LogController::class,'destroy'])->name('log.destroy');
+        Route::get('/list',[LogController::class,'list'])->name('log.list');
+    });
 });
 
-require __DIR__.'/auth.php'; // Tava no final do codigo.
+
+
+
+
+/*
+
 
 /*  _______  _______ __  __ ____  _     ___  ____   */
 /* | ____\ \/ / ____|  \/  |  _ \| |   / _ \/ ___|  */
@@ -159,7 +161,14 @@ Route::get('/teste-cache', function () {
     return "Total de usuários no sistema: " . $usuarios;
 
 });
+
+        Route::get('/teste', function () {
+    return response()->json([
+        'status' => 'sucesso',
+        'mensagem' => 'Conexão com o Laravel funcionou perfeitamente!',
+        'horario' => now()->toDateTimeString()
+    ]);
+});
 */
-        
 
 /// Fim exemplos.
