@@ -4,9 +4,10 @@ import { Head, router } from '@inertiajs/vue3'
 import CrudLayout from '@/Layouts/CrudLayoutNoMenu.vue';
 import axios from 'axios'; // Vamos usar o axios para buscar o HTML sem mudar a URL
 import hljs from 'highlight.js';
+import debug from "@/Components/Debug.vue"
 
 defineProps({
-    docs: Object,
+    docs: Array,
     user: String,
     nivel: Number
 });
@@ -15,11 +16,11 @@ defineProps({
 // Estados para controlar o Modal
 const modalAberto = ref(false);
 const htmlDoMarkdown = ref('');
-const carregando = ref(false);
+const documentoCarregando = ref('');
 
 // Função que busca o conteúdo e abre o modal
 const abrirModal = async (nomeDoDocumento) => {
-    carregando.value = true;
+    documentoCarregando.value = nomeDoDocumento;
     try {
         // Faz uma requisição para uma rota que retorna apenas o HTML bruto (JSON)
         //const response = await axios.get("/markdown/conteudo/"+ nomeDoDocumento );
@@ -28,24 +29,25 @@ const abrirModal = async (nomeDoDocumento) => {
         modalAberto.value = true;
 
         // Aplica o highlight nos códigos após o Vue renderizar o HTML
-        setTimeout(() => {
+        //setTimeout(() => {
             const blocos = document.querySelectorAll('.markdown-body pre code');
             blocos.forEach((bloco) => {
                 hljs.highlightElement(bloco);
             });
-        }, 100);
+        //}, 30);
 
     } catch (error) {
         alert('Erro ao carregar o documento');
         console.error(error);
     } finally {
-        carregando.value = false;
+        documentoCarregando.value = '';
     }
 };
 
 const fecharModal = () => {
     modalAberto.value = false;
     htmlDoMarkdown.value = '';
+    documentoCarregando.value = '';
 };
 </script>
 
@@ -62,13 +64,21 @@ const fecharModal = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(caminho, nome) in docs" :key="nome">
-                            <td><strong>{{ nome }}</strong></td>
+                        <tr v-for="doc in docs" :key="doc.nome">
+                            <td><strong>{{ doc.nome }}</strong></td>
                             <td class="text-end">
-                                <button @click="abrirModal(caminho)" class="btn btn-primary btn-sm"
-                                    :disabled="carregando">
-                                    {{ carregando ? 'Carregando...' : 'Visualizar' }}
+                                <button @click="abrirModal(doc.nome)" class="btn btn-primary btn-sm"
+                                    :disabled="documentoCarregando !== ''">
+                                    {{ documentoCarregando === doc.nome ? 'Carregando...' : 'Visualizar' }}
                                 </button>
+
+                                <a :href="route('markdown.conteudo', { nomeDocumento: doc.nome })" 
+           target="_blank" 
+           class="btn btn-primary btn-sm">
+                                    Ver
+                                </a>
+
+
                             </td>
                         </tr>
                     </tbody>
@@ -146,7 +156,7 @@ const fecharModal = () => {
 
 .markdown-body {
     box-sizing: border-box;
-    width: 100%;
+    width: 95%;
     background-color: #0d1117;
 }
 

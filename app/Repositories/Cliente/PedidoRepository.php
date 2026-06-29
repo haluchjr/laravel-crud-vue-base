@@ -1,0 +1,61 @@
+<?php
+namespace App\Repositories\Cliente;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Request;
+
+use App\Models\Pedido;
+
+class PedidoRepository
+{
+    // Passamos o Model pelo construtor (Injeção de Dependência)
+    public function __construct(protected Pedido $pedido) {}
+
+    // Somente consultas pontuais, se repetir colar no PedidoRepository na raiz.
+    public function tudo1(){
+        $sql = "select * from fk_pedid";
+        $sql = DB::select($sql);
+        $sql = Pedido::Hydrate($sql);
+        return response()->json($sql);
+        
+    }
+
+    public function tudo(){
+        $perPage = 1;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+        // 2. Calcule o OFFSET para o SQL
+        $offset = ($currentPage - 1) * $perPage;
+
+        // 3. Busque apenas os dados da página atual usando LIMIT e OFFSET
+        $dadosRaw = DB::select("
+            SELECT * FROM tb_pedido
+            LIMIT :limit OFFSET :offset
+        ", [
+            'limit' => $perPage,
+            'offset' => $offset
+        ]);
+
+        // 4. Pegue o total geral de registros (necessário para o paginador saber o total de páginas)
+        $totalGeral = DB::selectOne("SELECT COUNT(*) as total FROM tb_usuarios")->total;
+
+        // 5. Hidrate os dados brutos para o Model Pedido
+        $itensHidratados = Pedido::hydrate($dadosRaw);
+
+        // 6. Monte o Paginador Manual
+        $paginador = new LengthAwarePaginator(
+            $itensHidratados, // Os itens da página atual (já transformados em Model)
+            $totalGeral,      // Total de registros no banco
+            $perPage,         // Itens por página
+            $currentPage,     // Página atual
+            ['path' => Request::url(), 'query' => Request::query()] // Mantém os filtros da URL
+        );
+
+        // Retorna o JSON estruturado com 'data', 'current_page', 'last_page', etc.
+        return $paginador;
+        
+    }
+    
+}

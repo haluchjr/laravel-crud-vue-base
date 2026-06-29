@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -8,6 +10,8 @@ use Illuminate\Support\Facades\Response;
 use Inertia\Inertia;
 
 use Parsedown;
+use Illuminate\Support\Str;
+
 
 class WikiController extends Controller
 {
@@ -21,27 +25,28 @@ class WikiController extends Controller
     public function listarMarkdown(){
         
         // Localizacao: docs/Md/
-        $docs = [
-            'Estrutura projeto'                                             => 'estrutura_projeto.md',
-            'Comandos Artisan'                                              => 'comandos_artisan.md',
-            'Migrations'                                                    => 'migrations.md',
-            'Git'                                                           => 'git.md',
-            'Guia de Referência: Imports Essenciais (Vue 3 + Inertia.js)'   => 'guia_referencia_imports.md',
-            'Docker Explicado em Imagem'                                    => 'docker_explicado.md',
-            'Padraoes-Aliases'                                              => 'padroes_alias.md',
-            'Instalando certificado localmente'                             => 'certificado_local.md', 
-            'Props'                                                         => 'entendendo_objeto_global_inertia.md',
-        ];
-        
+        $logs = base_path('docs/Md/');
+        $arqLogs = File::files($logs);
+
+        $lista = [];
+        //LOG::warning('OIII');
+        foreach ($arqLogs as $arquivo){
+            $lista[] = [
+                'nome'      => str_replace('.md','',$arquivo->getFilename()),
+                'tamanho'   => $arquivo->getSize() . ' bytes',
+                'data'      => \Carbon\Carbon::createFromTimestamp($arquivo->getCTime())->format('d/m/Y H:i'),
+             ];
+        }
+
         return Inertia::render('Markdown/Index',[
-            'docs' => $docs,
+            'docs' => $lista,
         ]);
 
     }
 
     public function getConteudo($nomeDocumento)
     {
-        $caminhoDoArquivo = "/var/www/html/docs/Md/{$nomeDocumento}";
+        $caminhoDoArquivo = "/var/www/html/docs/Md/{$nomeDocumento}.md";
         
         if (!File::exists($caminhoDoArquivo)) {
             return response()->json(['error' => 'Arquivo não encontrado'], 404);
@@ -50,11 +55,16 @@ class WikiController extends Controller
         $conteudoMarkdown = File::get($caminhoDoArquivo);
         
         // Converte o Markdown para HTML usando seu parser
-          $parsedown = new Parsedown();
-         $htmlConvertido = $parsedown->text($conteudoMarkdown);
+        //$parsedown = new Parsedown();
+        //$htmlConvertido = $parsedown->text($conteudoMarkdown);
 
+        $htmlConvertido = Str::markdown($conteudoMarkdown);
         // Retorna uma resposta JSON comum, sem Inertia!
-        return response()->json([
+        // return response()->json([
+        //     'html' => $htmlConvertido
+        // ]);
+        return view('markdown', [
+            'nome' => $nomeDocumento,
             'html' => $htmlConvertido
         ]);
     }

@@ -1,22 +1,31 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Financeiro;
+
+use App\Http\Controllers\Controller; 
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class UsuarioController extends Controller
+class PedidoController extends Controller
 {
+    
+    public function novoPedido(){ 
+        dd('novo pedido');
+        return Inertia::render('Pedido/Index');
+    }
+
+    public function relatorioPedidos(){ 
+        dd('relatorio pedidos');
+        return Inertia::render('Pedido/Relatorio');
+    }
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-         return Inertia::render('Usuario/Index');
-    }
-
-    public function alterarDados(){
-        return Inertia::render('Usuario/MeusDados');
+        //
     }
 
     /**

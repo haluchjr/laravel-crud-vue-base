@@ -2,28 +2,38 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\LogController;
-use App\Http\Controllers\WikiController;
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\Auth\PasswordController;
 
-function routeHash(string $nome): string
-{
-    //return hash_hmac('sha256', $nome, config('app.key'));
-    return sha1($nome);
-}
+// ADMIN
+use App\Http\Controllers\Admin\LogController;
+use App\Http\Controllers\Admin\WikiController;
 
-Route::get('/hash/{texto}', function ($texto) {
-    return sha1($texto);
+Route::get('/teste', function () {
+    return response()->json([
+        'status' => 'sucesso',
+        'mensagem' => 'Conexão com o Laravel funcionou perfeitamente!',
+        'horario' => now()->toDateTimeString()
+    ]);
 });
 
-//Route::get('/',[BaseController::class,'main'])->name('tela.index'); // AJustar depois...senao em producao da erro.
+// CLIENTE
+use App\Http\Controllers\Cliente\PedidoController;
+//Route::get('/',[PedidoController::class,'novoPedido'])->name('pedido.novo');
+Route::get('/',[BaseController::class,'mai1n'])->name('teste');
 
+// Mini Wiki, , restringir no menu a nivel ADM/99
+    Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
+    Route::get('/markdown/conteudo/{nomeDocumento}', [WikiController::class, 'getConteudo'])->name('markdown.conteudo');//->middleware('nivel:99');
+    Route::get('/markdown/img/{nomeImagem}', [WikiController::class, 'getImagem'])->name('markdown.imagem')->where('nomeImagem', '.*'); // Aceita subpastas e exten0
+
+//Route::get('/',[BaseController::class,'main'])->name('tela.index'); // AJustar depois...senao em producao da erro.
+/*
+
+use App\Http\Controllers\BaseController;
+use App\Http\Controllers\UsuarioController;
 Route::middleware('auth')->group(function () {
-    //Route::get('/',[BaseController::class,'main'])->name('redirect');
+    Route::get('/',[BaseController::class,'main'])->name('redirect');
 
     // Alteracoes de senha.
     Route::put('/password', [PasswordController::class, 'update'])->name('password.update');

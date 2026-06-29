@@ -1,16 +1,29 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Cliente;
 
+use App\Http\Controllers\Controller; 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Repositories\Cliente\PedidoRepository;
+use App\Repositories\PedidoRepository as PedidoRepositoryBase;
 
 class PedidoController extends Controller
 {
-    
+    public function __construct(
+        protected PedidoRepository $PedidoRepository, 
+        protected PedidoRepositoryBase $PedidoRepositoryBase) {    }
+
     public function novoPedido(){ 
-        dd('novo pedido');
-        return Inertia::render('Pedido/Index');
+        $dados = [
+            'fk_usuario' => 2,
+            'valor'      => 1
+        ];
+
+        $a = $this->PedidoRepository->tudo();
+        //-dd($a);
+
+        return Inertia::render('Cliente/Index',['dados'=>$a]);
     }
 
     public function relatorioPedidos(){ 

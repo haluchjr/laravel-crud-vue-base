@@ -1,3 +1,4 @@
+# Dica inertia
 
 ```javascript
 // Se o formulário tiver arquivos, essa é a ÚNICA alternativa que funciona sempre:

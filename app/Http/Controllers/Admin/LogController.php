@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller; 
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -10,6 +12,10 @@ use Illuminate\Support\Facades\Log;
 
 class LogController extends Controller
 {
+
+    public function teste(){
+        dd('oieee.');
+    }
 
     public function list(){
         $logs = storage_path('logs');

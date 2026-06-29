@@ -1,0 +1,3 @@
+2026/06/28 22:42:36 [error] 255#255: *85 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: sistema.local, request: "GET / HTTP/1.1", upstream: "http://172.18.0.5:8080/", host: "sistema.local"
+2026/06/28 22:45:40 [error] 231#231: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: sistema.local, request: "GET / HTTP/1.1", upstream: "http://172.18.0.5:8080/", host: "sistema.local"
+2026/06/28 22:46:19 [error] 236#236: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: sistema.local, request: "GET / HTTP/1.1", upstream: "http://172.18.0.5:8080/", host: "sistema.local"
