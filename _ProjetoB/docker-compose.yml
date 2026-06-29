@@ -1,0 +1,30 @@
+#DEV - sistema2.local
+services:
+  backend2:
+    container_name: ${COMPOSE_PROJECT_NAME}_backend2
+    build:
+      context: .
+      dockerfile: ./docker/php8.3/Dockerfile
+      target: development
+      args:
+        USER_ID: 1000
+        GROUP_ID: 1000
+    restart: unless-stopped
+    #ports:
+    #  - "${PORTA_HTTP}:80"
+    volumes:
+      - ./:/var/www/html
+    # REMOVA ou comente o depends_on se os containers estiverem em composes separados, 
+    # pois o compose atual não tem visibilidade local deles para checar o status.
+    # depends_on:
+    #   - cache
+    #   - db_mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    name: NOME DA REDE ( docker network ls )
+    external: true # <--- A mágica está aqui! Avisa que a rede já existe.

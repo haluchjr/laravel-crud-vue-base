@@ -35,28 +35,6 @@ services:
     networks:
       - app-net
 
-  backend2:
-    container_name: ${COMPOSE_PROJECT_NAME}_backend2
-    build:
-      context: .
-      dockerfile: ./docker/php8.3/Dockerfile
-      target: development # Para aqui!
-      args:
-        USER_ID: 1000
-        GROUP_ID: 1000
-    restart: unless-stopped
-    #ports:
-    #  - "${PORTA_HTTP}:80"
-    volumes:
-      - ./ProjetoB:/var/www/html # Espelha sua pasta
-    depends_on:
-      - cache
-      - db_mysql
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    networks:
-      - app-net
-
   frontend:
     image: node:20-alpine
     container_name: ${COMPOSE_PROJECT_NAME}_frontend

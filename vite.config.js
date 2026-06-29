@@ -43,7 +43,7 @@ export default defineConfig(({ mode }) => {
 
   // Define as portas pegando do .env ou usando os fallbacks padrão
   const vitePort = parseInt(env.PORTA_VITE) || 5173;
-  const appUrl = env.APP_URL || 'http://localhost:8080';
+  const appUrl = env.APP_URL || 'http://localhost';
 
   return {
     plugins: [
@@ -63,7 +63,12 @@ export default defineConfig(({ mode }) => {
       
       // Configura o CORS dinamicamente com base na URL do seu Laravel (.env)
       cors: {
-        origin: appUrl,
+        origin: [
+          'http://localhost', 
+          'http://sistema.local'
+        ],
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
         credentials: true,
       },
       
