@@ -13,6 +13,40 @@ class PedidoRepository
     // Passamos o Model pelo construtor (Injeção de Dependência)
     public function __construct(protected Pedido $pedido) {}
 
+    public function listarPedidosByIdCliente($idCliente){
+        $sql = "SELECT 
+                    tb_usuarios.name,
+                    tb_pedidos.id nr_pedido,
+                    tb_pedidos.descricao,
+                    date_format(tb_pedidos.data_inclusao, '%d/%m/%Y') data_inclusao,
+                    date_format(tb_pedidos.data_entrega, '%d/%m/%Y') data_entrega,
+                    tb_pedidos.status_pedido_id,
+                    tb_status_pedido.descricao_site,
+                    CONCAT('R$ ', FORMAT(tb_pedidos.valor_total_pedido, 2, 'pt_BR')) valor_total_pedido
+                FROM tb_pedidos 
+                INNER JOIN tb_status_pedido on tb_status_pedido.id = tb_pedidos.status_pedido_id
+                inner join tb_usuarios on tb_usuarios.id = tb_pedidos.clientes_id
+                where clientes_id = $idCliente 
+                limit 5";
+
+        $sql = DB::select($sql);
+        $sql = Pedido::Hydrate($sql);
+        return $sql;
+    }
+
+    public function obterItens($id){
+        $sql = "SELECT 
+                   *
+                FROM tb_pedido_itens
+                
+                where pedidos_id = $id ";
+                
+        $sql = DB::select($sql);
+        $sql = Pedido::Hydrate($sql);
+        return $sql;
+    }
+
+
     // Somente consultas pontuais, se repetir colar no PedidoRepository na raiz.
     public function tudo1(){
         $sql = "select * from fk_pedid";

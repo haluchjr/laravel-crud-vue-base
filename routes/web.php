@@ -25,18 +25,27 @@ require __DIR__.'/auth.php'; // Tava no final do codigo.
 
 
 Route::middleware('auth')->group(function () {
-
-    // APOST LOGAR vai pra usuario.index
-
-
     Route::get('/',[BaseController::class,'main'])->name('redirect');
-    Route::get('/1',[BaseController::class,'usuario'])->name('usuario.index');
-    Route::get('/12',[BaseController::class,'loginteste'])->name('usuario.index1');
-    Route::get('/134',[BaseController::class,'pedido'])->name('pedido.index');
 
-    // Alteracoes de senha.
-    Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
-    Route::get('/profile', [PasswordController::class, 'edit'])->name('profile.edit');
+    Route::prefix('clientes')->group(function(){
+        Route::get('/pedido/novo',[PedidoCliente::class,'create'])->name('usuario.novo');
+        Route::post('/pedido/salvar',[PedidoCliente::class,'store'])->name('usuario.salvar');
+        Route::get('/pedido/listar',[PedidoCliente::class,'listar'])->name('usuario.index');
+        Route::get('/pedido/relatorio',[PedidoCliente::class,'listar'])->name('usuario.relatorio');
+        Route::get('/sistema/dados',[PedidoCliente::class,'novo'])->name('usuario.ajustes');
+    });
+
+    Route::prefix('adm')->group(function(){
+        Route::get('/pedidos',[PedidoFinanceiro::class,'listar'])->name('pedido.index');
+    });
+
+   
+    
+    
+    Route::get('/12',[BaseController::class,'loginteste'])->name('usuario.index1');
+    
+
+    
 
     Route::prefix('cliente')->group(function(){    });
 
@@ -46,6 +55,10 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('preimpressao')->group(function(){    });
 
+
+    // Alteracoes de senha.
+    Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
+    Route::get('/profile', [PasswordController::class, 'edit'])->name('profile.edit');
 
     Route::prefix('docs')->group(function(){
         Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
@@ -58,6 +71,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/destroy/{id}',[LogController::class,'destroy'])->name('log.destroy');
         Route::get('/list',[LogController::class,'list'])->name('log.list');
     });
+
+    Route::prefix('monitor')->group(function(){
+        // Ativar telescope
+    });
+
 });
 
 

@@ -25,7 +25,7 @@ class BaseController extends Controller
          return Inertia::render('loginteste',['dados'=>'Pedidos do cliente']);
     }
     
-    public function pedido(){
+    public function pedidoClientes(){
          return Inertia::render('loginteste',['dados'=>'Listar pedidos, dos clientes']);
     }
 

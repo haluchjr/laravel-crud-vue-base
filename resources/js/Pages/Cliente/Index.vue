@@ -1,26 +1,184 @@
-3<script setup>
-import { ref, computed } from 'vue';
-import { router, useForm,usePage} from '@inertiajs/vue3'; 
-import tela from '@/Layouts/CrudLayoutNoMenu.vue';
-import Debug from '@/Components/Debug.vue';
-import Paginacao from '@/Components/Paginacao.vue'
+<script setup>
+import Layout from '@/Layouts/CrudLayout.vue';
+import { ref, computed, watch } from 'vue'; // Trocamos onMounted por watch
+import { useForm, router } from '@inertiajs/vue3';
+import debug from '@/Components/Debug.vue'; 
 
-defineProps({
-    dados: Object,
+// 1. Define as duas props vindas do Controller
+const props = defineProps({
+  produtos: Array,
+  formulario: Array, // O lazy do Inertia vai alimentar esse array dinamicamente
+  tamanhos:Array
 });
 
+// Chave para forçar o reset visual dos inputs do tipo file
+const resetKey = ref(0);
 
+// 2. Inicializa o formulário do Inertia
+const form = useForm({
+  produtos: null,      // Armazena o ID do produto escolhido no dropdown
+  product_id: null,    // ID que vai para o backend associar o pedido ao produto
+  nome: '',
+  nome1: '',
+  nome2: '',
+  files: [] 
+});
+
+// 3. Monitora a prop 'formulario'. Toda vez que o Lazy trouxer dados novos, monta a estrutura
+watch(() => props.formulario, (novoFormulario) => {
+  if (novoFormulario && novoFormulario.length > 0) {
+    // Alimenta o ID do produto automaticamente baseado na query organizada
+    form.product_id = novoFormulario[0].produto_id;
+
+    // Mapeia a casca dos inputs conforme o retorno limpo do SQL
+    form.files = novoFormulario.map(componente => ({
+      produtos_componentes_id: componente.id_componente, 
+      label_componente: componente.label || componente.label_componente,
+      requerido: componente.requerido === 1,              
+      file: null                                        
+    }));
+  } else {
+    // Se não vier nada (ou limpar a seleção), esvazia os inputs dinâmicos
+    form.files = [];
+  }
+}, { deep: true });
+
+// Disparado no evento @change do Select
+const produtoSelecionado = () => {
+  if (!form.produtos) return;
+
+  // Faz a chamada em background requisitando APENAS o lazy property 'formulario'
+  router.reload({
+    only: ['formulario','tamanhos'], // Apenas o lazy property 'formulario' será atualizado
+    data: { produto_id: form.produtos }, // Envia o ID via query string para o request() do Laravel
+  });
+};
+
+
+
+// Resgata o nome do produto dinamicamente para o título
+const nomeProduto = computed(() => {
+  return props.formulario && props.formulario.length > 0 
+    ? props.formulario[0].produto_nome 
+    : '';
+});
+
+// Captura o arquivo binário do upload
+const handleFileChange = (index, event) => {
+  form.files[index].file = event.target.files[0];
+};
+
+// Computada inteligente para o Grid do Bootstrap (calcula colunas sozinho)
+const colunaClass = computed(() => {
+  const totalItens = props.formulario?.length || 0;
+  if (!totalItens) return 'col-12 mb-3';
+  
+  const tamanhoColuna = Math.floor(12 / totalItens);
+  return tamanhoColuna < 3 ? 'col-md-3 mb-3' : `col-md-${tamanhoColuna} mb-3`;
+});
+
+// Envio dos dados para o backend
+const submit = () => {
+  form.post(route('usuario.salvar'), {
+    onSuccess: () => {
+      form.reset('nome', 'nome1', 'nome2');
+      form.files.forEach(item => { item.file = null; });
+      resetKey.value++;
+    }
+  });
+};
 </script>
 
 <template>
-    <tela>
+  <Layout>
+    <form @submit.prevent="submit">
+      <!-- <debug></debug> -->
+      <div class="container mt-4">
+        <div class="row"> 
+          <div class="col-md-4">
+            <label for="input1" class="form-label">Primeiro Campo</label>
+            <input type="text" v-model="form.nome" class="form-control" id="input1" placeholder="Digite algo...">
+          </div>
+          <div class="col-md-4">
+            <label for="input2" class="form-label">Segundo Campo</label>
+            <input type="text" v-model="form.nome1" class="form-control" id="input2" placeholder="Digite algo...">
+          </div>
+          <div class="col-md-4">
+            <label for="input3" class="form-label">Terceiro Campo</label>
+            <input type="text" v-model="form.nome2" class="form-control" id="input3" placeholder="Digite algo...">
+          </div>
+        </div>
+      </div>
+      
+      <hr>
+      
+      <div class="container mb-3">
+        <label for="selecaoProduto" class="form-label">Selecione o Produto</label>
+        <select 
+          id="selecaoProduto" 
+          v-model="form.produtos" 
+          class="form-select" 
+          @change="produtoSelecionado"
+        >
+          <option :value="null" disabled>Escolha uma opção...</option>
+          <option v-for="produto in props.produtos" :key="produto.id" :value="produto.id">
+            {{ produto.nome }}
+          </option>
+        </select>      
+      </div>
 
-    <ul v-if="dados?.data">
-        <li v-for="dado in dados.data" :key="dado.id">
-            {{ dado.fk_usuario }} - R$ {{ dado.valor }}
-        </li>
-    </ul>
-    <p v-else>Nenhum dado encontrado...</p>
-    <Paginacao :links="dados.links" />
-    </tela>
+      <hr>
+
+      <div v-if="form.files.length > 0">
+        <h5 class="ms-3">Produto Selecionado: {{ nomeProduto }}</h5>
+        
+        <div class="container mt-4">
+          <div class="row"> 
+            <div 
+              v-for="(item, index) in form.files" 
+              :key="`${item.produtos_componentes_id}-${resetKey}`" 
+              :class="colunaClass"
+            >
+              <label class="form-label">{{ item.label_componente }}:</label>
+              <input 
+                :required="item.requerido"
+                class="form-control" 
+                type="file" 
+                @change="handleFileChange(index, $event)" 
+              />
+              <span v-if="form.errors[`files.${index}.file`]" class="text-danger d-block small mt-1">
+                {{ form.errors[`files.${index}.file`] }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="container mt-4">
+          <div class="row"> 
+             <h5>Tamanhos</h5>
+            <select 
+              v-model="form.produtos" 
+              class="form-select" 
+            >
+              <option :value="null" disabled>Escolha uma opção...</option>
+              <option v-for="tamanho in props.tamanhos" :key="tamanho.id" :value="tamanho.id">
+                {{ tamanho.tamanho_real }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="container">
+         
+          <button 
+            class="btn btn-sm btn-outline-primary"  
+            type="submit" 
+            :disabled="form.processing" 
+            style="margin-top: 20px;"
+          >
+            {{ form.processing ? 'Enviando...' : 'Enviar novo pedido' }}
+          </button>
+        </div>
+      </div>
+
+    </form> 
+  </Layout>
 </template>

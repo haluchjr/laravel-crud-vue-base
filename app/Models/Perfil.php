@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Acl extends Model
+class Perfil extends Model
 {
-    protected $table = 'tb_acl';
+    protected $table = 'tb_perfil';
     protected $fillable = ['id','perfil','descricao'];
 
 }
