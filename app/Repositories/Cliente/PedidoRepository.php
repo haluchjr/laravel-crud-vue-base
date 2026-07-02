@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Request;
 
-use App\Models\Pedido;
+use App\Models\Pedidos;
 
 class PedidoRepository
 {
     // Passamos o Model pelo construtor (Injeção de Dependência)
-    public function __construct(protected Pedido $pedido) {}
+    public function __construct(protected Pedidos $pedido) {}
 
     public function listarPedidosByIdCliente($idCliente){
         $sql = "SELECT 
@@ -25,24 +25,22 @@ class PedidoRepository
                     CONCAT('R$ ', FORMAT(tb_pedidos.valor_total_pedido, 2, 'pt_BR')) valor_total_pedido
                 FROM tb_pedidos 
                 INNER JOIN tb_status_pedido on tb_status_pedido.id = tb_pedidos.status_pedido_id
-                inner join tb_usuarios on tb_usuarios.id = tb_pedidos.clientes_id
-                where clientes_id = $idCliente 
+                inner join tb_usuarios on tb_usuarios.id = tb_pedidos.cliente_id
+                where cliente_id = $idCliente 
                 limit 5";
-
+        
         $sql = DB::select($sql);
-        $sql = Pedido::Hydrate($sql);
+        $sql = Pedidos::Hydrate($sql);
         return $sql;
     }
 
     public function obterItens($id){
-        $sql = "SELECT 
-                   *
+        $sql = "SELECT *
                 FROM tb_pedido_itens
-                
-                where pedidos_id = $id ";
+                where pedido_id = $id ";
                 
         $sql = DB::select($sql);
-        $sql = Pedido::Hydrate($sql);
+        $sql = Pedidos::Hydrate($sql);
         return $sql;
     }
 
@@ -51,7 +49,7 @@ class PedidoRepository
     public function tudo1(){
         $sql = "select * from fk_pedid";
         $sql = DB::select($sql);
-        $sql = Pedido::Hydrate($sql);
+        $sql = Pedidos::Hydrate($sql);
         return response()->json($sql);
         
     }

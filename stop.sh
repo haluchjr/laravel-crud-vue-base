@@ -10,10 +10,10 @@ NC='\033[0m' # No Color
 #export $(grep -v '^#' "$ENV_FILE" | xargs)
 
 
-echo ""
+echo "-----------------------------------------------------------------------------------------------"
 echo ""
 echo -e "${AMARELO}Iniciando a limpeza do ambiente...${NC}"
-echo ""
+echo "-----------------------------------------------------------------------------------------------"
 
 # 1. Limpa o Laravel Telescope antes de derrubar (apenas se o container estiver rodando)
 if [ "$(docker ps -q -f name=^backend$)" ]; then
@@ -37,12 +37,12 @@ if [ -f "$LOG_FILE" ]; then
 else
     echo -e "${AMARELO}Arquivo laravel.log não encontrado. Pulando limpeza de log.${NC}"
 fi
-# ----------------------------------------------------------------------
+echo "-----------------------------------------------------------------------------------------------"
 echo ""
 echo -e "${vermelho}Gerando backup antes de desligar os containers${NC}"
 source ./backup_sql.sh
 
-echo "-------------------------------------------------------------------"
+echo "-----------------------------------------------------------------------------------------------"
 
 echo ""
 echo -e "${VERMELHO}Desligando os containers (Mantendo os volumes intactos)...${NC}"
@@ -50,16 +50,16 @@ echo -e "${VERMELHO}Desligando os containers (Mantendo os volumes intactos)...${
 docker compose down
 
 echo ""
-echo "----------------------------------------"
+echo "-----------------------------------------------------------------------------------------------"
 echo "Verificando status atual dos serviços:"
-echo "----------------------------------------"
+echo "-----------------------------------------------------------------------------------------------"
 
 # 3. Lista o status final para garantir que tudo morreu
 # Se a tabela vier vazia, significa sucesso total.
 OUTPUT=$(docker compose ps --format "{{.Name}}\t{{.Status}}\t{{.Ports}}\t{{.Service}}" | column -t -s $'\t')
 
 echo ""
-echo "----------------------------------------"
+echo "-----------------------------------------------------------------------------------------------"
 echo -e "${VERDE}Tudo desligado com sucesso! Seus dados do MySQL/Redis estão salvos.${NC}"
-echo "----------------------------------------"
+echo "-----------------------------------------------------------------------------------------------"
 echo ""

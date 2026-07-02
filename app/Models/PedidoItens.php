@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PedidosItem extends Model
+class PedidoItens extends Model
 {
     /* 
         $fillable: É uma lista branca (Só aceita o que estiver aqui dentro).

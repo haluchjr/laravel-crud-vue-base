@@ -4,63 +4,62 @@ namespace App\Repositories;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-use App\Models\Pedidos;
+use App\Models\PedidoItemArquivo;
 
-class PedidoRepository
+class PedidoItemArquivoRepository
 {
     // Passamos o Model pelo construtor (Injeção de Dependência)
-    public function __construct(protected Pedidos $pedido) {}
+    public function __construct(protected PedidoItemArquivo $pedidoItemArquivo) {}
 
     public function findAll()
     {
-        return $this->pedido->all();
+        return $this->pedidoItemArquivo->all();
     }
 
     public function findById($id)
     {
-        return $this->pedido->find($id);
+        return $this->pedidoItemArquivo->where('pedido_item_id', $id)->get();
     }
 
     public function salvar(array $dados)
     {
-        
         try{
-            $pedido = $this->pedido->create($dados);
-            return $pedido->id;
+            $pedidoItem = $this->pedidoItemArquivo->create($dados);
+            return $pedidoItem->id;
 
-        }catch(\Exception $e){
+        }catch(\Throwable$e){
             Log::error('Erro ao salvar: ' . $e->getMessage());
-            return false;
+            throw $e;
         }
     }
 
     public function atualizar($id, array $dados)
     {
         try{
-            $pedido = $this->pedido->find($id);
-            if ($pedido) {
-                $pedido->update($dados);
+            $pedidoItem = $this->pedidoItemArquivo->find($id);
+            if ($pedidoItem) {
+                $pedidoItem->update($dados);
                 return true;
             }
             return false;
-        }catch(\Exception $e){
+        }catch(\Throwable $e){
             Log::error('Erro ao atualizar: ' . $e->getMessage());
-            return false;
+            throw $e;
         }
     }
 
     public function deletar($id)
     {
         try{
-            $pedido = $this->pedido->find($id);
-            if ($pedido) {
-                $pedido->delete();
+            $pedidoItem = $this->pedidoItemArquivo->find($id);
+            if ($pedidoItem) {
+                $pedidoItem->delete();
                 return true;
             }
             return false;
-        }catch(\Exception $e){
+        }catch(\Throwable $e){
             Log::error('Erro ao deletar: ' . $e->getMessage());
-            return false;
+            throw $e;
         }
     }
     

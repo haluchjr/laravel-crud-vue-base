@@ -4,28 +4,28 @@ namespace App\Repositories;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-use App\Models\Pedidos;
+use App\Models\PedidoItens;
 
-class PedidoRepository
+class PedidoItensRepository
 {
     // Passamos o Model pelo construtor (Injeção de Dependência)
-    public function __construct(protected Pedidos $pedido) {}
+    public function __construct(protected PedidoItens $model) {}
 
     public function findAll()
     {
-        return $this->pedido->all();
+        return $this->model->all();
     }
 
     public function findById($id)
     {
-        return $this->pedido->find($id);
+        return $this->model->find($id);
     }
 
     public function salvar(array $dados)
     {
         
         try{
-            $pedido = $this->pedido->create($dados);
+            $pedido = $this->model->create($dados);
             return $pedido->id;
 
         }catch(\Exception $e){
@@ -37,7 +37,7 @@ class PedidoRepository
     public function atualizar($id, array $dados)
     {
         try{
-            $pedido = $this->pedido->find($id);
+            $pedido = $this->model->find($id);
             if ($pedido) {
                 $pedido->update($dados);
                 return true;
@@ -52,7 +52,7 @@ class PedidoRepository
     public function deletar($id)
     {
         try{
-            $pedido = $this->pedido->find($id);
+            $pedido = $this->model->find($id);
             if ($pedido) {
                 $pedido->delete();
                 return true;

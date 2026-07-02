@@ -8,9 +8,9 @@ AZUL='\033[0;34m'
 VERMELHO='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${AZUL}==============================================================================${NC}"
+echo "-----------------------------------------------------------------------------------------------"
 echo -e "${AZUL}             INICIANDO AMBIENTE DE DESENVOLVIMENTO${NC}"
-echo -e "${AZUL}==============================================================================${NC}"
+echo "-----------------------------------------------------------------------------------------------"
 echo ""
 
 # 1. Validação de segurança: Verifica se o .env existe
@@ -21,7 +21,7 @@ if [ ! -f .env ]; then
 else
     export $(grep -v '^#' .env | xargs )
 fi
-
+echo "-----------------------------------------------------------------------------------------------"
 # 2. Sobe os containers em background
 echo -e "${AMARELO}Subindo os containers...${NC}"
 docker compose up -d
@@ -29,7 +29,7 @@ docker compose up -d
 sleep 2
 echo -e "${VERMELHO}Apagando redes inuteis.${NC}"
 docker network prune -f
-
+echo "-----------------------------------------------------------------------------------------------"
 echo ""
 echo -e "${AMARELO}Aguardando os serviços estabilizarem...${NC}"
 
@@ -37,32 +37,31 @@ echo -e "${AMARELO}Aguardando os serviços estabilizarem...${NC}"
 # Ele tenta rodar um 'mysqladmin ping' de dentro do container até dar boa
 MYSQL_READY=0
 for i in {1..15}; do
-    if docker exec db_mysql mysqladmin ping -h"localhost" -u"root" -p"${DB_ROOT_PASSWORD}" --silent &> /dev/null; then
+    if docker exec dev_db_mysql mysqladmin ping -h"localhost" -u"root" -p"${DB_ROOT_PASSWORD}" --silent &> /dev/null; then
         MYSQL_READY=1
         break
     fi
     echo -n "#"
     sleep 1
 done
-
+echo "-----------------------------------------------------------------------------------------------"
 echo ""
 if [ $MYSQL_READY -eq 1 ]; then
     echo -e "${VERDE}[OK] MySQL está pronto para conexões!${NC}"
 else
     echo -e "${AMARELO}[AVISO] MySQL demorando mais que o esperado para iniciar. Verifique os logs se necessário.${NC}"
 fi
-
+echo "-----------------------------------------------------------------------------------------------"
 echo ""
 echo -e "${VERDE}Status atual dos serviços:${NC}"
 
 # 4. Exibe a tabela de status formatada
 OUTPUT=$(docker compose ps --format "{{.Name}}\t{{.Status}}\t{{.Ports}}\t{{.Service}}" | column -t -s $'\t')
 echo "$OUTPUT"
-echo ""
+
+echo "-----------------------------------------------------------------------------------------------"
 eval "echo -e \"Acesse em : ${VERDE}${APP_URL}${SEM_COR}\""
-echo ""
-echo -e "${AZUL}========================================${NC}"
+echo "-----------------------------------------------------------------------------------------------"
 echo -e "${VERDE} Ambiente online! Boa codificação. ${NC}"
-echo -e "${AZUL}========================================${NC}"
-echo ""
+echo "-----------------------------------------------------------------------------------------------"
 echo ""

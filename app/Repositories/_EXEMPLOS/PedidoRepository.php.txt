@@ -59,7 +59,7 @@ class PedidoRepository
     }
     
 }
-
+/*
 VUE
 <script setup>
 import { ref, computed } from 'vue';
@@ -87,3 +87,5 @@ defineProps({
     <Paginacao :links="dados.links" />
     </tela>
 </template>
+
+*/

@@ -26,6 +26,7 @@ class ProdutoRepository
                     tb_produtos.id as produto_id,
                     tb_componentes.id id_componente,
                     tb_componentes.label label_componente,
+                    tb_componentes.tipo_arquivo,
                     tb_produtos_componentes.requerido
                 from tb_produtos
                 inner join tb_produtos_componentes on tb_produtos_componentes.produto_id = tb_produtos.id

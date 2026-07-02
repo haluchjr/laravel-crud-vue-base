@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/pedido/listar',[PedidoCliente::class,'listar'])->name('usuario.index');
         Route::get('/pedido/relatorio',[PedidoCliente::class,'listar'])->name('usuario.relatorio');
         Route::get('/sistema/dados',[PedidoCliente::class,'novo'])->name('usuario.ajustes');
+        //tmp
+        Route::get('/pedido/excluir/{id}',[PedidoCliente::class,'limpaPedidoEntregue'])->name('usuario.excluir');
     });
 
     Route::prefix('adm')->group(function(){

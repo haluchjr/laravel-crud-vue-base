@@ -57,7 +57,7 @@ const detalhesPedido = (item) => {
                         <td>{{ linha.descricao }}</td>
                         <td>{{ linha.data_inclusao }}</td>
                         <td>{{ linha.data_entrega }}</td>
-                        <td :class="obterClasseStatus(linha.status_pedido_id)">{{ linha.descricao_site }}</td>
+                        <td ><span :class="obterClasseStatus(linha.status_pedido_id)">{{ linha.descricao_site }}</span></td>
                         <td>{{ linha.valor_total_pedido }}</td>
                         <td><i title="Visualizar" class="bi-receipt" @click="detalhesPedido(linha)" ></i></td>
                     </tr>
@@ -83,7 +83,7 @@ const detalhesPedido = (item) => {
                         <td>{{ linha.pdf_valido }}</td>
                         <td>{{ linha.boneco_gerado }}</td>
                         <td>{{ linha.total_paginas_pdf }}</td>
-                        <td><a href="LocalExplorer:\\wsl$\Ubuntu\home\dev\Crud11Base\public\artes" server="\\wsl$\Ubuntu\home\dev\Crud11Base\public\artes" >teste</a></td>
+                        <td><a href="LocalExplorer:\\wsl$\Ubuntu\home\dev\Crud11Base\public\artes" >teste</a></td>
                     </tr>
                 </tbody>
             </table>

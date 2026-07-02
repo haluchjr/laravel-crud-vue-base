@@ -18,10 +18,9 @@ const resetKey = ref(0);
 const form = useForm({
   produtos: null,      // Armazena o ID do produto escolhido no dropdown
   product_id: null,    // ID que vai para o backend associar o pedido ao produto
-  nome: '',
-  nome1: '',
-  nome2: '',
-  files: [] 
+  observacao: '',
+  files: [] ,
+  produto_tamanho_id: null
 });
 
 // 3. Monitora a prop 'formulario'. Toda vez que o Lazy trouxer dados novos, monta a estrutura
@@ -34,7 +33,8 @@ watch(() => props.formulario, (novoFormulario) => {
     form.files = novoFormulario.map(componente => ({
       produtos_componentes_id: componente.id_componente, 
       label_componente: componente.label || componente.label_componente,
-      requerido: componente.requerido === 1,              
+      requerido: componente.requerido === 1,
+      tipo_arquivo: componente.tipo_arquivo || null,              
       file: null                                        
     }));
   } else {
@@ -53,8 +53,6 @@ const produtoSelecionado = () => {
     data: { produto_id: form.produtos }, // Envia o ID via query string para o request() do Laravel
   });
 };
-
-
 
 // Resgata o nome do produto dinamicamente para o título
 const nomeProduto = computed(() => {
@@ -91,26 +89,14 @@ const submit = () => {
 
 <template>
   <Layout>
+    <template #header>
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        Novo Pedido
+      </h2>
+    </template>
+
     <form @submit.prevent="submit">
       <!-- <debug></debug> -->
-      <div class="container mt-4">
-        <div class="row"> 
-          <div class="col-md-4">
-            <label for="input1" class="form-label">Primeiro Campo</label>
-            <input type="text" v-model="form.nome" class="form-control" id="input1" placeholder="Digite algo...">
-          </div>
-          <div class="col-md-4">
-            <label for="input2" class="form-label">Segundo Campo</label>
-            <input type="text" v-model="form.nome1" class="form-control" id="input2" placeholder="Digite algo...">
-          </div>
-          <div class="col-md-4">
-            <label for="input3" class="form-label">Terceiro Campo</label>
-            <input type="text" v-model="form.nome2" class="form-control" id="input3" placeholder="Digite algo...">
-          </div>
-        </div>
-      </div>
-      
-      <hr>
       
       <div class="container mb-3">
         <label for="selecaoProduto" class="form-label">Selecione o Produto</label>
@@ -139,7 +125,7 @@ const submit = () => {
               :key="`${item.produtos_componentes_id}-${resetKey}`" 
               :class="colunaClass"
             >
-              <label class="form-label">{{ item.label_componente }}:</label>
+              <label class="form-label">{{ item.label_componente }}<span v-if="item.requerido">*</span></label>
               <input 
                 :required="item.requerido"
                 class="form-control" 
@@ -156,7 +142,7 @@ const submit = () => {
           <div class="row"> 
              <h5>Tamanhos</h5>
             <select 
-              v-model="form.produtos" 
+              v-model="form.produto_tamanho_id" 
               class="form-select" 
             >
               <option :value="null" disabled>Escolha uma opção...</option>
@@ -166,6 +152,16 @@ const submit = () => {
             </select>
           </div>
         </div>
+
+        <div class="container mt-4">
+        <div class="row"> 
+          <div class="col-md-4">
+            <label for="input1" class="form-label">Observação</label>
+            <input type="text" v-model="form.observacao" class="form-control" id="input1" placeholder="Digite algo...">
+          </div>
+        </div>
+      </div>
+      
         <div class="container">
          
           <button 
