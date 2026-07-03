@@ -2,8 +2,9 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Auth\PasswordController;
-
+use Illuminate\Http\Request;
 // ADMIN
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\WikiController;
@@ -13,7 +14,9 @@ use App\Http\Controllers\BaseController;
 use App\Http\Controllers\UsuarioController;
 
 // Por Setor/Perfil
+use App\Http\Controllers\Cliente\UsuarioController as UsuarioCliente;
 use App\Http\Controllers\Cliente\PedidoController as PedidoCliente;
+
 use App\Http\Controllers\Financeiro\PedidoController as PedidoFinanceiro;
 use App\Http\Controllers\Comercial\PedidoController as PedidoComercial;
 use App\Http\Controllers\Preimpressao\PedidoController as PedidoPreimpressao;
@@ -25,35 +28,27 @@ require __DIR__.'/auth.php'; // Tava no final do codigo.
 
 
 Route::middleware('auth')->group(function () {
+     //Route::get('/12',[BaseController::class,'loginteste'])->name('usuario.index');
     Route::get('/',[BaseController::class,'main'])->name('redirect');
 
-    Route::prefix('clientes')->group(function(){
+    Route::prefix('cliente')->group(function(){
         Route::get('/pedido/novo',[PedidoCliente::class,'create'])->name('usuario.novo');
         Route::post('/pedido/salvar',[PedidoCliente::class,'store'])->name('usuario.salvar');
         Route::get('/pedido/listar',[PedidoCliente::class,'listar'])->name('usuario.index');
-        Route::get('/pedido/relatorio',[PedidoCliente::class,'listar'])->name('usuario.relatorio');
-        Route::get('/sistema/dados',[PedidoCliente::class,'novo'])->name('usuario.ajustes');
+        Route::get('/pedido/relatorio',[PedidoCliente::class,'relatorioPedidos'])->name('usuario.listar');
+
+        Route::get('/sistema/dados',[UsuarioCliente::class,'alterarDados'])->name('usuario.ajustes');
         //tmp
-        Route::get('/pedido/excluir/{id}',[PedidoCliente::class,'limpaPedidoEntregue'])->name('usuario.excluir');
+        //Route::get('/pedido/excluir/{id}',[UsuarioCliente::class,'limpaPedidoEntregue'])->name('usuario.excluir');
     });
 
     Route::prefix('adm')->group(function(){
         Route::get('/pedidos',[PedidoFinanceiro::class,'listar'])->name('pedido.index');
     });
 
-   
-    
-    
-    Route::get('/12',[BaseController::class,'loginteste'])->name('usuario.index1');
-    
+    Route::prefix('comercial')->group(function(){       });
 
-    
-
-    Route::prefix('cliente')->group(function(){    });
-
-    Route::prefix('comercial')->group(function(){    });
-
-    Route::prefix('financeiro')->group(function(){    });
+    Route::prefix('financeiro')->group(function(){      });
 
     Route::prefix('preimpressao')->group(function(){    });
 
@@ -62,11 +57,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
     Route::get('/profile', [PasswordController::class, 'edit'])->name('profile.edit');
 
+    // ! Remover
     Route::prefix('docs')->group(function(){
         Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
         Route::get('/markdown/conteudo/{nomeDocumento}', [WikiController::class, 'getConteudo'])->name('markdown.conteudo');//->middleware('nivel:99');
         Route::get('/markdown/img/{nomeImagem}', [WikiController::class, 'getImagem'])->name('markdown.imagem')->where('nomeImagem', '.*'); // Aceita subpastas e exten0
     });
+    // ! Remover
 
     Route::prefix('logs')->group(function(){
         Route::get('/show/{id}',[LogController::class,'showLog'])->name('log.show');

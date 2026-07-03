@@ -64,8 +64,8 @@ export default defineConfig(({ mode }) => {
       // Configura o CORS dinamicamente com base na URL do seu Laravel (.env)
       cors: {
         origin: [
+          'http://sistema.local',
           'http://localhost', 
-          'http://sistema.local'
         ],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],

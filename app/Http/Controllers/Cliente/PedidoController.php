@@ -40,8 +40,11 @@ class PedidoController extends Controller
 
 
     public function relatorioPedidos(){ 
-        dd('relatorio pedidos');
-        return Inertia::render('Pedido/Relatorio');
+        $pedidos = $this->PedidoClienteRepository->listarPedidosByIdCliente(Auth::user()->id, 1000);
+        return Inertia::render('Cliente/Relatorio',[
+            'dados'         => $pedidos,
+            //'itensPedido'   => Inertia::lazy(fn () => $this->PedidoClienteRepository->obterItens(request('pedido_id')))
+        ]);
     }
     
     /**

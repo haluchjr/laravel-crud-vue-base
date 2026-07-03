@@ -123,6 +123,32 @@ LOCK TABLES `tb_cache_locks` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_componentes`
+--
+
+DROP TABLE IF EXISTS `tb_componentes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_componentes` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `tipo_arquivo` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_componentes`
+--
+
+LOCK TABLES `tb_componentes` WRITE;
+/*!40000 ALTER TABLE `tb_componentes` DISABLE KEYS */;
+INSERT INTO `tb_componentes` VALUES (1,'Frente','frente','_frente'),(2,'Capa','capa','_capa'),(7,'Miolo','miolo','_miolo'),(8,'Trás','tras','_tras'),(9,'Hot Stamping','hotstamping','_hs'),(10,'Verniz Total Frente','verniztotalfrente','_vtf');
+/*!40000 ALTER TABLE `tb_componentes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_enderecos`
 --
 
@@ -303,13 +329,13 @@ LOCK TABLES `tb_log_status_pedido` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tb_log_status_pedido_item`
+-- Table structure for table `tb_log_status_pedido_itens`
 --
 
-DROP TABLE IF EXISTS `tb_log_status_pedido_item`;
+DROP TABLE IF EXISTS `tb_log_status_pedido_itens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tb_log_status_pedido_item` (
+CREATE TABLE `tb_log_status_pedido_itens` (
   `id` int unsigned NOT NULL,
   `usuario_id` bigint unsigned DEFAULT NULL,
   `status_pedido_id` int unsigned DEFAULT NULL,
@@ -317,18 +343,18 @@ CREATE TABLE `tb_log_status_pedido_item` (
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   KEY `status_pedido_id` (`status_pedido_id`),
-  CONSTRAINT `tb_log_status_pedido_item_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `tb_usuarios` (`id`),
-  CONSTRAINT `tb_log_status_pedido_item_ibfk_2` FOREIGN KEY (`status_pedido_id`) REFERENCES `tb_status_pedido_item` (`id`)
+  CONSTRAINT `tb_log_status_pedido_itens_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `tb_usuarios` (`id`),
+  CONSTRAINT `tb_log_status_pedido_itens_ibfk_2` FOREIGN KEY (`status_pedido_id`) REFERENCES `tb_status_pedido_item` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_log_status_pedido_item`
+-- Dumping data for table `tb_log_status_pedido_itens`
 --
 
-LOCK TABLES `tb_log_status_pedido_item` WRITE;
-/*!40000 ALTER TABLE `tb_log_status_pedido_item` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tb_log_status_pedido_item` ENABLE KEYS */;
+LOCK TABLES `tb_log_status_pedido_itens` WRITE;
+/*!40000 ALTER TABLE `tb_log_status_pedido_itens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_log_status_pedido_itens` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -360,33 +386,8 @@ CREATE TABLE `tb_menus` (
 
 LOCK TABLES `tb_menus` WRITE;
 /*!40000 ALTER TABLE `tb_menus` DISABLE KEYS */;
-INSERT INTO `tb_menus` VALUES (1,'Pedidos','#','bi-cart',1,'[1]',NULL,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(9,'Novo Pedido','usuario.index','bi-cart',1,'[1]',1,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(10,'Listar Pedidos','usuario.index1','bi-card-checklist',2,'[1]',1,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(11,'Sistema','#','bi-gear',1,'[1]',NULL,NULL,NULL),(12,'Meus Dados','usuario.index','bi-postcard',1,'[1]',11,NULL,NULL),(13,'teste','#',NULL,1,'[99]',NULL,NULL,NULL);
+INSERT INTO `tb_menus` VALUES (1,'Pedidos','#','bi-cart',1,'[1]',NULL,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(9,'Novo Pedido','usuario.novo','bi-cart',1,'[1]',1,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(10,'Listar Pedidos','usuario.index','bi-card-checklist',2,'[1]',1,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(11,'Sistema','#','bi-gear',1,'[1]',NULL,NULL,NULL),(12,'Meus Dados','usuario.index','bi-postcard',1,'[1]',11,NULL,NULL),(13,'Relatório','usuario.relatorio','bi-card-checklist',3,'[1]',1,NULL,NULL);
 /*!40000 ALTER TABLE `tb_menus` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tb_nivels`
---
-
-DROP TABLE IF EXISTS `tb_nivels`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tb_nivels` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `perfil` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `descricao` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_nivels`
---
-
-LOCK TABLES `tb_nivels` WRITE;
-/*!40000 ALTER TABLE `tb_nivels` DISABLE KEYS */;
-INSERT INTO `tb_nivels` VALUES (2,'Usuario','Usuário comum'),(3,'Baixa','Operador Baixa'),(4,'Bureau','Operador Bureau'),(5,'Orcamentista','Pessoa Orçamentista'),(99,'Admin','Administrador');
-/*!40000 ALTER TABLE `tb_nivels` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -422,7 +423,10 @@ DROP TABLE IF EXISTS `tb_pedido_itens`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_pedido_itens` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `pedidos_id` bigint unsigned DEFAULT NULL,
+  `pedido_id` bigint unsigned DEFAULT NULL,
+  `produto_id` int unsigned DEFAULT NULL,
+  `tamanho_id` int unsigned DEFAULT NULL,
+  `status_pedido_item_id` int unsigned DEFAULT NULL,
   `pdf_valido` tinyint DEFAULT NULL,
   `boneco_gerado` tinyint DEFAULT NULL,
   `data_boneco_gerado` date DEFAULT NULL,
@@ -433,9 +437,15 @@ CREATE TABLE `tb_pedido_itens` (
   `data_entrega` date DEFAULT NULL,
   `caminho_pdf` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `pedidos_id` (`pedidos_id`),
-  CONSTRAINT `tb_pedido_itens_ibfk_1` FOREIGN KEY (`pedidos_id`) REFERENCES `tb_pedidos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `pedidos_id` (`pedido_id`),
+  KEY `status_pedido_item_id` (`status_pedido_item_id`),
+  KEY `produto_id` (`produto_id`),
+  KEY `tamanho_id` (`tamanho_id`),
+  CONSTRAINT `tb_pedido_itens_ibfk_1` FOREIGN KEY (`pedido_id`) REFERENCES `tb_pedidos` (`id`),
+  CONSTRAINT `tb_pedido_itens_ibfk_2` FOREIGN KEY (`status_pedido_item_id`) REFERENCES `tb_status_pedido_item` (`id`),
+  CONSTRAINT `tb_pedido_itens_ibfk_3` FOREIGN KEY (`produto_id`) REFERENCES `tb_produtos` (`id`),
+  CONSTRAINT `tb_pedido_itens_ibfk_4` FOREIGN KEY (`tamanho_id`) REFERENCES `tb_tamanhos` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -444,6 +454,7 @@ CREATE TABLE `tb_pedido_itens` (
 
 LOCK TABLES `tb_pedido_itens` WRITE;
 /*!40000 ALTER TABLE `tb_pedido_itens` DISABLE KEYS */;
+INSERT INTO `tb_pedido_itens` VALUES (3,8,2,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,9,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,10,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(6,11,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(7,12,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,13,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(9,14,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(10,15,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(11,16,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(17,22,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(18,23,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(19,24,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `tb_pedido_itens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -456,16 +467,21 @@ DROP TABLE IF EXISTS `tb_pedidos`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_pedidos` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `clientes_id` bigint unsigned NOT NULL,
+  `cliente_id` bigint unsigned NOT NULL,
   `descricao` text NOT NULL,
   `data_inclusao` date NOT NULL,
   `data_entrega` date NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `observacao` varchar(255) DEFAULT NULL,
+  `status_pedido_id` int unsigned DEFAULT '1',
+  `valor_total_pedido` float(8,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `tb_pedidos_fk_cliente_foreign` (`clientes_id`),
-  CONSTRAINT `tb_pedidos_fk_cliente_foreign` FOREIGN KEY (`clientes_id`) REFERENCES `tb_usuarios` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `tb_pedidos_fk_cliente_foreign` (`cliente_id`),
+  KEY `status_pedido_id` (`status_pedido_id`),
+  CONSTRAINT `tb_pedidos_fk_cliente_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `tb_usuarios` (`id`),
+  CONSTRAINT `tb_pedidos_ibfk_1` FOREIGN KEY (`status_pedido_id`) REFERENCES `tb_status_pedido` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -474,7 +490,121 @@ CREATE TABLE `tb_pedidos` (
 
 LOCK TABLES `tb_pedidos` WRITE;
 /*!40000 ALTER TABLE `tb_pedidos` DISABLE KEYS */;
+INSERT INTO `tb_pedidos` VALUES (8,10,'8945489','2026-07-01','2026-07-01',NULL,NULL,'8945489',1,NULL),(9,10,'fgh','2026-07-02','2026-07-02','2026-07-02 03:23:41','2026-07-02 03:23:41','fgh',1,NULL),(10,10,'fgh','2026-07-02','2026-07-02','2026-07-02 03:24:19','2026-07-02 03:24:19','fgh',1,NULL),(11,10,'fgh','2026-07-02','2026-07-02','2026-07-02 03:24:31','2026-07-02 03:24:31','fgh',1,NULL),(12,10,'fgh','2026-07-02','2026-07-02','2026-07-02 03:24:36','2026-07-02 03:24:36','fgh',1,NULL),(13,10,'fgh','2026-07-02','2026-07-02','2026-07-02 03:25:39','2026-07-02 03:25:39','fgh',1,NULL),(14,10,'4748','2026-07-02','2026-07-02','2026-07-02 03:27:46','2026-07-02 03:27:46','4748',1,NULL),(15,10,'77','2026-07-02','2026-07-02','2026-07-02 03:28:40','2026-07-02 03:28:40','77',1,NULL),(16,10,'54','2026-07-02','2026-07-02','2026-07-02 03:36:16','2026-07-02 03:36:16','54',1,NULL),(22,10,'78','2026-07-02','2026-07-02','2026-07-02 03:44:32','2026-07-02 03:44:32','78',1,NULL),(23,10,'89','2026-07-02','2026-07-02','2026-07-02 03:49:48','2026-07-02 03:49:48','89',1,NULL),(24,10,'874984','2026-07-02','2026-07-02','2026-07-02 03:55:15','2026-07-02 03:55:15','874984',1,NULL);
 /*!40000 ALTER TABLE `tb_pedidos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_pedidos_itens_arquivos`
+--
+
+DROP TABLE IF EXISTS `tb_pedidos_itens_arquivos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_pedidos_itens_arquivos` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `pedido_item_id` bigint unsigned DEFAULT NULL,
+  `produto_componente_id` int unsigned DEFAULT NULL,
+  `nome_original` varchar(255) DEFAULT NULL,
+  `nome_interno` varchar(255) DEFAULT NULL,
+  `data_inclusao` datetime DEFAULT NULL,
+  `caminho_arquivo` varchar(255) DEFAULT NULL,
+  `caminho_backup` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pedido_item_id` (`pedido_item_id`),
+  KEY `produto_componente_id` (`produto_componente_id`),
+  CONSTRAINT `tb_pedidos_itens_arquivos_ibfk_1` FOREIGN KEY (`pedido_item_id`) REFERENCES `tb_pedido_itens` (`id`),
+  CONSTRAINT `tb_pedidos_itens_arquivos_ibfk_2` FOREIGN KEY (`produto_componente_id`) REFERENCES `tb_componentes` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_pedidos_itens_arquivos`
+--
+
+LOCK TABLES `tb_pedidos_itens_arquivos` WRITE;
+/*!40000 ALTER TABLE `tb_pedidos_itens_arquivos` DISABLE KEYS */;
+INSERT INTO `tb_pedidos_itens_arquivos` VALUES (1,17,1,'untitled.pdf','22_17_frente.pdf',NULL,'artes/22_17_frente.pdf','tmp/untitled.pdf'),(2,17,7,'untitled.pdf','22_17_miolo.pdf',NULL,'artes/22_17_miolo.pdf','tmp/untitled.pdf'),(3,18,1,'untitled.pdf','23_18_frente.pdf','2026-07-02 00:49:48','artes/23_18_frente.pdf','tmp/untitled.pdf'),(4,18,7,'untitled.pdf','23_18_miolo.pdf','2026-07-02 00:49:48','artes/23_18_miolo.pdf','tmp/untitled.pdf');
+/*!40000 ALTER TABLE `tb_pedidos_itens_arquivos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_perfil`
+--
+
+DROP TABLE IF EXISTS `tb_perfil`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_perfil` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `perfil` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `descricao` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_perfil`
+--
+
+LOCK TABLES `tb_perfil` WRITE;
+/*!40000 ALTER TABLE `tb_perfil` DISABLE KEYS */;
+INSERT INTO `tb_perfil` VALUES (2,'Usuario','Usuário comum'),(3,'Baixa','Operador Baixa'),(4,'Bureau','Operador Bureau'),(5,'Orcamentista','Pessoa Orçamentista'),(99,'Admin','Administrador');
+/*!40000 ALTER TABLE `tb_perfil` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_produtos`
+--
+
+DROP TABLE IF EXISTS `tb_produtos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_produtos` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_produtos`
+--
+
+LOCK TABLES `tb_produtos` WRITE;
+/*!40000 ALTER TABLE `tb_produtos` DISABLE KEYS */;
+INSERT INTO `tb_produtos` VALUES (1,'Caderno'),(2,'Livro');
+/*!40000 ALTER TABLE `tb_produtos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_produtos_componentes`
+--
+
+DROP TABLE IF EXISTS `tb_produtos_componentes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_produtos_componentes` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `produto_id` int unsigned DEFAULT NULL,
+  `componente_id` int unsigned DEFAULT NULL,
+  `requerido` tinyint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `produto_id` (`produto_id`),
+  KEY `componente_id` (`componente_id`),
+  CONSTRAINT `tb_produtos_componentes_ibfk_1` FOREIGN KEY (`produto_id`) REFERENCES `tb_produtos` (`id`),
+  CONSTRAINT `tb_produtos_componentes_ibfk_2` FOREIGN KEY (`componente_id`) REFERENCES `tb_componentes` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_produtos_componentes`
+--
+
+LOCK TABLES `tb_produtos_componentes` WRITE;
+/*!40000 ALTER TABLE `tb_produtos_componentes` DISABLE KEYS */;
+INSERT INTO `tb_produtos_componentes` VALUES (1,1,1,1),(2,1,7,1),(4,2,1,1),(5,2,2,1);
+/*!40000 ALTER TABLE `tb_produtos_componentes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -561,6 +691,34 @@ INSERT INTO `tb_status_pedido_item` VALUES (1,'Ok','Recebido',1,NULL),(2,'Aguard
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_tamanhos`
+--
+
+DROP TABLE IF EXISTS `tb_tamanhos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_tamanhos` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `tamanho_real` varchar(255) DEFAULT NULL,
+  `tamanho_com_sangra` varchar(255) DEFAULT NULL,
+  `produto_id` int unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `produto_id` (`produto_id`),
+  CONSTRAINT `tb_tamanhos_ibfk_1` FOREIGN KEY (`produto_id`) REFERENCES `tb_produtos` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_tamanhos`
+--
+
+LOCK TABLES `tb_tamanhos` WRITE;
+/*!40000 ALTER TABLE `tb_tamanhos` DISABLE KEYS */;
+INSERT INTO `tb_tamanhos` VALUES (1,'300x200','300x200',1),(2,'200x200','3200x200',2);
+/*!40000 ALTER TABLE `tb_tamanhos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_tipo_endereco`
 --
 
@@ -571,7 +729,7 @@ CREATE TABLE `tb_tipo_endereco` (
   `id` int NOT NULL AUTO_INCREMENT,
   `descricao` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -580,6 +738,7 @@ CREATE TABLE `tb_tipo_endereco` (
 
 LOCK TABLES `tb_tipo_endereco` WRITE;
 /*!40000 ALTER TABLE `tb_tipo_endereco` DISABLE KEYS */;
+INSERT INTO `tb_tipo_endereco` VALUES (1,'Comercial'),(2,'Residencial'),(3,'Faturamento'),(4,'Entrega');
 /*!40000 ALTER TABLE `tb_tipo_endereco` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -707,4 +866,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-29 21:09:50
+-- Dump completed on 2026-07-02 12:30:23

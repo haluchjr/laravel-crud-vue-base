@@ -13,7 +13,7 @@ class PedidoRepository
     // Passamos o Model pelo construtor (Injeção de Dependência)
     public function __construct(protected Pedidos $pedido) {}
 
-    public function listarPedidosByIdCliente($idCliente){
+    public function listarPedidosByIdCliente($idCliente, $limite = 5){
         $sql = "SELECT 
                     tb_usuarios.name,
                     tb_pedidos.id nr_pedido,
@@ -27,7 +27,7 @@ class PedidoRepository
                 INNER JOIN tb_status_pedido on tb_status_pedido.id = tb_pedidos.status_pedido_id
                 inner join tb_usuarios on tb_usuarios.id = tb_pedidos.cliente_id
                 where cliente_id = $idCliente 
-                limit 5";
+                limit $limite";
         
         $sql = DB::select($sql);
         $sql = Pedidos::Hydrate($sql);
@@ -35,9 +35,22 @@ class PedidoRepository
     }
 
     public function obterItens($id){
-        $sql = "SELECT *
-                FROM tb_pedido_itens
-                where pedido_id = $id ";
+        $sql = "SELECT
+                    tb_componentes.label,
+                    tb_pedidos_itens_arquivos.caminho_arquivo,
+                    REPLACE(
+                        TRIM(TRAILING '/' FROM REPLACE(
+                            REPLACE(caminho_arquivo, SUBSTRING_INDEX(caminho_arquivo, '/', -1), ''),
+                            '/var/www/html/', '' 
+                        )),
+                        '/', '\\\\' 
+                    ) AS caminho_limpo
+                FROM
+                    tb_pedido_itens
+                INNER JOIN tb_pedidos_itens_arquivos ON tb_pedidos_itens_arquivos.pedido_item_id = tb_pedido_itens.id
+                inner join tb_componentes on tb_componentes.id = tb_pedidos_itens_arquivos.produto_componente_id
+                WHERE
+                    pedido_id = $id ";
                 
         $sql = DB::select($sql);
         $sql = Pedidos::Hydrate($sql);

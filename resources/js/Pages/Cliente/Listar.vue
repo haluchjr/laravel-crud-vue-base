@@ -36,10 +36,11 @@ const detalhesPedido = (item) => {
 <template>
     <Layout>
         <template #header>
-            <h1 class="h3 mb-0">Últimos pedidos</h1>
+            <h1 class="h3 mb-0">Últimos 5 pedidos</h1>
         </template>
         <div class="container mt-4">
-            <table class="table table-striped">
+
+            <table class="table table-striped" v-if="dados.length">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -63,12 +64,13 @@ const detalhesPedido = (item) => {
                     </tr>
                 </tbody>
             </table>
+            <span v-else>Nenhum pedido encontrado.</span>
+
         </div>
 
 
 
         <ModalBootstrap :show="modalAberto" :title="`Detalhes pedido #${pedidoSelecionado?.nr_pedido ?? ''}`" @close="modalAberto = false">
-
              <table class="table table-striped">
                 <thead>
                     <tr>
@@ -80,10 +82,13 @@ const detalhesPedido = (item) => {
                 </thead>
                 <tbody>
                     <tr v-for="linha in itensPedido" :key="linha.id">
-                        <td>{{ linha.pdf_valido }}</td>
-                        <td>{{ linha.boneco_gerado }}</td>
-                        <td>{{ linha.total_paginas_pdf }}</td>
-                        <td><a href="LocalExplorer:\\wsl$\Ubuntu\home\dev\Crud11Base\public\artes" >teste</a></td>
+                        <td>{{ linha.label }}</td>
+                        <td>{{ linha.nome_interno }}</td>
+                        <td>{{ linha.caminho_arquivo }}</td>
+                        <td>
+                            <a :href="`LocalExplorer:\\\\wsl$\\Ubuntu\\home\\dev\\Crud11Base\\${linha.caminho_limpo}`" >teste</a>
+                            
+                        </td>
                     </tr>
                 </tbody>
             </table>

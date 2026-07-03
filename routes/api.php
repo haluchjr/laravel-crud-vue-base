@@ -15,3 +15,27 @@ Route::get('/teste', function () {
         'horario' => now()->toDateTimeString()
     ]);
 });
+
+
+Route::post('log-javascript-error', function (Request $request) {
+    // Valida os dados recebidos do front-end
+    $validated = $request->validate([
+        'message' => 'required|string',
+        'url'     => 'nullable|string',
+        'line'    => 'nullable|integer',
+        'column'  => 'nullable|integer',
+        'stack'   => 'nullable|string',
+    ]);
+
+    // Formata a mensagem que irá para o laravel.log
+    Log::error('JS Error: ' . $validated['message'], [
+        'url'         => $validated['url'],
+        //'line'        => $validated['line'],
+        //'column'      => $validated['column'],
+        //'stack_trace' => $validated['stack'],
+        //'user_agent'  => $request->userAgent(),
+        //'ip'          => $request->ip(),
+    ]);
+
+    return response()->json(['status' => 'success'], 200);
+});

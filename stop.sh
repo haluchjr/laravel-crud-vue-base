@@ -8,10 +8,9 @@ NC='\033[0m' # No Color
 
 #ENV_FILE=".env"
 #export $(grep -v '^#' "$ENV_FILE" | xargs)
-
+echo ""
 
 echo "-----------------------------------------------------------------------------------------------"
-echo ""
 echo -e "${AMARELO}Iniciando a limpeza do ambiente...${NC}"
 echo "-----------------------------------------------------------------------------------------------"
 
@@ -38,28 +37,24 @@ else
     echo -e "${AMARELO}Arquivo laravel.log não encontrado. Pulando limpeza de log.${NC}"
 fi
 echo "-----------------------------------------------------------------------------------------------"
-echo ""
 echo -e "${vermelho}Gerando backup antes de desligar os containers${NC}"
 source ./backup_sql.sh
-
 echo "-----------------------------------------------------------------------------------------------"
 
-echo ""
+
 echo -e "${VERMELHO}Desligando os containers (Mantendo os volumes intactos)...${NC}"
 # 2. Derruba os containers e remove a rede virtual (sem mexer nos volumes!)
 docker compose down
 
-echo ""
+
 echo "-----------------------------------------------------------------------------------------------"
 echo "Verificando status atual dos serviços:"
-echo "-----------------------------------------------------------------------------------------------"
 
 # 3. Lista o status final para garantir que tudo morreu
 # Se a tabela vier vazia, significa sucesso total.
 OUTPUT=$(docker compose ps --format "{{.Name}}\t{{.Status}}\t{{.Ports}}\t{{.Service}}" | column -t -s $'\t')
 
-echo ""
-echo "-----------------------------------------------------------------------------------------------"
+
 echo -e "${VERDE}Tudo desligado com sucesso! Seus dados do MySQL/Redis estão salvos.${NC}"
 echo "-----------------------------------------------------------------------------------------------"
 echo ""

@@ -1,0 +1,27 @@
+services:
+  mariadb:
+    image: mariadb:11
+    environment:
+      MYSQL_ROOT_PASSWORD: senha
+      MYSQL_DATABASE: powerdns
+    volumes:
+      - db:/var/lib/mysql
+
+  powerdns:
+    image: pschiffe/pdns-mysql
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    environment:
+      PDNS_gmysql_host: mariadb
+      PDNS_gmysql_dbname: powerdns
+      PDNS_gmysql_user: root
+      PDNS_gmysql_password: senha
+      PDNS_api: "yes"
+      PDNS_api_key: minha-chave-api
+      PDNS_webserver: "yes"
+    depends_on:
+      - mariadb
+
+volumes:
+  db:

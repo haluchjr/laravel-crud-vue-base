@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
 import CrudLayout from '@/Layouts/CrudLayoutNoMenu.vue';
 import axios from 'axios'; // Vamos usar o axios para buscar o HTML sem mudar a URL
-import hljs from 'highlight.js';
 import debug from "@/Components/Debug.vue"
 
 defineProps({
@@ -105,7 +104,6 @@ const fecharModal = () => {
 <style>
 /* CSS do Markdown e do Modal (Juntamos tudo aqui) */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-dark.min.css');
-@import 'highlight.js/styles/github-dark.css';
 
 .modal-backdrop {
     position: fixed;

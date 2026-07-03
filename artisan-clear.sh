@@ -1,5 +1,7 @@
 #!/bin/bash
-
+echo ""
+echo ""
+echo "------------------------------------------------------------------------------------------------"
 echo "Arrumando a casa"
 docker compose exec backend sh -c "> storage/logs/laravel.log"
 
