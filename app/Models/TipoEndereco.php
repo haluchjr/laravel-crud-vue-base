@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoEndereco extends Model
 {
-    use HasFactory; 
     
     protected $table = "tb_tipo_endereco";
 

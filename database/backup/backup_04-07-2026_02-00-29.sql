@@ -157,19 +157,20 @@ DROP TABLE IF EXISTS `tb_enderecos`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_enderecos` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `usuarios_id` bigint unsigned DEFAULT NULL,
+  `usuario_id` bigint unsigned DEFAULT NULL,
   `endereco` varchar(255) DEFAULT NULL,
   `bairro` varchar(255) DEFAULT NULL,
   `cidade` varchar(255) DEFAULT NULL,
-  `estado` varchar(2) DEFAULT NULL,
+  `estado` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `cep` int DEFAULT NULL,
   `numero` int DEFAULT NULL,
   `complemento` varchar(30) DEFAULT NULL,
   `status` varchar(255) DEFAULT '1',
+  `apelido` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `usuarios_id` (`usuarios_id`),
-  CONSTRAINT `tb_enderecos_ibfk_1` FOREIGN KEY (`usuarios_id`) REFERENCES `tb_usuarios` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `usuarios_id` (`usuario_id`),
+  CONSTRAINT `tb_enderecos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `tb_usuarios` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,6 +179,7 @@ CREATE TABLE `tb_enderecos` (
 
 LOCK TABLES `tb_enderecos` WRITE;
 /*!40000 ALTER TABLE `tb_enderecos` DISABLE KEYS */;
+INSERT INTO `tb_enderecos` VALUES (1,9,'44','4','Sete Barras','SP',11910000,4,NULL,'1','80330-380'),(2,10,'Rua Alberto Klemtz','Portão','Curitiba','PR',80330380,1,NULL,'1','ghj'),(3,10,'Rua Alberto Klemtz','Portão','Curitiba','PR',80330380,116,NULL,'1','80330-380'),(4,10,'Rua Alberto Klemtz','Portão','Curitiba','PR',80330380,1,NULL,'1','teste');
 /*!40000 ALTER TABLE `tb_enderecos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -377,7 +379,7 @@ CREATE TABLE `tb_menus` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `tb_menus_menu_pai_id_foreign` (`menu_pai_id`) USING BTREE,
   CONSTRAINT `tb_menus_menu_pai_id_foreign` FOREIGN KEY (`menu_pai_id`) REFERENCES `tb_menus` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -386,7 +388,7 @@ CREATE TABLE `tb_menus` (
 
 LOCK TABLES `tb_menus` WRITE;
 /*!40000 ALTER TABLE `tb_menus` DISABLE KEYS */;
-INSERT INTO `tb_menus` VALUES (1,'Pedidos','#','bi-cart',1,'[1]',NULL,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(9,'Novo Pedido','usuario.novo','bi-cart',1,'[1]',1,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(10,'Listar Pedidos','usuario.index','bi-card-checklist',2,'[1]',1,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(11,'Sistema','#','bi-gear',1,'[1]',NULL,NULL,NULL),(12,'Meus Dados','usuario.index','bi-postcard',1,'[1]',11,NULL,NULL),(13,'Relatório','usuario.relatorio','bi-card-checklist',3,'[1]',1,NULL,NULL);
+INSERT INTO `tb_menus` VALUES (1,'Pedidos','#','bi-cart',1,'[1]',NULL,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(9,'Novo Pedido','usuario.novo','bi-cart',1,'[1]',1,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(11,'Sistema','#','bi-gear',2,'[1]',NULL,NULL,NULL),(12,'Relatório','usuario.listar','bi-postcard',2,'[1]',1,NULL,NULL),(14,'Meus dados','usuario.ajustes','bi-postcard',1,'[1]',11,NULL,NULL);
 /*!40000 ALTER TABLE `tb_menus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -433,9 +435,8 @@ CREATE TABLE `tb_pedido_itens` (
   `total_paginas_pdf` int DEFAULT NULL,
   `dimensao_pdf_com_sangra` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `dimensao_pdf_sem_sangra` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `data_impressao` date DEFAULT NULL,
-  `data_entrega` date DEFAULT NULL,
-  `caminho_pdf` varchar(255) DEFAULT NULL,
+  `data_impressao` datetime DEFAULT NULL,
+  `data_entrega` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pedidos_id` (`pedido_id`),
   KEY `status_pedido_item_id` (`status_pedido_item_id`),
@@ -445,7 +446,7 @@ CREATE TABLE `tb_pedido_itens` (
   CONSTRAINT `tb_pedido_itens_ibfk_2` FOREIGN KEY (`status_pedido_item_id`) REFERENCES `tb_status_pedido_item` (`id`),
   CONSTRAINT `tb_pedido_itens_ibfk_3` FOREIGN KEY (`produto_id`) REFERENCES `tb_produtos` (`id`),
   CONSTRAINT `tb_pedido_itens_ibfk_4` FOREIGN KEY (`tamanho_id`) REFERENCES `tb_tamanhos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -454,7 +455,7 @@ CREATE TABLE `tb_pedido_itens` (
 
 LOCK TABLES `tb_pedido_itens` WRITE;
 /*!40000 ALTER TABLE `tb_pedido_itens` DISABLE KEYS */;
-INSERT INTO `tb_pedido_itens` VALUES (3,8,2,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,9,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,10,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(6,11,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(7,12,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,13,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(9,14,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(10,15,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(11,16,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(17,22,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(18,23,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(19,24,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `tb_pedido_itens` VALUES (20,25,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(21,26,2,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `tb_pedido_itens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -481,7 +482,7 @@ CREATE TABLE `tb_pedidos` (
   KEY `status_pedido_id` (`status_pedido_id`),
   CONSTRAINT `tb_pedidos_fk_cliente_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `tb_usuarios` (`id`),
   CONSTRAINT `tb_pedidos_ibfk_1` FOREIGN KEY (`status_pedido_id`) REFERENCES `tb_status_pedido` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -490,7 +491,7 @@ CREATE TABLE `tb_pedidos` (
 
 LOCK TABLES `tb_pedidos` WRITE;
 /*!40000 ALTER TABLE `tb_pedidos` DISABLE KEYS */;
-INSERT INTO `tb_pedidos` VALUES (8,10,'8945489','2026-07-01','2026-07-01',NULL,NULL,'8945489',1,NULL),(9,10,'fgh','2026-07-02','2026-07-02','2026-07-02 03:23:41','2026-07-02 03:23:41','fgh',1,NULL),(10,10,'fgh','2026-07-02','2026-07-02','2026-07-02 03:24:19','2026-07-02 03:24:19','fgh',1,NULL),(11,10,'fgh','2026-07-02','2026-07-02','2026-07-02 03:24:31','2026-07-02 03:24:31','fgh',1,NULL),(12,10,'fgh','2026-07-02','2026-07-02','2026-07-02 03:24:36','2026-07-02 03:24:36','fgh',1,NULL),(13,10,'fgh','2026-07-02','2026-07-02','2026-07-02 03:25:39','2026-07-02 03:25:39','fgh',1,NULL),(14,10,'4748','2026-07-02','2026-07-02','2026-07-02 03:27:46','2026-07-02 03:27:46','4748',1,NULL),(15,10,'77','2026-07-02','2026-07-02','2026-07-02 03:28:40','2026-07-02 03:28:40','77',1,NULL),(16,10,'54','2026-07-02','2026-07-02','2026-07-02 03:36:16','2026-07-02 03:36:16','54',1,NULL),(22,10,'78','2026-07-02','2026-07-02','2026-07-02 03:44:32','2026-07-02 03:44:32','78',1,NULL),(23,10,'89','2026-07-02','2026-07-02','2026-07-02 03:49:48','2026-07-02 03:49:48','89',1,NULL),(24,10,'874984','2026-07-02','2026-07-02','2026-07-02 03:55:15','2026-07-02 03:55:15','874984',1,NULL);
+INSERT INTO `tb_pedidos` VALUES (25,10,'teeste','2026-07-02','2026-07-02','2026-07-02 14:43:56','2026-07-02 14:43:56','teeste',1,NULL),(26,10,'sd','2026-07-02','2026-07-02','2026-07-02 14:44:35','2026-07-02 14:44:35','sd',1,NULL);
 /*!40000 ALTER TABLE `tb_pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -515,7 +516,7 @@ CREATE TABLE `tb_pedidos_itens_arquivos` (
   KEY `produto_componente_id` (`produto_componente_id`),
   CONSTRAINT `tb_pedidos_itens_arquivos_ibfk_1` FOREIGN KEY (`pedido_item_id`) REFERENCES `tb_pedido_itens` (`id`),
   CONSTRAINT `tb_pedidos_itens_arquivos_ibfk_2` FOREIGN KEY (`produto_componente_id`) REFERENCES `tb_componentes` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -524,7 +525,7 @@ CREATE TABLE `tb_pedidos_itens_arquivos` (
 
 LOCK TABLES `tb_pedidos_itens_arquivos` WRITE;
 /*!40000 ALTER TABLE `tb_pedidos_itens_arquivos` DISABLE KEYS */;
-INSERT INTO `tb_pedidos_itens_arquivos` VALUES (1,17,1,'untitled.pdf','22_17_frente.pdf',NULL,'artes/22_17_frente.pdf','tmp/untitled.pdf'),(2,17,7,'untitled.pdf','22_17_miolo.pdf',NULL,'artes/22_17_miolo.pdf','tmp/untitled.pdf'),(3,18,1,'untitled.pdf','23_18_frente.pdf','2026-07-02 00:49:48','artes/23_18_frente.pdf','tmp/untitled.pdf'),(4,18,7,'untitled.pdf','23_18_miolo.pdf','2026-07-02 00:49:48','artes/23_18_miolo.pdf','tmp/untitled.pdf');
+INSERT INTO `tb_pedidos_itens_arquivos` VALUES (7,20,1,'untitled.pdf','25_20_frente.pdf','2026-07-02 11:43:56','/var/www/html/public/artes/2026/07/02/25/25_20_frente.pdf','tmp/untitled.pdf'),(8,20,7,'untitled.pdf','25_20_miolo.pdf','2026-07-02 11:43:56','/var/www/html/public/artes/2026/07/02/25/25_20_miolo.pdf','tmp/untitled.pdf'),(9,21,1,'recomendacao_Luis_Renato_Haluch_Jr.pdf','26_21_frente.pdf','2026-07-02 11:44:35','/var/www/html/public/artes/2026/07/02/26/26_21_frente.pdf','tmp/recomendacao_Luis_Renato_Haluch_Jr.pdf'),(10,21,2,'banner.png','26_21_capa.png','2026-07-02 11:44:35','/var/www/html/public/artes/2026/07/02/26/26_21_capa.png','tmp/banner.png');
 /*!40000 ALTER TABLE `tb_pedidos_itens_arquivos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -650,7 +651,7 @@ CREATE TABLE `tb_status_pedido` (
   `status` tinyint DEFAULT NULL,
   `ordem` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -659,7 +660,7 @@ CREATE TABLE `tb_status_pedido` (
 
 LOCK TABLES `tb_status_pedido` WRITE;
 /*!40000 ALTER TABLE `tb_status_pedido` DISABLE KEYS */;
-INSERT INTO `tb_status_pedido` VALUES (1,'Ok','Recebido',1,NULL),(2,'Aguardando Pagamento','Aguardando Pagamento',1,NULL),(3,'Em Processamento','Produção',1,NULL),(4,'Pronto para Retirada','Disponível para retidada',1,NULL),(5,'Em Transporte / Saiu para Entrega','Saiu para entrega',1,NULL),(6,'Entregue','Entregue',1,NULL);
+INSERT INTO `tb_status_pedido` VALUES (1,'Ok','Aguardando Pagamento',1,1),(2,'Aguardando Pagamento','Aguardando Pagamento',1,2),(3,'Em Processamento','Produção',1,3),(4,'Pronto para Retirada','Disponível para retidada',1,4),(5,'Em Transporte / Saiu para Entrega','Saiu para entrega',1,5),(6,'Entregue','Entregue',1,6);
 /*!40000 ALTER TABLE `tb_status_pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -772,7 +773,7 @@ CREATE TABLE `tb_usuarios` (
 
 LOCK TABLES `tb_usuarios` WRITE;
 /*!40000 ALTER TABLE `tb_usuarios` DISABLE KEYS */;
-INSERT INTO `tb_usuarios` VALUES (9,'Luis','teste@teste.com',NULL,'$2y$12$WFomLjXuYjSSJiua1tR5aO2iOCS/qjh0xnKtpv2y1tT26c1YsfEC2',NULL,'2026-06-22 15:47:20','2026-06-22 15:47:20','99','1',NULL),(10,'admin@local.com','admin@local.com',NULL,'$2y$12$QySZVYH/rlk22Blm3995auAIIa4dzTOp0N3cU7W1czoMvZkXDCJ0m',NULL,'2026-06-29 00:00:45','2026-06-29 00:00:45','1','1',NULL);
+INSERT INTO `tb_usuarios` VALUES (9,'Luis','teste@teste.com',NULL,'$2y$12$WFomLjXuYjSSJiua1tR5aO2iOCS/qjh0xnKtpv2y1tT26c1YsfEC2',NULL,'2026-06-22 15:47:20','2026-06-22 15:47:20','99','1',NULL),(10,'admin@local.com','admin@local.com',NULL,'$2y$12$PV5jod6TLTmBYJi6MA7h7.fwpBeOwMbMDWIpqpInUUUhLWSOCMi.W',NULL,'2026-06-29 00:00:45','2026-07-03 15:09:47','1','1',NULL);
 /*!40000 ALTER TABLE `tb_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -866,4 +867,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-02 12:30:23
+-- Dump completed on 2026-07-04  5:00:29

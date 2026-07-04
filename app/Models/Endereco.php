@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Endereco extends Model
 {
-    use HasFactory; 
     
-    protected $table = "tb_endereco";
+    protected $table = "tb_enderecos";
 
-    protected $fillable = []; // Permite insert
+    //protected $fillable = []; // Permite insert
 
     // Proibidos no insert, update
     protected $guarded = []; // Se tiver nao entra.
 
+    // Nao cisma com falta do created_at / updated_at
+    public $timestamps = false;
 }

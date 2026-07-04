@@ -8,6 +8,7 @@ const props = defineProps({
 
 const emit = defineEmits(['fechar']);
 const visivel = ref(false);
+let timer = null;
 
 // Sempre que uma mensagem nova chegar, exibe o toast e inicia o cronômetro para sumir
 watch(() => props.mensagem, (novaMensagem) => {
@@ -17,7 +18,7 @@ watch(() => props.mensagem, (novaMensagem) => {
         // Some automaticamente após 4 segundos
         setTimeout(() => {
             fecharToast();
-        }, 4000);
+        }, 6000);
     }
 }, { immediate: true });
 

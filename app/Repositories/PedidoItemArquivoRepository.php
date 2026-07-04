@@ -27,7 +27,7 @@ class PedidoItemArquivoRepository
             $pedidoItem = $this->pedidoItemArquivo->create($dados);
             return $pedidoItem->id;
 
-        }catch(\Throwable$e){
+        }catch(\Throwable $e){
             Log::error('Erro ao salvar: ' . $e->getMessage());
             throw $e;
         }

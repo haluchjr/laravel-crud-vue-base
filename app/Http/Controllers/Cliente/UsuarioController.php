@@ -5,9 +5,23 @@ namespace App\Http\Controllers\Cliente;
 use App\Http\Controllers\Controller; 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Repositories\TipoEnderecoRepository;
+use App\Repositories\EnderecoRepository;
 
 class UsuarioController extends Controller
 {
+
+    use ValidatesRequests;
+
+    public function __construct(
+        protected TipoEnderecoRepository $tipoEnderecoRepository, 
+        protected EnderecoRepository $enderecoRepository
+    
+        ) {}
     /**
      * Display a listing of the resource.
      */
@@ -17,7 +31,55 @@ class UsuarioController extends Controller
     }
 
     public function alterarDados(){
-        return Inertia::render('Usuario/MeusDados');
+        
+        return Inertia::render('Usuario/MeusDados',[
+            'tipos_enderecos'       => $this->tipoEnderecoRepository->findAll(),
+            'enderecos_cadastrados' => $this->enderecoRepository->findById(Auth::user()->id,'usuario_id'),
+
+        ]);
+    }
+
+    public function SalvaralterarDados(Request $request){
+        
+        $a = $this->validate($request, [
+            'apelido' => 'required|string|max:255',
+            'cep' => 'required|string|max:10',
+            'endereco' => 'required|string|max:255',
+            'numero' => 'required|string|max:10',   
+            'bairro' => 'required|string|max:255',
+            'cidade' => 'required|string|max:255',
+            //'estado' => 'required|string|max:255',
+            // Adicione outras validações conforme necessário
+        ]);
+
+        try{
+            DB::beginTransaction();
+                $dados = [
+                    'apelido' => $request->apelido,
+                    'cep' => $request->cep,
+                    'endereco' => $request->endereco,
+                    'numero' => $request->numero,
+                    'bairro' => $request->bairro,
+                    'cidade' => $request->cidade,
+                    'estado' => $request->estado,
+                    'usuario_id' => Auth::user()->id
+                ];
+
+            $this->enderecoRepository->salvar($dados);
+            
+            DB::commit();// Sempre ultimo antes do Return
+            return redirect()->route('usuario.ajustes')->with('success', 'Cadastrado com sucesso!');
+
+        }catch(\Throwable $e){
+            DB::rollBack();
+            // Grava o erro detalhado no log do Laravel (storage/logs/laravel.log) para você analisar depois
+            Log::error('Erro ao salvar pedido: ' . $e->getMessage(), ['exception' => $e]);
+
+            // Retorna para a tela anterior mostrando o erro amigável ao usuário
+            return redirect()->back()->with('error', $e->getMessage() );
+        }
+
+        
     }
 
     /**
