@@ -82,15 +82,15 @@ const enviar = () => {
     <div class="row"> 
     
         <div class="col-md-9 ">
-            <Label forId="cep">Apelido</Label>
-            <input type="text" v-model="form.apelido" class="form-control form-control-sm" id="cep" placeholder="Digite o Apelido">
+            <Label forId="cep">Apelido para este endereço</Label>
+            <input type="text" v-model="form.apelido" class="form-control form-control-sm" id="cep">
             
         </div>
 
         <div class="col-md-3">
             <Label forId="cep">Tipo endereço</Label>
             <select class="form-select form-select-sm" id="tipo_endereco" v-model="form.tipo_endereco_id">
-                <option value="">Selecione o tipo</option>
+                <option value="">-</option>
                 <option v-for="tipo in tipos_enderecos" :key="tipo.id" :value="tipo.id">
                     {{ tipo.descricao }}
                 </option>
@@ -102,35 +102,35 @@ const enviar = () => {
     <div class="row"> 
         <div class="col-md-3">
             <Label forId="cep">CEP</Label>
-            <input type="text"  @change="buscarCep" v-model="form.cep" class="form-control form-control-sm" id="cep" placeholder="Digite o CEP">
+            <input type="text"  @change="buscarCep" v-model="form.cep" class="form-control form-control-sm" id="cep" >
         </div>
         <small v-if="carregando" class="text-dark">
             Buscando...
         </small>
         <div class="col-md-6">
             <Label forId="endereco">Endereço</Label>
-            <input type="text" v-model="form.endereco" class="form-control form-control-sm" id="endereco" placeholder="Digite o Endereço">
+            <input type="text" v-model="form.endereco" class="form-control form-control-sm" id="endereco" >
         </div>
         
         <div class="col-md-3">
             <Label forId="numero">Número</Label>
-            <input type="text" v-model="form.numero" class="form-control form-control-sm" id="numero" placeholder="Digite o Número">
+            <input type="text" v-model="form.numero" class="form-control form-control-sm" id="numero" >
         </div>
     </div>
 
     <div class="row"> 
         <div class="col-md-3">
             <Label forId="bairro">Bairro</Label>
-            <input type="text" v-model="form.bairro" class="form-control form-control-sm" id="bairro" placeholder="Digite o Bairro">
+            <input type="text" v-model="form.bairro" class="form-control form-control-sm" id="bairro" >
         </div>
         <div class="col-md-6">
             <Label forId="cidade">Cidade</Label>
-            <input type="text" v-model="form.cidade" class="form-control form-control-sm" id="cidade" placeholder="Digite a Cidade">
+            <input type="text" v-model="form.cidade" class="form-control form-control-sm" id="cidade">
         </div>
         
         <div class="col-md-3">
             <Label forId="estado">Estado</Label>
-            <input type="text" v-model="form.estado" class="form-control form-control-sm" id="estado" placeholder="Digite o Estado">
+            <input type="text" v-model="form.estado" class="form-control form-control-sm" id="estado">
         </div>
     </div>
     <div class="row mt-3">
@@ -155,8 +155,8 @@ const enviar = () => {
         <tbody>
         <tr v-for="linha in enderecos_cadastrados" :key="linha.id">
             <td>{{ linha.apelido }}</td>
-            <td>{{ linha.status}}</td>
-            <td>Detalhes / Excluir</td>
+            <td>{{ linha.descricao}}</td>
+            <td >Detalhes / Excluir</td>
         </tr>
         </tbody>
     </table>

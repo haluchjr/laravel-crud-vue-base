@@ -11,27 +11,39 @@ import DangerButton from '@/Components/DangerButton.vue';
 
 <template>
     <div class="row"> 
-    <div class="col-md-12">
+    <div class="col-md-9">
             <Label forId="cep">Nome</Label>
-            <input type="text" class="form-control" id="cep" placeholder="Digite o Nome">
+            <input type="text" class="form-control form-control-sm" id="cep" placeholder="Digite o Nome">
         </div>
 
+        <div class="col-md-3">
+            <Label forId="cep">CPF/CNPJ</Label>
+            <input type="text" class="form-control form-control-sm" id="cep" placeholder="Digite o CPF/CNPJ">
+        </div>
      </div>
 
     <div class="row"> 
-        <div class="col-md-3">
-            <Label forId="cep">CPF/CNPJ</Label>
-            <input type="text" class="form-control" id="cep" placeholder="Digite o CPF/CNPJ">
-        </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <Label forId="endereco">I.E.</Label>
-            <input type="text" class="form-control" id="endereco" placeholder="Digite o I.E.">
+            <input type="text" class="form-control form-control-sm" id="endereco" placeholder="Digite o I.E.">
         </div>
         
-        <div class="col-md-6">
+        <div class="col-md-4">
             <Label forId="numero">Email</Label>
-            <input type="text" class="form-control" id="numero" placeholder="Digite o Email">
+            <input type="text" class="form-control form-control-sm" id="numero" placeholder="Digite o Email">
         </div>
+        
+        <div class="col-md-3">
+            <Label forId="fone">Telefone Fixo</Label>
+            <input type="text" class="form-control form-control-sm" id="telefoneFixo">
+        </div>
+
+        
+        <div class="col-md-3">
+            <Label forId="celular">Telefone Celular</Label>
+            <input type="text" class="form-control form-control-sm" id="celular">
+        </div>
+
     </div>
 
 
@@ -39,7 +51,6 @@ import DangerButton from '@/Components/DangerButton.vue';
   <div class="row mt-3">
     <div class="col-md-12 d-flex justify-content-end">
         <button class="btn btn-sm btn-outline-success ">Salvar</button>
-        aplicar mesmo comportamento da senha, ficar na mesma tela.
     </div>
 </div>
 

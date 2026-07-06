@@ -5,11 +5,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-use App\Models\Endereco;
+use App\Models\Enderecos;
 
 class EnderecoRepository
 {
-    public function __construct(protected Endereco $model) {}
+    public function __construct(protected Enderecos $model) {}
 
     public function findById($id,$coluna = 'id')
     {
@@ -20,6 +20,18 @@ class EnderecoRepository
     public function findAll()
     {
         return $this->model->all();
+    }
+
+    public function listarEnderecosByID($idCliente){
+        $sql = "SELECT * 
+                from tb_enderecos
+                inner join tb_tipo_endereco 
+                    on tb_tipo_endereco.id = tb_enderecos.tipo_endereco_id
+                where usuario_id = $idCliente";
+        
+        $sql = DB::select($sql);
+        $sql = Enderecos::Hydrate($sql);
+        return $sql;
     }
 
     public function salvar(array $dados)

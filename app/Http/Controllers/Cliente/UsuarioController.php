@@ -34,13 +34,14 @@ class UsuarioController extends Controller
         
         return Inertia::render('Usuario/MeusDados',[
             'tipos_enderecos'       => $this->tipoEnderecoRepository->findAll(),
-            'enderecos_cadastrados' => $this->enderecoRepository->findById(Auth::user()->id,'usuario_id'),
+            'enderecos_cadastrados' => $this->enderecoRepository->listarEnderecosByID(Auth::user()->id),
 
         ]);
     }
 
     public function SalvaralterarDados(Request $request){
-        
+        log::error($request->all());
+
         $a = $this->validate($request, [
             'apelido' => 'required|string|max:255',
             'cep' => 'required|string|max:10',
@@ -48,7 +49,8 @@ class UsuarioController extends Controller
             'numero' => 'required|string|max:10',   
             'bairro' => 'required|string|max:255',
             'cidade' => 'required|string|max:255',
-            //'estado' => 'required|string|max:255',
+            'estado' => 'required|string|max:255',
+            'tipo_endereco_id' => 'required'
             // Adicione outras validações conforme necessário
         ]);
 
@@ -62,7 +64,8 @@ class UsuarioController extends Controller
                     'bairro' => $request->bairro,
                     'cidade' => $request->cidade,
                     'estado' => $request->estado,
-                    'usuario_id' => Auth::user()->id
+                    'usuario_id' => Auth::user()->id,
+                    'tipo_endereco_id' => $request->tipo_endereco_id
                 ];
 
             $this->enderecoRepository->salvar($dados);

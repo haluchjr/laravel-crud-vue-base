@@ -1,0 +1,15 @@
+services:
+  dnsmasq:
+    build: .
+    image: meu-dnsmasq-proprio:1.0
+    container_name: dnsmasq_local
+    volumes:
+      # Mapeia as configurações externas para dentro da imagem em modo Read-Only
+      - ./dnsmasq.conf:/etc/dnsmasq.conf:ro
+      - ./dnsmasq.hosts:/etc/dnsmasq.hosts:ro
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    cap_add:
+      - NET_ADMIN
+    restart: always
