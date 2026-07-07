@@ -4,15 +4,13 @@ namespace App\Repositories;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-use App\Models\UsuariosModel;
+use App\Models\Usuarios;
 
 class UsuarioRepository
 {
-    protected $model;
 
     // Passamos o Model pelo construtor (Injeção de Dependência)
-    public function __construct(protected UsuariosModel $usuario) {
-        $this->model = $usuario;
+    public function __construct(protected Usuarios $model) {
     }
 
     public function salvar(array $dados)
@@ -70,6 +68,17 @@ class UsuarioRepository
     public function findAll()
     {
         return $this->usuario->all();
+    }
+
+
+    public function visualizaCadastroPorId($id){
+        $sql = "select *
+                from tb_usuarios
+                left join tb_fones on tb_fones.usuarios_id = tb_usuarios.id
+                where tb_usuarios.id = {$id}";
+
+        $resultado = DB::select($sql);
+        return Usuarios::hydrate($resultado);
     }
 
 

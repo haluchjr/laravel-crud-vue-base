@@ -8,6 +8,7 @@ import EnderecosForm from '@/Pages/Usuario/Partials/Enderecos.vue';
 defineProps({
   tipos_enderecos: Array, // Recebe do Controller
   enderecos_cadastrados:Array,
+  dados_pessoais: Array,
 });
 </script>
 

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Repositories\TipoEnderecoRepository;
 use App\Repositories\EnderecoRepository;
 use App\Repositories\UsuarioRepository;
-use App\Repositories\FoneRepository;
+//use App\Repositories\FoneRepository;
 
 
 
@@ -25,7 +25,7 @@ class UsuarioController extends Controller
         protected TipoEnderecoRepository $tipoEnderecoRepository, 
         protected EnderecoRepository $enderecoRepository,
         protected UsuarioRepository $usuarioRepository,
-        protected FoneRepository $foneRepository
+        //protected FoneRepository $foneRepository
     
         ) {}
     /**
@@ -38,7 +38,9 @@ class UsuarioController extends Controller
 
     public function alterarDados(){
         
+
         return Inertia::render('Usuario/MeusDados',[
+            'dados_pessoais'        => $this->usuarioRepository->visualizaCadastroPorId(Auth::user()->id),
             'tipos_enderecos'       => $this->tipoEnderecoRepository->findAll(),
             'enderecos_cadastrados' => $this->enderecoRepository->listarEnderecosByID(Auth::user()->id),
 
@@ -94,7 +96,7 @@ class UsuarioController extends Controller
     public function  SalvaralterarDadosPessoais (Request $request){
 
         $dados = [
-            'nome'      => $requst->nome,
+            'nome'      => $request->nome,
             'cpf_cnpj'  => $request->cpf_cnpj,
             'ie'        => $request->ie,
             'email'     => $request->email,
@@ -113,9 +115,9 @@ class UsuarioController extends Controller
             'tipo_fone'  => 2
         ];
         
-        $this->usuarioRepository->salvar($dados);
-        $this->foneRepository->salvar($dadosFoneFixo);
-        $this->foneRepository->salvar($dadosFoneCel);
+       // $this->usuarioRepository->salvar($dados);
+       // $this->foneRepository->salvar($dadosFoneFixo);
+       // $this->foneRepository->salvar($dadosFoneCel);
 
     }
 

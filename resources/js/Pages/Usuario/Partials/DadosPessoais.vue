@@ -6,6 +6,10 @@ import debug from '@/Components/Debug.vue';
 import { Head , usePage, Link } from '@inertiajs/vue3'
 import Label from '@/Components/Label.vue';
 import { mask } from 'vue-the-mask';
+defineProps({
+    dados_pessoais:Array,
+});
+
 const vMask = mask;
 const documentoMasks = ['###.###.###-##', '##.###.###/####-##'];
 
@@ -20,11 +24,12 @@ const form = useForm({
 const enviar = () => {
      form.post(route('usuario.ajustes.salvarPessoais'));
 };
-
 </script>
 
 <template>
     <form @submit.prevent="enviar" class="container mt-4">
+    <debug/>
+     {{ dados_pessoais}}
 
     <div class="row"> 
         <div class="col-md-9">
@@ -63,7 +68,7 @@ const enviar = () => {
 
     <div class="row mt-3">
         <div class="col-md-12 d-flex justify-content-end">
-            <button class="btn btn-sm btn-outline-success ">Salvar</button>
+            <button class="btn btn-sm btn-outline-success ">Salvar/Atualizar</button>
         </div>
     </div>
 
