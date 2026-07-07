@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/sistema/dados',[UsuarioCliente::class,'alterarDados'])->name('usuario.ajustes');
         Route::post('/sistema/dados',[UsuarioCliente::class,'SalvaralterarDados'])->name('usuario.ajustes.salvar');
+        Route::post('/sistema/dados',[UsuarioCliente::class,'SalvaralterarDadosPessoais'])->name('usuario.ajustes.salvarPessoais');
         //tmp
         //Route::get('/pedido/excluir/{id}',[UsuarioCliente::class,'limpaPedidoEntregue'])->name('usuario.excluir');
     });

@@ -8,9 +8,9 @@ class Fones extends Model
 {
     use HasFactory; 
     
-    protected $table = "tb_cadastros";
+    protected $table = "tb_fones";
 
-    protected $fillable = []; // Permite insert
+    //protected $fillable = []; // Permite insert
 
     // Proibidos no insert, update
     protected $guarded = []; // Se tiver nao entra.

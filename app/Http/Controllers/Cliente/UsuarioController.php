@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\TipoEnderecoRepository;
 use App\Repositories\EnderecoRepository;
+use App\Repositories\UsuarioRepository;
+use App\Repositories\FoneRepository;
+
+
 
 class UsuarioController extends Controller
 {
@@ -19,7 +23,9 @@ class UsuarioController extends Controller
 
     public function __construct(
         protected TipoEnderecoRepository $tipoEnderecoRepository, 
-        protected EnderecoRepository $enderecoRepository
+        protected EnderecoRepository $enderecoRepository,
+        protected UsuarioRepository $usuarioRepository,
+        protected FoneRepository $foneRepository
     
         ) {}
     /**
@@ -81,9 +87,38 @@ class UsuarioController extends Controller
             // Retorna para a tela anterior mostrando o erro amigável ao usuário
             return redirect()->back()->with('error', $e->getMessage() );
         }
-
         
     }
+
+    // Update...
+    public function  SalvaralterarDadosPessoais (Request $request){
+
+        $dados = [
+            'nome'      => $requst->nome,
+            'cpf_cnpj'  => $request->cpf_cnpj,
+            'ie'        => $request->ie,
+            'email'     => $request->email,
+            'id'        => Auth::user()->id
+        ];
+
+        $dadosFoneFixo = [
+            'usuario_id' => Auth::user()->id,
+            'ddd_numero' => $request->telefonefixo,
+            'tipo_fone'  => 1
+        ];
+
+        $dadosFoneCel = [
+            'usuario_id' => Auth::user()->id,
+            'ddd_numero' => $request->telefonecel,
+            'tipo_fone'  => 2
+        ];
+        
+        $this->usuarioRepository->salvar($dados);
+        $this->foneRepository->salvar($dadosFoneFixo);
+        $this->foneRepository->salvar($dadosFoneCel);
+
+    }
+
 
     /**
      * Show the form for creating a new resource.
