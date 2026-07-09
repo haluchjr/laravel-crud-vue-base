@@ -8,7 +8,8 @@ import EnderecosForm from '@/Pages/Usuario/Partials/Enderecos.vue';
 defineProps({
   tipos_enderecos: Array, // Recebe do Controller
   enderecos_cadastrados:Array,
-  dados_pessoais: Array,
+  dados_pessoais: Object,
+  endereco_editado : Object,
 });
 </script>
 
@@ -45,28 +46,33 @@ defineProps({
             <!-- Painel: Dados Pessoais (Ativo por padrão) -->
             <div class="tab-pane fade show active" id="dados" role="tabpanel">
                 <div class="row g-3"> <!-- g-3 cria o espaçamento (gap) perfeito entre as colunas do form -->
-                    <DadosPessoaisForm />
+                    <DadosPessoaisForm 
+                        :dados_pessoais="dados_pessoais"
+                    />
                 </div>
             </div>
 
             <!-- Painel: Meus Endereços -->
             <div class="tab-pane fade" id="enderecos" role="tabpanel">
                 <div class="row g-3">
-                    <EnderecosForm :tipos_enderecos="tipos_enderecos" :enderecos_cadastrados="enderecos_cadastrados" />
+                    <EnderecosForm 
+                        :tipos_enderecos="tipos_enderecos" 
+                        :enderecos_cadastrados="enderecos_cadastrados" 
+                        :endereco_editado="endereco_editado"
+                    />
                 </div>
             </div>
 
             <!-- Painel: Senha -->
             <div class="tab-pane fade" id="senha" role="tabpanel">
                 <div class="row g-3">
-                        <UpdatePasswordForm />
+                    <UpdatePasswordForm />
                 </div>
             </div>
 
         </div>
     </div>
 
-aplicar mesmo comportamento da senha, ficar na mesma tela.
 </Layout>
 </template>
 

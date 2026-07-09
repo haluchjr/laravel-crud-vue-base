@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Repositories\TipoEnderecoRepository;
 use App\Repositories\EnderecoRepository;
 use App\Repositories\UsuarioRepository;
-//use App\Repositories\FoneRepository;
+use App\Repositories\FoneRepository;
 
 
 
@@ -25,7 +25,7 @@ class UsuarioController extends Controller
         protected TipoEnderecoRepository $tipoEnderecoRepository, 
         protected EnderecoRepository $enderecoRepository,
         protected UsuarioRepository $usuarioRepository,
-        //protected FoneRepository $foneRepository
+        protected FoneRepository $foneRepository
     
         ) {}
     /**
@@ -37,20 +37,37 @@ class UsuarioController extends Controller
     }
 
     public function alterarDados(){
-        
 
+    //print_r($this->enderecoRepository->selecionaEnderecoByID(request('enderecoId')));    exit;
         return Inertia::render('Usuario/MeusDados',[
             'dados_pessoais'        => $this->usuarioRepository->visualizaCadastroPorId(Auth::user()->id),
             'tipos_enderecos'       => $this->tipoEnderecoRepository->findAll(),
             'enderecos_cadastrados' => $this->enderecoRepository->listarEnderecosByID(Auth::user()->id),
+            'endereco_editado' => Inertia::lazy(function () {
+                return $this->enderecoRepository->selecionaEnderecoByID(request('enderecoId'));
+            }),
 
         ]);
     }
 
+    public function excluirEndereco($id){
+        $this->enderecoRepository->deletar($id);
+        return redirect()->route('usuario.ajustes')->with('success', 'Excluido com sucesso!');
+    }
+
+    public function editarEndereco($id){
+        return Inertia::render('Usuario/MeusDados',[
+            'dados_pessoais'        => $this->usuarioRepository->visualizaCadastroPorId(Auth::user()->id),
+            'tipos_enderecos'       => $this->tipoEnderecoRepository->findAll(),
+            'enderecos_cadastrados' => $this->enderecoRepository->listarEnderecosByID(Auth::user()->id),
+            'endereco_editado' => $this->enderecoRepository->selecionaEnderecoByID($id)
+            ]);
+
+    }
+
     public function SalvaralterarDados(Request $request){
         log::error($request->all());
-
-        $a = $this->validate($request, [
+        /*$a = $this->validate($request, [
             'apelido' => 'required|string|max:255',
             'cep' => 'required|string|max:10',
             'endereco' => 'required|string|max:255',
@@ -60,11 +77,12 @@ class UsuarioController extends Controller
             'estado' => 'required|string|max:255',
             'tipo_endereco_id' => 'required'
             // Adicione outras validações conforme necessário
-        ]);
+        ]);*/
 
         try{
             DB::beginTransaction();
                 $dados = [
+                    'id'    => $request->id,
                     'apelido' => $request->apelido,
                     'cep' => $request->cep,
                     'endereco' => $request->endereco,
@@ -75,8 +93,12 @@ class UsuarioController extends Controller
                     'usuario_id' => Auth::user()->id,
                     'tipo_endereco_id' => $request->tipo_endereco_id
                 ];
+            if ($request->id){
+                $this->enderecoRepository->atualizar($request->id, $dados);
+            }else{
 
-            $this->enderecoRepository->salvar($dados);
+                $this->enderecoRepository->salvar($dados);
+            }
             
             DB::commit();// Sempre ultimo antes do Return
             return redirect()->route('usuario.ajustes')->with('success', 'Cadastrado com sucesso!');
@@ -95,29 +117,27 @@ class UsuarioController extends Controller
     // Update...
     public function  SalvaralterarDadosPessoais (Request $request){
 
-        $dados = [
-            'nome'      => $request->nome,
-            'cpf_cnpj'  => $request->cpf_cnpj,
-            'ie'        => $request->ie,
-            'email'     => $request->email,
-            'id'        => Auth::user()->id
-        ];
-
-        $dadosFoneFixo = [
-            'usuario_id' => Auth::user()->id,
-            'ddd_numero' => $request->telefonefixo,
-            'tipo_fone'  => 1
-        ];
-
-        $dadosFoneCel = [
-            'usuario_id' => Auth::user()->id,
-            'ddd_numero' => $request->telefonecel,
-            'tipo_fone'  => 2
-        ];
+        $this->usuarioRepository->atualizar( Auth::user()->id, [
+        'name'      => $request->nome,
+        'cpf_cnpj'  => $request->cpf_cnpj,
+        'ie'        => $request->ie,
+        'email'     => $request->email,
+        'id'        => Auth::user()->id,
+        'password'  => Auth::user()->password
+        ]);
         
-       // $this->usuarioRepository->salvar($dados);
-       // $this->foneRepository->salvar($dadosFoneFixo);
-       // $this->foneRepository->salvar($dadosFoneCel);
+        $this->foneRepository->atualizar( 
+            [
+                'usuario_id' => Auth::user()->id,
+                'tipo_fone'     => 2
+            ], ['ddd_numero' => $request->telefonefixo]);
+
+        $this->foneRepository->atualizar( [
+            'usuario_id'=> Auth::user()->id,
+            'tipo_fone' => 1
+        ], ['ddd_numero' => $request->telefonecel]);
+
+        return redirect()->route('usuario.index')->with('success', 'Atualizado com sucesso!');
 
     }
 

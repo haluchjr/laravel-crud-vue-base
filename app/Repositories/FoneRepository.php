@@ -25,13 +25,13 @@ class FoneRepository
         }
     }
 
-    public function atualizar($id, array $dados)
+    public function atualizar( array $coluna, array $dados)
     {
         try{
-            $usuario = $this->model->find($id);
+            $usuario = $this->model->where($coluna)->first();
             if ($usuario) {
-                $usuario->update($dados);
-                return true;
+                return $usuario->update($dados);
+                //return true;
             }
             return false;
         }catch(\Exception $e){

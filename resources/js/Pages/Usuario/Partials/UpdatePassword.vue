@@ -94,7 +94,7 @@ const updatePassword = () => {
                 </div>
             </div>
             
-            <div class="col-md-12 d-flex justify-content-end">
+            <div class="col-md-12 d-flex justify-content-start">
                 <button 
                     class="btn btn-sm btn-outline-success"  
                     type="submit" 

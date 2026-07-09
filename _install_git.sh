@@ -104,16 +104,6 @@ echo -e "${AZUL}==> Aguardando o MySQL iniciar por completo...${SEM_COR}"
 sleep 10
 echo -e "${VERDE}==> MySQL está pronto!${SEM_COR}"
 
-# 9. Executa as migrations do banco de dados
-echo -e "${AZUL}==> Rodando as migrations no MySQL...${SEM_COR}"
-docker compose exec backend php artisan migrate
-
-# 9.1 Rodar as seeders
-echo -e "${AZUL}==> Rodando as seeders...${SEM_COR}"
-docker compose exec backend php artisan db:seed
-# Caso ficou alguma seeder de lado, ver em : database/seeders/DatabaseSeeder.php
-# docker compose exec backend php artisan db:seed --class=MenuSeeder
-
 # 10. Limpa caches internos do framework
 echo -e "${AZUL}==> Limpando caches internos do Laravel...${SEM_COR}"
 docker compose exec backend php artisan config:clear

@@ -10,7 +10,7 @@ class StatusPedido extends Model
     
     protected $table = "tb_status_pedido";
 
-    protected $fillable = []; // Permite insert
+    //protected $fillable = []; // Permite insert
 
     // Proibidos no insert, update
     protected $guarded = []; // Se tiver nao entra.

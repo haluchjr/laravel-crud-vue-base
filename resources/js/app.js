@@ -17,7 +17,7 @@ import { initGlobalLogger, sendErrorToLaravel } from './Utils/logger-front';
 initGlobalLogger();
 
 // Inicializa a segurança do console
-initConsoleSecurity();
+// initConsoleSecurity();
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

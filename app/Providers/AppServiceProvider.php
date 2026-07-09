@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate; // 1. IMPORTANTE: Importar o Gate
 use App\Models\Usuarios;              // 2. IMPORTANTE: Importar o seu Model de Usuário
 use Illuminate\Auth\Access\Response;
+use Illuminate\Database\Eloquent\Model;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Vite::prefetch(concurrency: 3);
+
+        Model::preventSilentlyDiscardingAttributes(
+            app()->isLocal()
+        );
 
         // 3. Definindo o portão "deletar-usuarios"
         Gate::define('deletar-usuarios', function (Usuarios $user) {

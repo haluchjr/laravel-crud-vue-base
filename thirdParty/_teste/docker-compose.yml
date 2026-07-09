@@ -1,0 +1,22 @@
+#DEV
+services:
+  backend:
+    container_name: ${COMPOSE_PROJECT_NAME}_backend
+    build:
+      context: .
+      dockerfile: ./docker/php8.3/Dockerfile
+      target: development # Para aqui!
+      args:
+        USER_ID: 1000
+        GROUP_ID: 1000
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html # Espelha sua pasta
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - app-net
+  
+networks:
+  app-net:
+    driver: bridge

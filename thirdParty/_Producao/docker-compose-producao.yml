@@ -1,11 +1,11 @@
-# ···························
-# :   ____  _______     __  :
-# :  |  _ \| ____\ \   / /  :
-# :  | | | |  _|  \ \ / /   :
-# :  | |_| | |___  \ V /    :
-# :  |____/|_____|  \_/     :
-# :                         :
-# ···························
+# ·······························
+# :   ____  ____   ___  ____    :
+# :  |  _ \|  _ \ / _ \|  _ \   :
+# :  | |_) | |_) | | | | | | |  :
+# :  |  __/|  _ <| |_| | |_| |  :
+# :  |_|   |_| \_\\___/|____/   :
+# :                             :
+# ·······························
 
 services:
   proxy:
@@ -41,21 +41,6 @@ services:
       - db_mysql
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    networks:
-      - app-net
-
-  frontend:
-    image: node:20-alpine
-    container_name: ${COMPOSE_PROJECT_NAME}_frontend
-    user: "1000:1000"
-    volumes:
-      - .:/var/www/html
-    working_dir: /var/www/html
-    ports:
-      - "${PORTA_VITE}:5173"
-    command: tail -f /dev/null
-    depends_on:
-      - backend
     networks:
       - app-net
 

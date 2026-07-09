@@ -23,7 +23,16 @@ class EnderecoRepository
     }
 
     public function listarEnderecosByID($idCliente){
-        $sql = "SELECT * 
+        $sql = "SELECT 
+                    tb_enderecos.id,
+                    tb_enderecos.endereco,
+                    tb_enderecos.bairro,
+                    tb_enderecos.cidade,
+                    tb_enderecos.estado,
+                    tb_enderecos.cep,
+                    tb_enderecos.numero,
+                    tb_enderecos.apelido,
+                    tb_tipo_endereco.descricao
                 from tb_enderecos
                 inner join tb_tipo_endereco 
                     on tb_tipo_endereco.id = tb_enderecos.tipo_endereco_id
@@ -33,6 +42,30 @@ class EnderecoRepository
         $sql = Enderecos::Hydrate($sql);
         return $sql;
     }
+
+    public function selecionaEnderecoByID($idEndereco){
+        $sql = "SELECT 
+                    tb_enderecos.id,
+                    tb_enderecos.endereco,
+                    tb_enderecos.bairro,
+                    tb_enderecos.cidade,
+                    tb_enderecos.estado,
+                    tb_enderecos.cep,
+                    tb_enderecos.numero,
+                    tb_enderecos.apelido,
+                    tb_tipo_endereco.descricao,
+                    tb_tipo_endereco.id as tipo_endereco_id
+                from tb_enderecos
+                inner join tb_tipo_endereco 
+                    on tb_tipo_endereco.id = tb_enderecos.tipo_endereco_id
+                where tb_enderecos.id = $idEndereco";
+        
+        $sql = DB::select($sql);
+        $sql = Enderecos::Hydrate($sql)->first();
+        return $sql;
+    }
+
+
 
     public function salvar(array $dados)
     {

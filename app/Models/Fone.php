@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Fones extends Model
+class Fone extends Model
 {
-    use HasFactory; 
     
     protected $table = "tb_fones";
 
@@ -14,5 +13,6 @@ class Fones extends Model
 
     // Proibidos no insert, update
     protected $guarded = []; // Se tiver nao entra.
+    public $timestamps = false;
 
 }

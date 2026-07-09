@@ -11,12 +11,14 @@ import DangerButton from '@/Components/DangerButton.vue';
 import { useEventBus } from '@/Utils/eventBus'; // <-- IMPORTA O BUS em cada pagina que precisar.
 const { emit } = useEventBus(); // Só usar se tiver algo q aconteça na tela.
 
-defineProps({
-  tipos_enderecos: Array, // Agora o filho aceita o dado vindo do pai
-  enderecos_cadastrados: Array,
+const props = defineProps({
+    tipos_enderecos: Array,
+    enderecos_cadastrados: Array,
+    endereco_editado: Object,
 });
 
 const form = useForm({
+    id: '',
     apelido: '',
     tipo_endereco_id: '',
     cep: '',
@@ -71,16 +73,41 @@ const enviar = () => {
         },
     });*/
 };
+const excluirEndereco = (id) => {
+       router.delete(route('usuario.ajustes.excluirEndereco', id));
+}
 
+const editarEnderecoSelecionado = (id) => {
+    //router.get(route('usuario.ajustes.editarEndereco', id));
+    
+    router.reload({
+        only: ['endereco_editado'], 
+        data: { enderecoId: id }, 
+    });
+}
 
+watch(
+    () => props.endereco_editado,
+    (novo) => {
+        console.log('WATCH', novo);
+        form.id = novo.id;
+        form.apelido = novo.apelido;
+        form.bairro = novo.bairro;
+        form.cidade = novo.cidade;
+        form.estado = novo.estado;
+        form.numero = novo.numero;
+        form.tipo_endereco_id = Number(novo.tipo_endereco_id);
+        form.endereco = novo.endereco;
+        form.cep = novo.cep;
+    },
+    { immediate: true }
+);
 </script>
 
 <template>
     <!-- <debug/> -->
 <div id="master">
-   
     <div class="row"> 
-    
         <div class="col-md-9 ">
             <Label forId="cep">Apelido para este endereço</Label>
             <input type="text" v-model="form.apelido" class="form-control form-control-sm" id="cep">
@@ -134,7 +161,7 @@ const enviar = () => {
         </div>
     </div>
     <div class="row mt-3">
-        <div class="col-md-12 d-flex justify-content-end">
+        <div class="col-md-12 d-flex justify-content-start">
             <button class="btn btn-sm btn-outline-success " @click="enviar">Salvar</button>
             
         </div>
@@ -154,9 +181,17 @@ const enviar = () => {
         </tr></thead>
         <tbody>
         <tr v-for="linha in enderecos_cadastrados" :key="linha.id">
-            <td>{{ linha.apelido }}</td>
+            <td>
+                {{ linha.apelido }}</td>
             <td>{{ linha.descricao}}</td>
-            <td >Detalhes / Excluir</td>
+            <td >
+                <button class="btn btn-sm btn-outline-primary me-2 meu-tooltip" data-tooltip="Editar" @click="editarEnderecoSelecionado(linha.id)">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger meu-tooltip" data-tooltip="Excluir" @click="excluirEndereco(linha.id)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>

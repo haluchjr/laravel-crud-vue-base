@@ -11,6 +11,16 @@ NC='\033[0m' # No Color
 echo "-----------------------------------------------------------------------------------------------"
 echo -e "${AZUL}INICIANDO AMBIENTE DE DESENVOLVIMENTO${NC}"
 echo "-----------------------------------------------------------------------------------------------"
+PID=$(pgrep dockerd)
+if [ -n "$PID" ]; then
+    echo "Docker está rodando (PID: $PID)"
+    echo "-----------------------------------------------------------------------------------------------"    
+else
+    echo -e "${VERMELHO}"-----------------------------------------------------------------------------------------------"${NC}"
+    echo " Docker está parado"
+    echo -e "${VERMELHO}"-----------------------------------------------------------------------------------------------"${NC}"
+    exit 1
+fi
 
 
 # 1. Validação de segurança: Verifica se o .env existe
@@ -30,6 +40,7 @@ sleep 2
 echo -e "${VERMELHO}Apagando redes inuteis.${NC}"
 docker network prune -f
 echo "-----------------------------------------------------------------------------------------------"
+
 echo -e "${AMARELO}Aguardando os serviços estabilizarem...${NC}"
 # 3. Loop rápido para esperar o MySQL aceitar conexões (opcional, mas evita erro de Connection Refused no Artisan)
 # Ele tenta rodar um 'mysqladmin ping' de dentro do container até dar boa
@@ -42,6 +53,7 @@ for i in {1..15}; do
     echo -n "#"
     sleep 1
 done
+
 echo "-----------------------------------------------------------------------------------------------"
 if [ $MYSQL_READY -eq 1 ]; then
     echo -e "${VERDE}[OK] MySQL está pronto para conexões!${NC}"
@@ -49,6 +61,8 @@ else
     echo -e "${AMARELO}[AVISO] MySQL demorando mais que o esperado para iniciar." 
     echo -e "Verifique os logs se necessário.${NC}"
 fi
+
+
 echo "-----------------------------------------------------------------------------------------------"
 echo -e "${VERDE}Status atual dos serviços:${NC}"
 echo "-----------------------------------------------------------------------------------------------"
@@ -62,3 +76,9 @@ echo "--------------------------------------------------------------------------
 echo -e "${VERDE}Ambiente online! Boa codificação. ${NC}"
 echo "-----------------------------------------------------------------------------------------------"
 echo ""
+
+sleep 2
+echo "-----------------------------------------------------------------------------------------------"
+echo -e "${VERDE}Iniciando servidor de compilacao de frontend:${NC}"
+echo "-----------------------------------------------------------------------------------------------"
+docker compose exec frontend npm run dev

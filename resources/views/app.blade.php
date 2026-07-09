@@ -11,10 +11,16 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
 
+            @routes
+            @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
+            @inertiaHead
+
         <!-- Scripts -->
-        @routes
-        @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
-        @inertiaHead
+        <?php 
+        //@routes
+        //@vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
+        //@inertiaHead
+        ?>
     </head>
     <body class="font-sans antialiased">
         @inertia

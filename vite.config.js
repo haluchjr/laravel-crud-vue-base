@@ -62,19 +62,22 @@ export default defineConfig(({ mode }) => {
       strictPort: true,
       
       // Configura o CORS dinamicamente com base na URL do seu Laravel (.env)
-      cors: {
+      /*cors: {
         origin: [
-          'http://sistema.local',
-          'http://localhost', 
+          'http://sistema.homelab',
+          'http://localhost',
         ],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
         credentials: true,
-      },
+      },*/
+
+      cors:true,
       
       // Hot Module Replacement (HMR)
       hmr: {
-        host: 'localhost',
+        host:  'localhost', // PARA PRODUCAO '192.168.18.65' ||
+        protocol:'ws',
         port: vitePort, // Garante que o HMR use a mesma porta dinâmica do servidor
         overlay: true,  // Explode erros de compilação na tela
       },

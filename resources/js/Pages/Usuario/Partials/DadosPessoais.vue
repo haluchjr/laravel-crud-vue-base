@@ -5,22 +5,29 @@ import { useForm, router } from '@inertiajs/vue3';
 import debug from '@/Components/Debug.vue'; 
 import { Head , usePage, Link } from '@inertiajs/vue3'
 import Label from '@/Components/Label.vue';
+import btnsalvar from "@/Components/BtnSalvar.vue"
+
+import Checkbox from '@/Components/Checkbox.vue'
+
 import { mask } from 'vue-the-mask';
-defineProps({
-    dados_pessoais:Array,
+
+const props = defineProps({
+    dados_pessoais: Object, // se tiver dados da listagem
 });
 
 const vMask = mask;
 const documentoMasks = ['###.###.###-##', '##.###.###/####-##'];
 
 const form = useForm({
-    nome : '',
-    cpf_cnpj : '',
-    ie : '',
-    email : '',
-    telefonefixo : '',
-    telefonecel : ''
+    id : props.dados_pessoais.id,
+    nome : props.dados_pessoais.name ??'',
+    cpf_cnpj : props.dados_pessoais.cpf_cnpj ?? '',
+    ie : props.dados_pessoais.ie ?? '',
+    email : props.dados_pessoais.email ?? '',
+    telefonefixo : props.dados_pessoais.telefonefixo ?? '',
+    telefonecel : props.dados_pessoais.telefonecel ?? ''
 });
+
 const enviar = () => {
      form.post(route('usuario.ajustes.salvarPessoais'));
 };
@@ -28,9 +35,6 @@ const enviar = () => {
 
 <template>
     <form @submit.prevent="enviar" class="container mt-4">
-    <debug/>
-     {{ dados_pessoais}}
-
     <div class="row"> 
         <div class="col-md-9">
             <Label forId="cep">Nome</Label>
@@ -67,10 +71,9 @@ const enviar = () => {
     </div>
 
     <div class="row mt-3">
-        <div class="col-md-12 d-flex justify-content-end">
-            <button class="btn btn-sm btn-outline-success ">Salvar/Atualizar</button>
+        <div class="col-md-12 d-flex justify-content-start">
+            <btnsalvar>Salvar</btnsalvar>
         </div>
     </div>
-
 </form>
 </template>

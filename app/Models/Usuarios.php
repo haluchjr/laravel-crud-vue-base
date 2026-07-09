@@ -14,7 +14,7 @@ class Usuarios extends Authenticatable
 
 
     protected $table = "tb_usuarios";
-        
+    //protected $guarded = []; // Se tiver nao entra.
     /**
      * The attributes that are mass assignable.
      *

@@ -31,8 +31,8 @@ class UsuarioRepository
         try{
             $usuario = $this->model->find($id);
             if ($usuario) {
-                $usuario->update($dados);
-                return true;
+                $a = $usuario->update($dados);
+                return $a;
             }
             return false;
         }catch(\Exception $e){
@@ -72,13 +72,37 @@ class UsuarioRepository
 
 
     public function visualizaCadastroPorId($id){
-        $sql = "select *
-                from tb_usuarios
-                left join tb_fones on tb_fones.usuarios_id = tb_usuarios.id
-                where tb_usuarios.id = {$id}";
+        $sql = "SELECT
+                    tb_usuarios.id,
+                    tb_usuarios.name,
+                    tb_usuarios.email,
+                    tb_usuarios.cpf_cnpj,
+                    tb_usuarios.ie,
 
+                    MAX(CASE
+                        WHEN tb_fones.tipo_fone = 1
+                        THEN tb_fones.ddd_numero
+                    END) AS telefonecel,
+
+                    MAX(CASE
+                        WHEN tb_fones.tipo_fone = 2
+                        THEN tb_fones.ddd_numero
+                    END) AS telefonefixo
+
+                FROM tb_usuarios
+                LEFT JOIN tb_fones
+                    ON tb_fones.usuario_id = tb_usuarios.id
+
+                WHERE tb_usuarios.id = {$id}
+
+                GROUP BY
+                    tb_usuarios.id,
+                    tb_usuarios.name,
+                    tb_usuarios.email,
+                    tb_usuarios.cpf_cnpj,
+                    tb_usuarios.ie;";
         $resultado = DB::select($sql);
-        return Usuarios::hydrate($resultado);
+        return Usuarios::hydrate($resultado)->first();
     }
 
 
