@@ -137,9 +137,6 @@ const submit = () => {
               </span>
             </div>
           </div>
-        </div>
-        <div class="container mt-4">
-          <div class="row"> 
              <h5>Tamanhos</h5>
             <select 
               v-model="form.produto_tamanho_id" 
@@ -150,7 +147,6 @@ const submit = () => {
                 {{ tamanho.tamanho_real }}
               </option>
             </select>
-          </div>
         </div>
 
         <div class="container mt-4">

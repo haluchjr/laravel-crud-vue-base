@@ -123,6 +123,46 @@ LOCK TABLES `tb_cache_locks` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_cadastro`
+--
+
+DROP TABLE IF EXISTS `tb_cadastro`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_cadastro` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ddd_telefone` varchar(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ddd_celular` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `cpf_cnpj` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `cep` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `endereco` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nr` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `bairro` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `cidade` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `estado` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `foto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `tb_cadastro_email_unique` (`email`) USING BTREE,
+  UNIQUE KEY `tb_cadastro_cpf_cnpj_unique` (`cpf_cnpj`) USING BTREE,
+  UNIQUE KEY `tb_cadastro_uuid_unique` (`uuid`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_cadastro`
+--
+
+LOCK TABLES `tb_cadastro` WRITE;
+/*!40000 ALTER TABLE `tb_cadastro` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_cadastro` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_componentes`
 --
 
@@ -157,19 +197,23 @@ DROP TABLE IF EXISTS `tb_enderecos`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_enderecos` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `usuarios_id` bigint unsigned DEFAULT NULL,
+  `usuario_id` bigint unsigned DEFAULT NULL,
   `endereco` varchar(255) DEFAULT NULL,
   `bairro` varchar(255) DEFAULT NULL,
   `cidade` varchar(255) DEFAULT NULL,
-  `estado` varchar(2) DEFAULT NULL,
+  `estado` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `cep` int DEFAULT NULL,
   `numero` int DEFAULT NULL,
   `complemento` varchar(30) DEFAULT NULL,
   `status` varchar(255) DEFAULT '1',
+  `apelido` varchar(255) DEFAULT NULL,
+  `tipo_endereco_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `usuarios_id` (`usuarios_id`),
-  CONSTRAINT `tb_enderecos_ibfk_1` FOREIGN KEY (`usuarios_id`) REFERENCES `tb_usuarios` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `usuarios_id` (`usuario_id`),
+  KEY `tipo_endereco_id` (`tipo_endereco_id`),
+  CONSTRAINT `tb_enderecos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `tb_usuarios` (`id`),
+  CONSTRAINT `tb_enderecos_ibfk_2` FOREIGN KEY (`tipo_endereco_id`) REFERENCES `tb_tipo_endereco` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,6 +222,7 @@ CREATE TABLE `tb_enderecos` (
 
 LOCK TABLES `tb_enderecos` WRITE;
 /*!40000 ALTER TABLE `tb_enderecos` DISABLE KEYS */;
+INSERT INTO `tb_enderecos` VALUES (6,10,'Rua Alberto Klemtz','Portão','Curitiba','PR',80330380,1,NULL,'1','ertgr',1),(7,10,'Rua Padre Leonardo Nunes teste','Portão','Curitiba','PR',80330320,1,NULL,'1','teste teste',2);
 /*!40000 ALTER TABLE `tb_enderecos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -218,16 +263,15 @@ DROP TABLE IF EXISTS `tb_fones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_fones` (
-  `id` int NOT NULL,
-  `usuarios_id` bigint unsigned DEFAULT NULL,
-  `ddd_fone` int DEFAULT NULL,
-  `numero` varchar(9) DEFAULT NULL,
-  `tipo_fone` int DEFAULT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `usuario_id` bigint unsigned DEFAULT NULL,
+  `ddd_numero` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `tipo_fone` int DEFAULT NULL COMMENT '1-Cel / 2-Fixo',
   `status` tinyint DEFAULT '1',
   PRIMARY KEY (`id`),
-  KEY `teste` (`usuarios_id`),
-  CONSTRAINT `teste` FOREIGN KEY (`usuarios_id`) REFERENCES `tb_usuarios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `teste` (`usuario_id`),
+  CONSTRAINT `teste` FOREIGN KEY (`usuario_id`) REFERENCES `tb_usuarios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,6 +280,7 @@ CREATE TABLE `tb_fones` (
 
 LOCK TABLES `tb_fones` WRITE;
 /*!40000 ALTER TABLE `tb_fones` DISABLE KEYS */;
+INSERT INTO `tb_fones` VALUES (1,10,'99 99999-9999',1,1),(2,10,'22 2222-2225',2,1);
 /*!40000 ALTER TABLE `tb_fones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -388,6 +433,31 @@ LOCK TABLES `tb_menus` WRITE;
 /*!40000 ALTER TABLE `tb_menus` DISABLE KEYS */;
 INSERT INTO `tb_menus` VALUES (1,'Pedidos','#','bi-cart',1,'[1]',NULL,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(9,'Novo Pedido','usuario.novo','bi-cart',1,'[1]',1,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(11,'Sistema','#','bi-gear',2,'[1]',NULL,NULL,NULL),(12,'Relatório','usuario.listar','bi-postcard',2,'[1]',1,NULL,NULL),(14,'Meus dados','usuario.ajustes','bi-postcard',1,'[1]',11,NULL,NULL);
 /*!40000 ALTER TABLE `tb_menus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_nivel`
+--
+
+DROP TABLE IF EXISTS `tb_nivel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_nivel` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `perfil` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `descricao` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_nivel`
+--
+
+LOCK TABLES `tb_nivel` WRITE;
+/*!40000 ALTER TABLE `tb_nivel` DISABLE KEYS */;
+INSERT INTO `tb_nivel` VALUES (2,'Usuario','Usuário comum'),(3,'Baixa','Operador Baixa'),(4,'Bureau','Operador Bureau'),(5,'Orcamentista','Pessoa Orçamentista'),(99,'Admin','Administrador');
+/*!40000 ALTER TABLE `tb_nivel` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -607,6 +677,33 @@ INSERT INTO `tb_produtos_componentes` VALUES (1,1,1,1),(2,1,7,1),(4,2,1,1),(5,2,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_projetos`
+--
+
+DROP TABLE IF EXISTS `tb_projetos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_projetos` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'ativo',
+  `arquivo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_projetos`
+--
+
+LOCK TABLES `tb_projetos` WRITE;
+/*!40000 ALTER TABLE `tb_projetos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_projetos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_sessions`
 --
 
@@ -760,9 +857,10 @@ CREATE TABLE `tb_usuarios` (
   `nivel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'usuario',
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '1' COMMENT '[1 Ativo / 0 Inativo ]',
   `cpf_cnpj` varchar(15) DEFAULT NULL,
+  `ie` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `tb_usuarios_email_unique` (`email`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -771,7 +869,7 @@ CREATE TABLE `tb_usuarios` (
 
 LOCK TABLES `tb_usuarios` WRITE;
 /*!40000 ALTER TABLE `tb_usuarios` DISABLE KEYS */;
-INSERT INTO `tb_usuarios` VALUES (9,'Luis','teste@teste.com',NULL,'$2y$12$WFomLjXuYjSSJiua1tR5aO2iOCS/qjh0xnKtpv2y1tT26c1YsfEC2',NULL,'2026-06-22 15:47:20','2026-06-22 15:47:20','99','1',NULL),(10,'admin@local.com','admin@local.com',NULL,'$2y$12$QySZVYH/rlk22Blm3995auAIIa4dzTOp0N3cU7W1czoMvZkXDCJ0m',NULL,'2026-06-29 00:00:45','2026-06-29 00:00:45','1','1',NULL);
+INSERT INTO `tb_usuarios` VALUES (9,'Luis','teste@teste.com',NULL,'$2y$12$WFomLjXuYjSSJiua1tR5aO2iOCS/qjh0xnKtpv2y1tT26c1YsfEC2',NULL,'2026-06-22 15:47:20','2026-06-22 15:47:20','99','1',NULL,NULL),(10,'admin@local.com','admin@local.com',NULL,'$2y$12$PV5jod6TLTmBYJi6MA7h7.fwpBeOwMbMDWIpqpInUUUhLWSOCMi.W',NULL,'2026-06-29 00:00:45','2026-07-08 21:05:15','1','1','111.222.333-11','23fd');
 /*!40000 ALTER TABLE `tb_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -865,4 +963,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-03 14:20:18
+-- Dump completed on 2026-07-10 14:12:51
