@@ -227,13 +227,13 @@ INSERT INTO `tb_enderecos` VALUES (6,10,'Rua Alberto Klemtz','Portão','Curitiba
 UNLOCK TABLES;
 
 --
--- Table structure for table `tb_extensao_arquivos`
+-- Table structure for table `tb_extensoes`
 --
 
-DROP TABLE IF EXISTS `tb_extensao_arquivos`;
+DROP TABLE IF EXISTS `tb_extensoes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tb_extensao_arquivos` (
+CREATE TABLE `tb_extensoes` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `nome_formato` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `extensao` varchar(4) DEFAULT NULL,
@@ -242,13 +242,13 @@ CREATE TABLE `tb_extensao_arquivos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_extensao_arquivos`
+-- Dumping data for table `tb_extensoes`
 --
 
-LOCK TABLES `tb_extensao_arquivos` WRITE;
-/*!40000 ALTER TABLE `tb_extensao_arquivos` DISABLE KEYS */;
-INSERT INTO `tb_extensao_arquivos` VALUES (1,'Corel Draw(CDR)','.cdr'),(2,'Portable Document','.pdf');
-/*!40000 ALTER TABLE `tb_extensao_arquivos` ENABLE KEYS */;
+LOCK TABLES `tb_extensoes` WRITE;
+/*!40000 ALTER TABLE `tb_extensoes` DISABLE KEYS */;
+INSERT INTO `tb_extensoes` VALUES (1,'Corel Draw(CDR)','.cdr'),(2,'Portable Document','.pdf');
+/*!40000 ALTER TABLE `tb_extensoes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -683,7 +683,6 @@ CREATE TABLE `tb_produtos_componentes` (
   `produto_id` int unsigned DEFAULT NULL,
   `componente_id` int unsigned DEFAULT NULL,
   `requerido` tinyint DEFAULT NULL,
-  `tipo_extensao_id` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `produto_id` (`produto_id`),
   KEY `componente_id` (`componente_id`),
@@ -698,8 +697,35 @@ CREATE TABLE `tb_produtos_componentes` (
 
 LOCK TABLES `tb_produtos_componentes` WRITE;
 /*!40000 ALTER TABLE `tb_produtos_componentes` DISABLE KEYS */;
-INSERT INTO `tb_produtos_componentes` VALUES (1,1,1,1,'1,2'),(2,1,7,1,NULL),(4,2,1,1,NULL),(5,2,2,1,NULL);
+INSERT INTO `tb_produtos_componentes` VALUES (1,1,1,1),(2,1,7,1),(4,2,1,1),(5,2,2,1);
 /*!40000 ALTER TABLE `tb_produtos_componentes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_produtos_componentes_extensoes`
+--
+
+DROP TABLE IF EXISTS `tb_produtos_componentes_extensoes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_produtos_componentes_extensoes` (
+  `produto_componente_id` int unsigned DEFAULT NULL,
+  `extensao_id` int unsigned DEFAULT NULL,
+  KEY `produto_componente_id` (`produto_componente_id`),
+  KEY `extensao_id` (`extensao_id`),
+  CONSTRAINT `tb_produtos_componentes_extensoes_ibfk_1` FOREIGN KEY (`produto_componente_id`) REFERENCES `tb_produtos_componentes` (`id`),
+  CONSTRAINT `tb_produtos_componentes_extensoes_ibfk_2` FOREIGN KEY (`extensao_id`) REFERENCES `tb_extensoes` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_produtos_componentes_extensoes`
+--
+
+LOCK TABLES `tb_produtos_componentes_extensoes` WRITE;
+/*!40000 ALTER TABLE `tb_produtos_componentes_extensoes` DISABLE KEYS */;
+INSERT INTO `tb_produtos_componentes_extensoes` VALUES (1,1),(1,2),(2,1);
+/*!40000 ALTER TABLE `tb_produtos_componentes_extensoes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -895,7 +921,7 @@ CREATE TABLE `tb_usuarios` (
 
 LOCK TABLES `tb_usuarios` WRITE;
 /*!40000 ALTER TABLE `tb_usuarios` DISABLE KEYS */;
-INSERT INTO `tb_usuarios` VALUES (9,'Luis','teste@teste.com',NULL,'$2y$12$WFomLjXuYjSSJiua1tR5aO2iOCS/qjh0xnKtpv2y1tT26c1YsfEC2',NULL,'2026-06-22 15:47:20','2026-06-22 15:47:20','99','1',NULL,NULL),(10,'admin@local.com','admin@local.com',NULL,'$2y$12$PV5jod6TLTmBYJi6MA7h7.fwpBeOwMbMDWIpqpInUUUhLWSOCMi.W',NULL,'2026-06-29 00:00:45','2026-07-08 21:05:15','5','1','111.222.333-11','23fd');
+INSERT INTO `tb_usuarios` VALUES (9,'Luis','teste@teste.com',NULL,'$2y$12$WFomLjXuYjSSJiua1tR5aO2iOCS/qjh0xnKtpv2y1tT26c1YsfEC2',NULL,'2026-06-22 15:47:20','2026-06-22 15:47:20','99','1',NULL,NULL),(10,'admin@local.com','admin@local.com',NULL,'$2y$12$PV5jod6TLTmBYJi6MA7h7.fwpBeOwMbMDWIpqpInUUUhLWSOCMi.W',NULL,'2026-06-29 00:00:45','2026-07-08 21:05:15','1','1','111.222.333-11','23fd');
 /*!40000 ALTER TABLE `tb_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -989,4 +1015,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-11  0:36:53
+-- Dump completed on 2026-07-11 18:24:07

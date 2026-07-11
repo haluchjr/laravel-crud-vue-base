@@ -35,6 +35,7 @@ watch(() => props.formulario, (novoFormulario) => {
       label_componente: componente.label || componente.label_componente,
       requerido: componente.requerido === 1,
       tipo_arquivo: componente.tipo_arquivo || null,              
+      extensoes: componente.extensoes || null,
       file: null                                        
     }));
   } else {
@@ -89,6 +90,7 @@ const submit = () => {
 
 <template>
   <Layout>
+
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Novo Pedido
@@ -129,9 +131,11 @@ const submit = () => {
               <input 
                 :required="item.requerido"
                 class="form-control" 
+                :accept="item.extensoes"
                 type="file" 
                 @change="handleFileChange(index, $event)" 
               />
+              <small>Extensões aceitas : {{ item.extensoes.replaceAll(".","")}}</small>
               <span v-if="form.errors[`files.${index}.file`]" class="text-danger d-block small mt-1">
                 {{ form.errors[`files.${index}.file`] }}
               </span>

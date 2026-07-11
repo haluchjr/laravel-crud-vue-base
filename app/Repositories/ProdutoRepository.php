@@ -21,17 +21,53 @@ class ProdutoRepository
 
     public function listarCamposById($id){
        // Apelidamos o ID do produto para 'produto_id' para clareza total no Vue
-        $sql = "select 
-                    tb_produtos.nome produto_nome,
-                    tb_produtos.id as produto_id,
-                    tb_componentes.id id_componente,
-                    tb_componentes.label label_componente,
-                    tb_componentes.tipo_arquivo,
-                    tb_produtos_componentes.requerido
-                from tb_produtos
-                inner join tb_produtos_componentes on tb_produtos_componentes.produto_id = tb_produtos.id
-                inner join tb_componentes on tb_componentes.id = tb_produtos_componentes.componente_id
-                where tb_produtos.id = :id"; // Trocado por :id (seguro)
+
+        $sql = "SELECT
+                    p.nome AS produto_nome,
+                    p.id AS produto_id,
+                    c.id AS componente_id,
+                    c.label AS label_componente,
+                    c.tipo_arquivo,
+                    pc.requerido,
+
+                    GROUP_CONCAT(
+                        e.extensao
+                        ORDER BY e.extensao
+                        SEPARATOR ', '
+                    ) AS extensoes,
+
+                    GROUP_CONCAT(
+                        e.nome_formato
+                        ORDER BY e.extensao
+                        SEPARATOR ', '
+                    ) AS formatos
+
+                FROM tb_produtos_componentes AS pc
+
+                INNER JOIN tb_produtos AS p
+                    ON p.id = pc.produto_id
+
+                INNER JOIN tb_componentes AS c
+                    ON c.id = pc.componente_id
+
+                LEFT JOIN tb_produtos_componentes_extensoes AS pce
+                    ON pce.produto_componente_id = pc.id
+
+                LEFT JOIN tb_extensoes AS e
+                    ON e.id = pce.extensao_id
+
+                WHERE p.id = :id
+
+                GROUP BY
+                    p.nome,
+                    p.id,
+                    c.id,
+                    c.label,
+                    c.tipo_arquivo,
+                    pc.requerido
+
+                ORDER BY
+                    c.id;";
 
         // Passa o ID no array de parâmetros do DB::select
         $resultado = DB::select($sql, ['id' => $id]);

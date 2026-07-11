@@ -123,6 +123,46 @@ LOCK TABLES `tb_cache_locks` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_cadastro`
+--
+
+DROP TABLE IF EXISTS `tb_cadastro`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_cadastro` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ddd_telefone` varchar(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ddd_celular` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `cpf_cnpj` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `cep` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `endereco` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nr` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `bairro` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `cidade` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `estado` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `foto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `tb_cadastro_email_unique` (`email`) USING BTREE,
+  UNIQUE KEY `tb_cadastro_cpf_cnpj_unique` (`cpf_cnpj`) USING BTREE,
+  UNIQUE KEY `tb_cadastro_uuid_unique` (`uuid`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_cadastro`
+--
+
+LOCK TABLES `tb_cadastro` WRITE;
+/*!40000 ALTER TABLE `tb_cadastro` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_cadastro` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_componentes`
 --
 
@@ -187,6 +227,31 @@ INSERT INTO `tb_enderecos` VALUES (6,10,'Rua Alberto Klemtz','Portão','Curitiba
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_extensoes`
+--
+
+DROP TABLE IF EXISTS `tb_extensoes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_extensoes` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `nome_formato` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `extensao` varchar(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_extensoes`
+--
+
+LOCK TABLES `tb_extensoes` WRITE;
+/*!40000 ALTER TABLE `tb_extensoes` DISABLE KEYS */;
+INSERT INTO `tb_extensoes` VALUES (1,'Corel Draw(CDR)','.cdr'),(2,'Portable Document','.pdf');
+/*!40000 ALTER TABLE `tb_extensoes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_failed_jobs`
 --
 
@@ -240,7 +305,7 @@ CREATE TABLE `tb_fones` (
 
 LOCK TABLES `tb_fones` WRITE;
 /*!40000 ALTER TABLE `tb_fones` DISABLE KEYS */;
-INSERT INTO `tb_fones` VALUES (1,10,'99 99999-9999',1,1),(2,10,'22 2222-2222',2,1);
+INSERT INTO `tb_fones` VALUES (1,10,'99 99999-9999',1,1),(2,10,'22 2222-2225',2,1);
 /*!40000 ALTER TABLE `tb_fones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -382,7 +447,7 @@ CREATE TABLE `tb_menus` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `tb_menus_menu_pai_id_foreign` (`menu_pai_id`) USING BTREE,
   CONSTRAINT `tb_menus_menu_pai_id_foreign` FOREIGN KEY (`menu_pai_id`) REFERENCES `tb_menus` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -391,8 +456,33 @@ CREATE TABLE `tb_menus` (
 
 LOCK TABLES `tb_menus` WRITE;
 /*!40000 ALTER TABLE `tb_menus` DISABLE KEYS */;
-INSERT INTO `tb_menus` VALUES (1,'Pedidos','#','bi-cart',1,'[1]',NULL,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(9,'Novo Pedido','usuario.novo','bi-cart',1,'[1]',1,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(11,'Sistema','#','bi-gear',2,'[1]',NULL,NULL,NULL),(12,'Relatório','usuario.listar','bi-postcard',2,'[1]',1,NULL,NULL),(14,'Meus dados','usuario.ajustes','bi-postcard',1,'[1]',11,NULL,NULL);
+INSERT INTO `tb_menus` VALUES (1,'Pedidos','#','bi-cart',1,'[1]',NULL,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(9,'Novo Pedido','usuario.novo','bi-cart',1,'[1]',1,'2026-06-22 14:57:43','2026-06-22 14:57:43'),(11,'Sistema','#','bi-gear',2,'[1,5]',NULL,NULL,NULL),(12,'Relatório','usuario.listar','bi-postcard',2,'[1]',1,NULL,NULL),(14,'Meus dados','usuario.ajustes','bi-postcard',1,'[1,5]',11,NULL,NULL),(15,'Financeiro','#','bi-postcard',1,'[5]',NULL,NULL,NULL),(16,'Pedidos','#','bi-cart',1,'[5]',15,NULL,NULL);
 /*!40000 ALTER TABLE `tb_menus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_nivel`
+--
+
+DROP TABLE IF EXISTS `tb_nivel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_nivel` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `perfil` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `descricao` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_nivel`
+--
+
+LOCK TABLES `tb_nivel` WRITE;
+/*!40000 ALTER TABLE `tb_nivel` DISABLE KEYS */;
+INSERT INTO `tb_nivel` VALUES (2,'Usuario','Usuário comum'),(3,'Baixa','Operador Baixa'),(4,'Bureau','Operador Bureau'),(5,'Financeiro','Financeiro'),(99,'Admin','Administrador');
+/*!40000 ALTER TABLE `tb_nivel` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -612,6 +702,60 @@ INSERT INTO `tb_produtos_componentes` VALUES (1,1,1,1),(2,1,7,1),(4,2,1,1),(5,2,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_produtos_componentes_extensoes`
+--
+
+DROP TABLE IF EXISTS `tb_produtos_componentes_extensoes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_produtos_componentes_extensoes` (
+  `produto_componente_id` int unsigned DEFAULT NULL,
+  `extensao_id` int unsigned DEFAULT NULL,
+  KEY `produto_componente_id` (`produto_componente_id`),
+  KEY `extensao_id` (`extensao_id`),
+  CONSTRAINT `tb_produtos_componentes_extensoes_ibfk_1` FOREIGN KEY (`produto_componente_id`) REFERENCES `tb_produtos_componentes` (`id`),
+  CONSTRAINT `tb_produtos_componentes_extensoes_ibfk_2` FOREIGN KEY (`extensao_id`) REFERENCES `tb_extensoes` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_produtos_componentes_extensoes`
+--
+
+LOCK TABLES `tb_produtos_componentes_extensoes` WRITE;
+/*!40000 ALTER TABLE `tb_produtos_componentes_extensoes` DISABLE KEYS */;
+INSERT INTO `tb_produtos_componentes_extensoes` VALUES (1,1),(1,2);
+/*!40000 ALTER TABLE `tb_produtos_componentes_extensoes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_projetos`
+--
+
+DROP TABLE IF EXISTS `tb_projetos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_projetos` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'ativo',
+  `arquivo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_projetos`
+--
+
+LOCK TABLES `tb_projetos` WRITE;
+/*!40000 ALTER TABLE `tb_projetos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_projetos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_sessions`
 --
 
@@ -777,7 +921,7 @@ CREATE TABLE `tb_usuarios` (
 
 LOCK TABLES `tb_usuarios` WRITE;
 /*!40000 ALTER TABLE `tb_usuarios` DISABLE KEYS */;
-INSERT INTO `tb_usuarios` VALUES (9,'Luis','teste@teste.com',NULL,'$2y$12$WFomLjXuYjSSJiua1tR5aO2iOCS/qjh0xnKtpv2y1tT26c1YsfEC2',NULL,'2026-06-22 15:47:20','2026-06-22 15:47:20','99','1',NULL,NULL),(10,'admin@local.com','admin@local.com',NULL,'$2y$12$PV5jod6TLTmBYJi6MA7h7.fwpBeOwMbMDWIpqpInUUUhLWSOCMi.W',NULL,'2026-06-29 00:00:45','2026-07-08 21:05:15','1','1','111.222.333-11','23fd');
+INSERT INTO `tb_usuarios` VALUES (9,'Luis','teste@teste.com',NULL,'$2y$12$WFomLjXuYjSSJiua1tR5aO2iOCS/qjh0xnKtpv2y1tT26c1YsfEC2',NULL,'2026-06-22 15:47:20','2026-06-22 15:47:20','99','1',NULL,NULL),(10,'admin@local.com','admin@local.com',NULL,'$2y$12$PV5jod6TLTmBYJi6MA7h7.fwpBeOwMbMDWIpqpInUUUhLWSOCMi.W',NULL,'2026-06-29 00:00:45','2026-07-08 21:05:15','5','1','111.222.333-11','23fd');
 /*!40000 ALTER TABLE `tb_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -871,4 +1015,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-09  3:01:08
+-- Dump completed on 2026-07-11  3:00:58
