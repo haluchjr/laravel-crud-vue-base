@@ -9,7 +9,7 @@ use Inertia\Inertia;
 
 class PedidoController extends Controller
 {
-    public function listar(){return Inertia::render('Cliente/Index',['dados'=>$a]);}    
+    public function listar(){return Inertia::render('Producao/Index');}    
 
     public function novoPedido(){ 
         dd('novo pedido');

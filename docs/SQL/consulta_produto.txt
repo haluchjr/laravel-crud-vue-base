@@ -1,0 +1,14 @@
+https://chatgpt.com/share/6a51b1b0-a8e8-83e9-9f45-06b0365d184b
+
+SELECT *
+FROM tb_produtos_componentes pc
+JOIN tb_produtos_componentes_extensoes pce
+    ON pce.produto_componente_id = pc.id
+JOIN tb_extensoes e
+    ON e.id = pce.extensao_id
+join tb_produtos 
+		on tb_produtos.id = pc.produto_id
+join tb_componentes
+		on tb_componentes.id = pc.componente_id
+
+WHERE tb_produtos.id = 1;
