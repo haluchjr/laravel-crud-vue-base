@@ -26,6 +26,12 @@ require __DIR__.'/auth.php'; // Tava no final do codigo.
 
 //******************************************************************** */
 
+use App\Http\Controllers\Admin\KanbanController;
+Route::get('/kanban', [KanbanController::class, 'index'])->name('kanban.index');
+Route::post('/kanban/card', [KanbanController::class, 'store'])->name('kanban.store');
+Route::put('/kanban/card/{id}', [KanbanController::class, 'update'])->name('kanban.update');
+Route::delete('/kanban/card/{id}', [KanbanController::class, 'destroy'])->name('kanban.destroy');
+Route::post('/kanban/move', [KanbanController::class, 'move'])->name('kanban.move');
 
 Route::middleware('auth')->group(function () {
      //Route::get('/12',[BaseController::class,'loginteste'])->name('usuario.index');
