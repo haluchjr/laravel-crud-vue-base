@@ -35,13 +35,8 @@ class Kanban extends Model
     ];
 
 
-    // 1. Diz ao Laravel para incluir o campo customizado no JSON/Array enviado ao Vue
     protected $appends = ['incluso','atualizado'];
 
-    /**
-     * 2. Cria o campo virtual 'data_br'
-     * Acessível no Vue como: projeto.data_br
-     */
     protected function incluso(): Attribute
     {
         return Attribute::make(

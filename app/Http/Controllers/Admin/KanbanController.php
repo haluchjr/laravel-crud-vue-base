@@ -3,25 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller; 
-use App\Models\Kanban;
+use App\Models\KanbanColumns;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use App\Repositories\Admin\KanbanRepository;
 
 class KanbanController extends Controller
 {
+    public function __construct(protected KanbanRepository $kanbanRepository){}
+
     /**
      * Renderiza a página do Kanban com os cards via Inertia Props
      */
     public function index()
     {
-        $cards = Kanban::orderBy('column_index')
-            ->orderBy('position')
-            ->get();
-
-        // Altere 'KanbanDashboard' para o caminho exato dentro de Pages/
         return Inertia::render('Kanban/KanbanDashboard', [
-            'cards' => $cards
+            'cards' => $this->kanbanRepository->findAll(),
+            'colunas' => KanbanColumns::orderBy('id')->get(),
         ]);
     }
 
@@ -38,19 +37,7 @@ class KanbanController extends Controller
             'tags' => 'nullable|array'
         ]);
 
-        $columnIndex = $validated['column_index'] ?? 0;
-
-        $nextPosition = Kanban::where('column_index', $columnIndex)->max('position');
-        $position = is_null($nextPosition) ? 0 : $nextPosition + 1;
-
-        Kanban::create([
-            'title' => $validated['title'],
-            'description' => $validated['description'] ?? null,
-            'priority' => $validated['priority'] ?? 'medium',
-            'column_index' => $columnIndex,
-            'position' => $position,
-            'tags' => $validated['tags'] ?? []
-        ]);
+        $this->kanbanRepository->create($validated);
 
         // O Inertia recarrega a página automaticamente com os novos dados
         return redirect()->back()->with('success', 'Tarefa criada!');
@@ -61,8 +48,6 @@ class KanbanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $card = Kanban::findOrFail($id);
-
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -70,7 +55,7 @@ class KanbanController extends Controller
             'tags' => 'nullable|array'
         ]);
 
-        $card->update($validated);
+        $this->kanbanRepository->update( $id, $validated);
 
         return redirect()->back()->with('success', 'Tarefa atualizada!');
     }
@@ -80,8 +65,7 @@ class KanbanController extends Controller
      */
     public function destroy($id)
     {
-        $card = Kanban::findOrFail($id);
-        $card->delete(); // Faz o soft delete
+        $this->kanbanRepository->destroy($id);
 
         return redirect()->back()->with('toast', [
             'tipo' => 'success',
@@ -100,22 +84,7 @@ class KanbanController extends Controller
             'position' => 'required|integer'
         ]);
 
-        $cardId = $validated['card_id'];
-        $newColumnIndex = $validated['column_index'];
-        $newPosition = $validated['position'];
-
-        DB::transaction(function () use ($cardId, $newColumnIndex, $newPosition) {
-            Kanban::where('id', $cardId)->update([
-                'column_index' => $newColumnIndex,
-                'position' => $newPosition
-            ]);
-
-            Kanban::where('column_index', $newColumnIndex)
-                ->where('position', '>=', $newPosition)
-                ->where('id', '!=', $cardId)
-                ->increment('position');
-        });
-
+        $this->kanbanRepository->moveCard($validated);
         return redirect()->back();
     }
 }
