@@ -93,7 +93,6 @@ class HandleInertiaRequests extends Middleware
                                 'nome' => $menu->nome,
                                 'url' => $menu->url,
                                 'icon' => $menu->icon,
-                                // 🌟 A LINHA QUE ESTAVA FALTANDO AQUI:
                                 'nivel_permissao' => is_array($menu->nivel_permissao) ? $menu->nivel_permissao : json_decode($menu->nivel_permissao, true) ?? [],
                                 'filhos_recursivos' => $filtrarMenu($menu->filhosRecursivos),
                             ];

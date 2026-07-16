@@ -8,12 +8,13 @@ const { dados } = defineProps({
     dados: {
         type: Object,
         required: true
-    }
+    },
 });
 </script>
 
 <template>
 <Layout>
+    
     <template #header>
         <h1 class="h3 mb-0">Relatório de pedidos</h1>
     </template>
@@ -39,7 +40,6 @@ const { dados } = defineProps({
                 </tr>
             </tbody>
             </table>
-
 
 
     </div>

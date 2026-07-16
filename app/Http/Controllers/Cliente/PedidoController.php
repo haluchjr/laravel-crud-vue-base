@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 // user request
 use App\Http\Requests\ValidaNovoPedidoRequest;
 
@@ -40,9 +41,12 @@ class PedidoController extends Controller
 
 
     public function relatorioPedidos(){ 
+        $permissoes = Auth::user()->hasPermission(Route::currentRouteName());
+
         $pedidos = $this->PedidoClienteRepository->listarPedidosByIdCliente(Auth::user()->id, 1000);
         return Inertia::render('Cliente/Relatorio',[
             'dados'         => $pedidos,
+            'permissoes'     => $permissoes
             //'itensPedido'   => Inertia::lazy(fn () => $this->PedidoClienteRepository->obterItens(request('pedido_id')))
         ]);
     }

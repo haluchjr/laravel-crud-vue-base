@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Validation\ValidationException;
+use App\Models\Perfil;
+use App\Models\NivelPermissao;
+use Illuminate\Support\Facades\DB;
 
 class Usuarios extends Authenticatable
 {
@@ -63,5 +66,47 @@ class Usuarios extends Authenticatable
         }
 
         return $this->nivel === $nivelRequerido;
+    }
+
+    public function hasPermission(string $urlAmigavel)
+    {
+        if (!$this->nivel){
+            abort(403, 'Rota não mapeada para permissões.');
+            return false;
+        }
+
+        $sql = "SELECT 
+                    tb_usuarios.id,
+                    tb_usuarios.`name`,
+                    tb_usuarios.nivel,
+                    tb_perfil.descricao,
+                    tb_menus.nome,
+                    tb_menus.url,
+                    tb_nivel_permissoes.criar,
+                    tb_nivel_permissoes.editar,
+                    tb_nivel_permissoes.excluir,
+                    tb_nivel_permissoes.ver,
+                    tb_nivel_permissoes.btn_pdf
+                    
+                FROM tb_usuarios
+                inner join tb_perfil on tb_perfil.id = tb_usuarios.nivel
+                inner join tb_nivel_permissoes on tb_nivel_permissoes.nivel_id = tb_usuarios.nivel
+                inner join tb_menus on tb_menus.id = tb_nivel_permissoes.menu_id
+                where tb_usuarios.nivel = :nivel_id
+                and tb_menus.url = :menu_url ";
+
+        $resultado = DB::selectOne($sql, [
+            'nivel_id' => $this->nivel,
+            'menu_url' => $urlAmigavel
+            ]);
+        
+        if (!$resultado){
+            abort(403, 'Rota não mapeada para permissões.');
+            return false;
+        }
+
+        return $resultado;
+
+
     }
 }

@@ -1,1 +1,0 @@
-![Docker Compose Explicado](/markdown/img/docker-compose_explicado.jpg)

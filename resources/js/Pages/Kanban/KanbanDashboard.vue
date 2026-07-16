@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
 import draggable from 'vuedraggable';
-import tela from '@/Layouts/CrudLayoutNoMenu.vue'
+import tela from '@/Layouts/CrudLayout.vue'
 
 import ModalBs from '@/Components/ModalBs.vue';
 import { useEventBus } from '@/Utils/eventBus';
@@ -136,21 +136,26 @@ const closeCardModal = () => {
 
 <template>
 <tela>
-  <div class="bg-light min-vh-100 py-5">
+   <template #header>
+            <h1 class="h3 mb-0">Quadro de Tarefas</h1>
+        </template>
+  <div class="">
     
-    <div class="container mb-4">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h2 fw-bold text-dark m-0">🥋 Kanban Dashboard</h1>
+        
         <button 
           @click="openAddCardModal" 
-          class="btn btn-primary d-flex align-items-center gap-2 shadow-sm"
+          class="btn btn-outline-primary d-flex align-items-end gap-2 shadow-sm"
         >
-          <span>➕</span> Novo Card
+          Novo Card
+          <span class="bi bi-plus"></span>
         </button>
-      </div>
-    </div>
 
-    <div class="container-fluid px-4">
+
+      </div>
+      
+
+    <div class=" ">
       <div class="row g-3 row-cols-1 row-cols-md-3 row-cols-xl-6">
         <div 
           v-for="(coluna, index) in colunas" 
@@ -182,7 +187,7 @@ const closeCardModal = () => {
                 <div :class="[priorities[element.priority].border, 'card rounded-3 shadow-sm hover-shadow']">
                   <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                      <h3 class="card-title h6 fw-bold text-dark m-0 leading-tight">
+                      <h3 class="card-title h6 fw-bold text-dark m-0 leading-tight" :title="`Criado: ${element.incluso} | Atualizado: ${element.atualizado}`">
                         {{ element.title }}
                       </h3>
                       <button 
@@ -218,10 +223,6 @@ const closeCardModal = () => {
                       </button>
                     </div>
                     
-                    <p style="font-size: 60%;" class="mt-2 mb-0 text-muted">
-                      Criado em: {{ element.incluso }}<br>
-                      Atualizado em: {{ element.atualizado }}
-                    </p>
                   </div>
                 </div>
               </template>

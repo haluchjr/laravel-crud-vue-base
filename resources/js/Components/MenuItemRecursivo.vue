@@ -135,7 +135,7 @@ const deveDestacarParaAdmin = computed(() => ehAdmin.value && ehOpcaoUsuarioComu
 
 /* 🌟 CLASSE DE DESTAQUE DO ADMIN */
 .opcao-comum-admin {
-  color: #adb5bd !important; /* Deixa o texto cinza fosco */
+  color: brown !important; /* Deixa o texto cinza fosco */
   font-style: italic;        /* Deixa em itálico para diferenciar das rotas exclusivas de Admin */
 }
 
