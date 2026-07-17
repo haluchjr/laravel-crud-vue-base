@@ -10,6 +10,7 @@ defineProps({
   enderecos_cadastrados:Array,
   dados_pessoais: Object,
   endereco_editado : Object,
+  permissoes:Object
 });
 </script>
 
@@ -19,7 +20,7 @@ defineProps({
     <template #header>
         <h1 class="h3 mb-0">Meus dados</h1>
     </template>
-    
+   
     <div class="container mt-4">
         <!-- 1. Cabeçalho das Abas -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">

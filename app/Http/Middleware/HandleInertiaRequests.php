@@ -8,6 +8,7 @@ use App\Models\Menu;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -41,7 +42,7 @@ class HandleInertiaRequests extends Middleware
                     'name' => $request->user()->name,
                     'email' => $request->user()->email, 
                     'nivel' => $request->user()->nivel,
-                    //'permissoes' => Auth::user()->hasPermission(Route::currentRouteName()), 
+                    'permissoes' => Auth::user()->hasPermission(Route::currentRouteName(), true), 
                 ] : null, // Se não tiver logado, envia null com segurança
             ],
             /* 

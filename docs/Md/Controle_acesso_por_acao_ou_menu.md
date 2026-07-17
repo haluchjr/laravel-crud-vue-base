@@ -7,15 +7,6 @@ tb_usuarios
 # Uso no controller
     $permissoes = Auth::user()->hasPermission(Route::currentRouteName());
 
-# Ou No __construct
-
-    private $permissao; 
-    
-    public function __construct(){
-        $this->permissao = (Auth::user()->hasPermission(Route::currentRouteName()));
-    }
-
-
 
 ## Inibir o usuario de ver
 if (!$permissoes || (int)$permissoes->ver !== 1) {
@@ -54,9 +45,10 @@ app/Http/Middleware/HandleInertiaRequests.php
 
 # Definicao
 Ajustar na tb_nivel_permissoes :
-    NIVEL_ID => Id baseado na tb_nivel
-    MENU_ID  => Qual ID, na tb_menu que irá barrar ou não acesso a aquela tela, 
-                por mais que ja tem em tb_menus tal acao, mas da pra barrar salvar/editar/ver/criar ou até mesmo mais acoes.
+    NIVEL_ID        => Id baseado na tb_nivel
+    URL_AMIGAVEL    => Qual ID, na tb_menu que irá barrar ou não acesso a aquela tela, 
+                        por mais que ja tem em tb_menus tal acao, mas da pra barrar salvar/editar/ver/criar ou até mesmo mais acoes.
+    
     ver/criar/editar/excluir => Valores bit(0/1/null*) ativo pra aquela tela.
     Expandir opcoes na tabela se necessario.
 

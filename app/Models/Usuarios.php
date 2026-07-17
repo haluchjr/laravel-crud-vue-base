@@ -68,50 +68,55 @@ class Usuarios extends Authenticatable
         return $this->nivel === $nivelRequerido;
     }
     
-    public function hasPermission(string $urlAmigavel)
+    public function hasPermission(string $urlAmigavel, bool $exibirAcoes = false)
     {
+        if ($this->nivel == 99){
+
+            $colunas = \Schema::getColumnListing('tb_nivel_permissoes');
+            // Colunas que queremos ignorar (metadados e chaves)
+            $ignorar = ['id', 'nivel_id', 'url_amigavel', 'created_at', 'updated_at'];
+
+            $adminPermissoes = [];
+            foreach ($colunas as $coluna) {
+                if (!in_array($coluna, $ignorar)) {
+                    $adminPermissoes[$coluna] = 1; // Dá acesso total a qualquer permissão existente
+                }
+            }
+                return (object) $adminPermissoes;
+        }
+
         if (in_array($urlAmigavel ,['usuario.index','login','logout','redirect'])){
             return true;
         }
         
-        if (!$this->nivel){
-            abort(403, 'Rota não mapeada para permissões.');
-            return false;
-        }
+        // if (!$this->nivel){
+        //     abort(403, 'Rota não mapeada para permissões.');
+        //     return false;
+        // }
         
-        $sql = "SELECT 
-                    -- tb_usuarios.id,
-                    -- tb_usuarios.`name`,
-                    -- tb_usuarios.nivel,
-                    -- tb_perfil.descricao,
-                    -- tb_menus.nome,
-                    -- tb_menus.url,
-                COALESCE(tb_nivel_permissoes.criar, 0) AS criar,
-                COALESCE(tb_nivel_permissoes.editar, 0) AS editar,
-                COALESCE(tb_nivel_permissoes.excluir, 0) AS excluir,
-                COALESCE(tb_nivel_permissoes.ver, 0) AS ver,
-                COALESCE(tb_nivel_permissoes.btn_pdf, 0) AS btn_pdf
-                    
-                FROM tb_usuarios
-                inner join tb_perfil on tb_perfil.id = tb_usuarios.nivel
-                inner join tb_nivel_permissoes on tb_nivel_permissoes.nivel_id = tb_usuarios.nivel
-                inner join tb_menus on tb_menus.id = tb_nivel_permissoes.menu_id
-                where tb_usuarios.nivel = :nivel_id
-                and tb_menus.url = :menu_url ";
+        $sql = "SELECT
+                    COALESCE (tb_nivel_permissoes.criar, 0) AS criar,
+                    COALESCE ( tb_nivel_permissoes.editar, 0) AS editar,
+                    COALESCE (tb_nivel_permissoes.excluir, 0) AS excluir,
+                    COALESCE (tb_nivel_permissoes.ver, 0) AS ver,
+                    COALESCE (tb_nivel_permissoes.btn_pdf, 0) AS btn_pdf
+                FROM
+                    tb_nivel_permissoes
+                where 
+                    tb_nivel_permissoes.nivel_id = :nivel_id
+                AND tb_nivel_permissoes.url_amigavel = :menu_url";
 
         $resultado = DB::selectOne($sql, [
             'nivel_id' => $this->nivel,
             'menu_url' => $urlAmigavel
-            ]);
-        
-        if (!$resultado ){
+            ]); 
+
+        if (!$resultado && !$exibirAcoes){
             abort(403, 'Rota não mapeada para permissões.');
             return false;
         }
 
-        //var_dump($resultado);exit;
         return $resultado;
-
 
     }
 

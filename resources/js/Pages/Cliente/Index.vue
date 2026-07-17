@@ -8,7 +8,7 @@ import debug from '@/Components/Debug.vue';
 const props = defineProps({
   produtos: Array,
   formulario: Array, // O lazy do Inertia vai alimentar esse array dinamicamente
-  tamanhos:Array
+  tamanhos:Array,
 });
 
 // Chave para forçar o reset visual dos inputs do tipo file
@@ -90,7 +90,6 @@ const submit = () => {
 
 <template>
   <Layout>
-
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Novo Pedido
@@ -101,11 +100,11 @@ const submit = () => {
       <!-- <debug></debug> -->
       
       <div class="container mb-3">
-        <label for="selecaoProduto" class="form-label">Selecione o Produto</label>
+        <label for="selecaoProduto" class="form-label">Escolha o Produto</label>
         <select 
           id="selecaoProduto" 
           v-model="form.produtos" 
-          class="form-select" 
+          class="form-select form-select-sm" 
           @change="produtoSelecionado"
         >
           <option :value="null" disabled>Escolha uma opção...</option>
@@ -118,7 +117,7 @@ const submit = () => {
       <hr>
 
       <div v-if="form.files.length > 0">
-        <h5 class="ms-3">Produto Selecionado: {{ nomeProduto }}</h5>
+        <h6 class="ms-3">Produto Selecionado: {{ nomeProduto }}</h6>
         
         <div class="container mt-4">
           <div class="row"> 
@@ -127,24 +126,25 @@ const submit = () => {
               :key="`${item.produtos_componentes_id}-${resetKey}`" 
               :class="colunaClass"
             >
-              <label class="form-label">{{ item.label_componente }}<span v-if="item.requerido">*</span></label>
+              <label class="form-label h6">{{ item.label_componente }}<span v-if="item.requerido">*</span></label>
               <input 
                 :required="item.requerido"
-                class="form-control" 
+                class="form-control form-control-sm" 
                 :accept="item.extensoes"
                 type="file" 
                 @change="handleFileChange(index, $event)" 
               />
-              <small>Extensões aceitas : {{ item.extensoes.replaceAll(".","")}}</small>
+              <small class="">Formatos aceitos : {{ item.extensoes.replaceAll(".","")}}</small>
               <span v-if="form.errors[`files.${index}.file`]" class="text-danger d-block small mt-1">
                 {{ form.errors[`files.${index}.file`] }}
               </span>
             </div>
           </div>
-             <h5>Tamanhos</h5>
+          <hr>
+             <h6>Tamanhos</h6>
             <select 
               v-model="form.produto_tamanho_id" 
-              class="form-select" 
+              class="form-select form-select-sm" 
             >
               <option :value="null" disabled>Escolha uma opção...</option>
               <option v-for="tamanho in props.tamanhos" :key="tamanho.id" :value="tamanho.id">
@@ -152,12 +152,12 @@ const submit = () => {
               </option>
             </select>
         </div>
-
+        <hr>
         <div class="container mt-4">
         <div class="row"> 
           <div class="">
             <label for="input1" class="form-label">Observação</label>
-            <input type="text" v-model="form.observacao" autocomplete="off" class="form-control" id="input1">
+            <input type="text" v-model="form.observacao" autocomplete="off" class="form-control form-control-sm" id="input1">
           </div>
         </div>
       </div>

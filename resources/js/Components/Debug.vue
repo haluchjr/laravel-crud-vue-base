@@ -10,16 +10,7 @@ const formattedProps = computed(() => {
   return JSON.stringify(page.props, null, 2)
 })
 
-// Função opcional para copiar os dados direto para o clipboard
-const copyToClipboard = async () => {
-  try {
-    await navigator.clipboard.writeText(formattedProps.value)
-    copied.value = true
-    setTimeout(() => (copied.value = false), 2000)
-  } catch (err) {
-    console.error('Falha ao copiar: ', err)
-  }
-}
+
 </script>
 
 <template>
@@ -31,11 +22,8 @@ const copyToClipboard = async () => {
         <span class="dot red"></span>
         <span class="dot yellow"></span>
         <span class="dot green"></span>
-        <span class="title-text">Inertia Page Props</span>
+        <span class="title-text">Inertia debug props</span>
       </div>
-      <button @click="copyToClipboard" class="copy-btn" :class="{ success: copied }">
-        {{ copied ? 'Copiado!' : 'Copiar JSON' }}
-      </button>
     </div>
 
     <div class="debug-body">

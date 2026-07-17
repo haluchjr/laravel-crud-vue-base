@@ -13,7 +13,7 @@ use App\Repositories\TipoEnderecoRepository;
 use App\Repositories\EnderecoRepository;
 use App\Repositories\UsuarioRepository;
 use App\Repositories\FoneRepository;
-
+use Illuminate\Support\Facades\Route;
 
 
 class UsuarioController extends Controller
@@ -43,6 +43,7 @@ class UsuarioController extends Controller
             'dados_pessoais'        => $this->usuarioRepository->visualizaCadastroPorId(Auth::user()->id),
             'tipos_enderecos'       => $this->tipoEnderecoRepository->findAll(),
             'enderecos_cadastrados' => $this->enderecoRepository->listarEnderecosByID(Auth::user()->id),
+            'permissoes'            => Auth::user()->hasPermission(Route::currentRouteName()),
             'endereco_editado' => Inertia::lazy(function () {
                 return $this->enderecoRepository->selecionaEnderecoByID(request('enderecoId'));
             }),

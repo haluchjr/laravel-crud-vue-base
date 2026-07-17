@@ -20,7 +20,6 @@ use App\Repositories\Cliente\PedidoRepository as PedidoClienteRepository;
 
 class PedidoController extends Controller
 {
-    private $permissao;
 
     public function __construct(
         protected ProdutoGeralRepository $ProdutoGeralRepository,
@@ -30,10 +29,7 @@ class PedidoController extends Controller
         protected PedidoItemArquivoGeralRepository $PedidoItemArquivoGeralRepository
     ) {
         
-       // $this->permissao = (Auth::user()->hasPermission(Route::currentRouteName()));
     }
-
-
 
     public function listar(){
         $pedidos = $this->PedidoClienteRepository->listarPedidosByIdCliente(Auth::user()->id);
@@ -41,16 +37,13 @@ class PedidoController extends Controller
             'dados'         => $pedidos,
             'itensPedido'   => Inertia::lazy(fn () => $this->PedidoClienteRepository->obterItens(request('pedido_id')))
         ]);
-    
     }
-
 
     public function relatorioPedidos(){ 
         // if (!$this->permissao || (int)$this->permissao->ver !== 1) {
         //     return redirect()->back()->withInput()->with('error', 'Você não pode acessar.');   
         // // abort(403);
         // }
-
         $pedidos = $this->PedidoClienteRepository->listarPedidosByIdCliente(Auth::user()->id, 1000);
         return Inertia::render('Cliente/Relatorio',[
             'dados'         => $pedidos,
@@ -94,10 +87,12 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //if (!$this->permissao || (int)$this->permissao->criar !== 1) {
-        //    return redirect()->back()->withInput()->with('error', 'Você não pode acessar. 1');   
-        // abort(403);
-        //}
+        $permissao = (Auth::user()->hasPermission(Route::currentRouteName()));
+        
+        if (!$permissao || (int)$permissao->criar !== 1) {
+            return redirect()->back()->withInput()->with('error', 'Você não pode salvar.');   
+            // abort(403);
+        }
              //dd($request->all());
              //log::error($request->all());
         try{
