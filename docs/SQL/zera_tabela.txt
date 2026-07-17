@@ -1,0 +1,8 @@
+-- 1. Desativa a verificação de chaves estrangeiras
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 2. Zera a tabela e o contador (repita a linha abaixo para cada tabela se necessário)
+TRUNCATE TABLE tb_pedidos_itens_arquivos;
+
+-- 3. Reativa a verificação de chaves estrangeiras (Segurança)
+SET FOREIGN_KEY_CHECKS = 1;

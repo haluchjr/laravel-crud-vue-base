@@ -31,14 +31,14 @@ class LogController extends Controller
              ];
         }
 
-        return Inertia::render('Logs/Index', [ 'data' => $lista ]);
+        return Inertia::render('Admin/Logs/Index', [ 'data' => $lista ]);
 
     }
 
     public function showLog($arquivo){
         $arquivo = Crypt::decryptString($arquivo);
         $conteudo = file_get_contents(storage_path('logs/'.$arquivo));
-        return Inertia::render('Logs/Show',[
+        return Inertia::render('Admin/Logs/Show',[
             'arquivo' => $arquivo,
             'conteudo' => $conteudo,
         ]);

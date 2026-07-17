@@ -18,7 +18,7 @@ class KanbanController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Kanban/KanbanDashboard', [
+        return Inertia::render('Admin/Kanban/KanbanDashboard', [
             'cards' => $this->kanbanRepository->findAll(),
             'colunas' => KanbanColumns::orderBy('id')->get(),
         ]);

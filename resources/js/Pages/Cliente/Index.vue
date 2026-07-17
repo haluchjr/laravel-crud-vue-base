@@ -25,7 +25,6 @@ const form = useForm({
 
 // 3. Monitora a prop 'formulario'. Toda vez que o Lazy trouxer dados novos, monta a estrutura
 watch(() => props.formulario, (novoFormulario) => {
-  console.log(props.formulario);
   if (novoFormulario && novoFormulario.length > 0) {
     // Alimenta o ID do produto automaticamente baseado na query organizada
     form.product_id = novoFormulario[0].produto_id;
@@ -156,9 +155,9 @@ const submit = () => {
 
         <div class="container mt-4">
         <div class="row"> 
-          <div class="col-md-4">
+          <div class="">
             <label for="input1" class="form-label">Observação</label>
-            <input type="text" v-model="form.observacao" class="form-control" id="input1" placeholder="Digite algo...">
+            <input type="text" v-model="form.observacao" autocomplete="off" class="form-control" id="input1">
           </div>
         </div>
       </div>

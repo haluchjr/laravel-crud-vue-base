@@ -15,9 +15,9 @@ defineProps({
 
 <template>
 <Layout>
-    <Head title="Dados do cliente"/>
+    <Head title="Meus dados"/>
     <template #header>
-        <h1 class="h3 mb-0">Dados do cliente</h1>
+        <h1 class="h3 mb-0">Meus dados</h1>
     </template>
     
     <div class="container mt-4">

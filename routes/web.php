@@ -60,29 +60,28 @@ Route::middleware('auth')->group(function () {
     Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
     Route::get('/profile', [PasswordController::class, 'edit'])->name('profile.edit');
 
-    // ! Remover
-    Route::prefix('docs')->group(function(){
-        Route::get('/markdown', [WikiController::class, 'listarMarkdown'])->name('markdown.index');
-        Route::get('/markdown/conteudo/{nomeDocumento}', [WikiController::class, 'getConteudo'])->name('markdown.conteudo');//->middleware('nivel:99');
-        Route::get('/markdown/img/{nomeImagem}', [WikiController::class, 'getImagem'])->name('markdown.imagem')->where('nomeImagem', '.*'); // Aceita subpastas e exten0
-    });
-    // ! Remover
 
-    Route::prefix('logs')->group(function(){
-        Route::get('/show/{id}',[LogController::class,'showLog'])->name('log.show');
-        Route::get('/destroy/{id}',[LogController::class,'destroy'])->name('log.destroy');
-        Route::get('/list',[LogController::class,'list'])->name('log.list');
-    });
+    Route::prefix('admin')->middleware('nivel:99')->group(function(){
 
-    // Quadro kanban pra me organizar.
-    Route::get('/kanban', [KanbanController::class, 'index'])->name('kanban.index');
-    Route::post('/kanban/card', [KanbanController::class, 'store'])->name('kanban.store');
-    Route::put('/kanban/card/{id}', [KanbanController::class, 'update'])->name('kanban.update');
-    Route::delete('/kanban/card/{id}', [KanbanController::class, 'destroy'])->name('kanban.destroy');
-    Route::post('/kanban/move', [KanbanController::class, 'move'])->name('kanban.move');
-
-    Route::prefix('monitor')->group(function(){
-        // Ativar telescope
+        Route::prefix('logs')->group(function(){
+            Route::get('/show/{id}',[LogController::class,'showLog'])->name('log.show');
+            Route::get('/destroy/{id}',[LogController::class,'destroy'])->name('log.destroy');
+            Route::get('/list',[LogController::class,'list'])->name('log.list');
+        });
+    
+        // Quadro kanban pra me organizar.
+        Route::prefix('kanban')->group(function(){
+            Route::get('/', [KanbanController::class, 'index'])->name('kanban.index');
+            Route::post('/card', [KanbanController::class, 'store'])->name('kanban.store');
+            Route::put('/card/{id}', [KanbanController::class, 'update'])->name('kanban.update');
+            Route::delete('/card/{id}', [KanbanController::class, 'destroy'])->name('kanban.destroy');
+            Route::post('/move', [KanbanController::class, 'move'])->name('kanban.move');
+        });
+    
+        Route::prefix('monitor')->group(function(){
+            // Ativar telescope
+        });
+        
     });
 
 });

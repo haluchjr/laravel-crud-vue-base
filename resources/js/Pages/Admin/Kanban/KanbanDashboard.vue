@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { useForm, router } from '@inertiajs/vue3';
+import { Head, useForm, router } from '@inertiajs/vue3';
 import draggable from 'vuedraggable';
 import tela from '@/Layouts/CrudLayout.vue'
 
@@ -136,6 +136,7 @@ const closeCardModal = () => {
 
 <template>
 <tela>
+  <Head title="Kanban"/>
    <template #header>
             <h1 class="h3 mb-0">Quadro de Tarefas</h1>
         </template>

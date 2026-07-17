@@ -20,7 +20,7 @@ const { emit } = useEventBus();
 
 <template>
 <Layout>
-<Head :title="appName"/>
+<Head title="Logs"/>
 <h2>Logs do sistema</h2>
 <span v-if="data.length > 0">
     <table class="table table-striped h6"><thead>
