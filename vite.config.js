@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
   // Define as portas pegando do .env ou usando os fallbacks padrão
   const vitePort = parseInt(env.PORTA_VITE) || 5173;
   const appUrl = env.APP_URL || 'http://localhost';
+  const appHost = new URL(appUrl).hostname;
 
   return {
     plugins: [
@@ -42,7 +43,7 @@ export default defineConfig(({ mode }) => {
       
       // Hot Module Replacement (HMR)
       hmr: {
-        host:  'localhost', // PARA PRODUCAO '192.168.18.65' ||
+        host:  appHost,//'localhost', // PARA PRODUCAO '192.168.18.65' ||
         protocol:'ws',
         port: vitePort, // Garante que o HMR use a mesma porta dinâmica do servidor
         overlay: true,  // Explode erros de compilação na tela

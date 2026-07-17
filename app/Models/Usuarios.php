@@ -67,10 +67,8 @@ class Usuarios extends Authenticatable
 
         return $this->nivel === $nivelRequerido;
     }
-
-    public function hasPermission($a){}
     
-    public function hasPermission1(string $urlAmigavel)
+    public function hasPermission(string $urlAmigavel)
     {
         if (in_array($urlAmigavel ,['usuario.index','login','logout','redirect'])){
             return true;
@@ -116,4 +114,5 @@ class Usuarios extends Authenticatable
 
 
     }
-}
+
+} // Fim classe

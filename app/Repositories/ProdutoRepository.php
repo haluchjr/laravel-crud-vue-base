@@ -23,13 +23,14 @@ class ProdutoRepository
        // Apelidamos o ID do produto para 'produto_id' para clareza total no Vue
 
         $sql = "SELECT
+                    pc.id AS id_componente,
                     p.nome AS produto_nome,
                     p.id AS produto_id,
+                    
                     c.id AS componente_id,
                     c.label AS label_componente,
                     c.tipo_arquivo,
                     pc.requerido,
-
                     GROUP_CONCAT(
                         e.extensao
                         ORDER BY e.extensao
@@ -64,14 +65,16 @@ class ProdutoRepository
                     c.id,
                     c.label,
                     c.tipo_arquivo,
-                    pc.requerido
-
+                    pc.requerido,
+                    pc.id
                 ORDER BY
                     c.id;";
 
+         // echo ($sql);exit;
         // Passa o ID no array de parâmetros do DB::select
         $resultado = DB::select($sql, ['id' => $id]);
-
+       // dd($resultado);
+        
         return collect($resultado);
 
     }

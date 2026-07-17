@@ -21,14 +21,11 @@ use App\Http\Controllers\Financeiro\PedidoController as PedidoFinanceiro;
 use App\Http\Controllers\Comercial\PedidoController as PedidoComercial;
 use App\Http\Controllers\Preimpressao\PedidoController as PedidoPreimpressao;
 
-require __DIR__.'/auth.php'; // Tava no final do codigo.
-
-
-//******************************************************************** */
-
 use App\Http\Controllers\Admin\KanbanController;
 
 
+
+//******************************************************************** */
 Route::middleware('auth')->group(function () {
      //Route::get('/12',[BaseController::class,'loginteste'])->name('usuario.index');
     Route::get('/',[BaseController::class,'main'])->name('redirect');
@@ -90,7 +87,7 @@ Route::middleware('auth')->group(function () {
 
 });
 
-
+require __DIR__.'/auth.php'; // Tava no final do codigo.
 
 
 

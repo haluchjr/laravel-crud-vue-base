@@ -25,13 +25,15 @@ const form = useForm({
 
 // 3. Monitora a prop 'formulario'. Toda vez que o Lazy trouxer dados novos, monta a estrutura
 watch(() => props.formulario, (novoFormulario) => {
+  console.log(props.formulario);
   if (novoFormulario && novoFormulario.length > 0) {
     // Alimenta o ID do produto automaticamente baseado na query organizada
     form.product_id = novoFormulario[0].produto_id;
-
+    
     // Mapeia a casca dos inputs conforme o retorno limpo do SQL
     form.files = novoFormulario.map(componente => ({
-      produtos_componentes_id: componente.id_componente, 
+      //produtos_componentes_id: componente.id_componente, 
+      produto_componente_id: componente.componente_id,
       label_componente: componente.label || componente.label_componente,
       requerido: componente.requerido === 1,
       tipo_arquivo: componente.tipo_arquivo || null,              
@@ -47,7 +49,6 @@ watch(() => props.formulario, (novoFormulario) => {
 // Disparado no evento @change do Select
 const produtoSelecionado = () => {
   if (!form.produtos) return;
-
   // Faz a chamada em background requisitando APENAS o lazy property 'formulario'
   router.reload({
     only: ['formulario','tamanhos'], // Apenas o lazy property 'formulario' será atualizado
@@ -121,7 +122,7 @@ const submit = () => {
         <h5 class="ms-3">Produto Selecionado: {{ nomeProduto }}</h5>
         
         <div class="container mt-4">
-          <div class="row"> {{ item.produtos_componentes_id }}
+          <div class="row"> 
             <div 
               v-for="(item, index) in form.files" 
               :key="`${item.produtos_componentes_id}-${resetKey}`" 

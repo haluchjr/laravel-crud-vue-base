@@ -27,8 +27,9 @@ class PedidoRepository
                 INNER JOIN tb_status_pedido on tb_status_pedido.id = tb_pedidos.status_pedido_id
                 inner join tb_usuarios on tb_usuarios.id = tb_pedidos.cliente_id
                 where cliente_id = $idCliente 
+                order by  tb_pedidos.id desc
                 limit $limite";
-        
+        //echo $sql;exit;
         $sql = DB::select($sql);
         $sql = Pedidos::Hydrate($sql);
         return $sql;

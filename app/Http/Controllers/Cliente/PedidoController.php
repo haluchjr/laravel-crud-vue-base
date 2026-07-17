@@ -98,7 +98,8 @@ class PedidoController extends Controller
         //    return redirect()->back()->withInput()->with('error', 'Você não pode acessar. 1');   
         // abort(403);
         //}
-             dd($request->all());
+             //dd($request->all());
+             //log::error($request->all());
         try{
             DB::beginTransaction();
 
@@ -117,11 +118,12 @@ class PedidoController extends Controller
                 //'quantidade'  => 1, // Trazer futuramente de outro local
             ]);
         
+            
         
             if ($request->has('files') && is_array($request->input('files'))) {
 
                 foreach ($request->input('files') as $index => $item) {
-                    
+                    //log::error($item);
                     if ($request->hasFile("files.{$index}.file") && $request->file("files.{$index}.file")->isValid()) {
                         
                         $arquivo = $request->file("files.{$index}.file");
@@ -154,11 +156,11 @@ class PedidoController extends Controller
                         // Agora sim, movemos o arquivo temporário original para o seu nome definitivo.
                         // O PHP vai limpar o TMP automaticamente após esse move.
                         $arquivo->move($diretorioDestino, $nomeInternoMD5);
--
+                    
                         $this->PedidoItemArquivoGeralRepository->salvar([
                             'pedido_item_id'        => $nrItemPedido,
                             'data_inclusao'         => date('Y-m-d H:i:s'),
-                            'produto_componente_id' => $item['produtos_componentes_id'],
+                            'produto_componente_id' => $item['produto_componente_id'],
                             'nome_original'         => $nomeOriginalCliente, // Nome que o cliente enviou  
                             'nome_interno'          => $nomeInternoMD5,      // Nome que o sistema vai usar
                             'caminho_arquivo'       => $diretorioDestino . '/' . $nomeInternoMD5,
@@ -168,7 +170,9 @@ class PedidoController extends Controller
                     }
                 }
                 DB::commit();
-                return redirect()->route('usuario.index')->with('success', 'Cadastrado com sucesso!');
+                //return back()->with('success', 'Pedido salvo!');
+                //return redirect()->back()->with('success', 'Cadastrado com sucesso!');
+                return redirect()->route('usuario.listar')->with('success', 'Cadastrado com sucesso!');
             }
         }catch(\Throwable $e){
             DB::rollBack();
