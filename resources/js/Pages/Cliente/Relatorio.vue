@@ -9,6 +9,7 @@ const { dados } = defineProps({
         type: Object,
         required: true
     },
+    
 });
 </script>
 
@@ -19,7 +20,6 @@ const { dados } = defineProps({
         <h1 class="h3 mb-0">Relatório de pedidos</h1>
     </template>
     <div class="container-fluid">
-        
         <table class="table table-striped table-hover">
             <thead>
                 <tr>

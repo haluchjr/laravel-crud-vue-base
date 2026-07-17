@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Inertia\Middleware;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -39,6 +41,7 @@ class HandleInertiaRequests extends Middleware
                     'name' => $request->user()->name,
                     'email' => $request->user()->email, 
                     'nivel' => $request->user()->nivel,
+                    //'permissoes' => Auth::user()->hasPermission(Route::currentRouteName()), 
                 ] : null, // Se não tiver logado, envia null com segurança
             ],
             /* 
@@ -103,9 +106,8 @@ class HandleInertiaRequests extends Middleware
                     return $filtrarMenu($menus);
                 //});
             },
-
-            'appName' => config('app.name'),
-            'dataAtual' => now()->format('d/m/Y'),
+            'appName'       => config('app.name'),
+            'dataAtual'     => now()->format('d/m/Y'),
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error'   => fn () => $request->session()->get('error'),

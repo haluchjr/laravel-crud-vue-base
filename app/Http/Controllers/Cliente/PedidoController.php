@@ -20,13 +20,18 @@ use App\Repositories\Cliente\PedidoRepository as PedidoClienteRepository;
 
 class PedidoController extends Controller
 {
+    private $permissao;
+
     public function __construct(
         protected ProdutoGeralRepository $ProdutoGeralRepository,
         protected PedidoClienteRepository $PedidoClienteRepository,
         protected PedidoGeralRepository $PedidoGeralRepository,
         protected PedidoItensGeralRepository $PedidoItensGeralRepository,
         protected PedidoItemArquivoGeralRepository $PedidoItemArquivoGeralRepository
-    ) {}
+    ) {
+        
+       // $this->permissao = (Auth::user()->hasPermission(Route::currentRouteName()));
+    }
 
 
 
@@ -41,12 +46,14 @@ class PedidoController extends Controller
 
 
     public function relatorioPedidos(){ 
-        $permissoes = Auth::user()->hasPermission(Route::currentRouteName());
+        // if (!$this->permissao || (int)$this->permissao->ver !== 1) {
+        //     return redirect()->back()->withInput()->with('error', 'Você não pode acessar.');   
+        // // abort(403);
+        // }
 
         $pedidos = $this->PedidoClienteRepository->listarPedidosByIdCliente(Auth::user()->id, 1000);
         return Inertia::render('Cliente/Relatorio',[
             'dados'         => $pedidos,
-            'permissoes'     => $permissoes
             //'itensPedido'   => Inertia::lazy(fn () => $this->PedidoClienteRepository->obterItens(request('pedido_id')))
         ]);
     }
@@ -64,7 +71,7 @@ class PedidoController extends Controller
      */
     public function create()
     {
-       $produtos = $this->ProdutoGeralRepository->listarProdutos();
+        $produtos = $this->ProdutoGeralRepository->listarProdutos();
 
         return Inertia::render('Cliente/Index', [
             'produtos' => $produtos,
@@ -87,7 +94,11 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-             //dd($request->all());
+        //if (!$this->permissao || (int)$this->permissao->criar !== 1) {
+        //    return redirect()->back()->withInput()->with('error', 'Você não pode acessar. 1');   
+        // abort(403);
+        //}
+             dd($request->all());
         try{
             DB::beginTransaction();
 

@@ -121,7 +121,7 @@ const submit = () => {
         <h5 class="ms-3">Produto Selecionado: {{ nomeProduto }}</h5>
         
         <div class="container mt-4">
-          <div class="row"> 
+          <div class="row"> {{ item.produtos_componentes_id }}
             <div 
               v-for="(item, index) in form.files" 
               :key="`${item.produtos_componentes_id}-${resetKey}`" 

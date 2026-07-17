@@ -68,25 +68,31 @@ class Usuarios extends Authenticatable
         return $this->nivel === $nivelRequerido;
     }
 
-    public function hasPermission(string $urlAmigavel)
+    public function hasPermission($a){}
+    
+    public function hasPermission1(string $urlAmigavel)
     {
+        if (in_array($urlAmigavel ,['usuario.index','login','logout','redirect'])){
+            return true;
+        }
+        
         if (!$this->nivel){
             abort(403, 'Rota não mapeada para permissões.');
             return false;
         }
-
+        
         $sql = "SELECT 
-                    tb_usuarios.id,
-                    tb_usuarios.`name`,
-                    tb_usuarios.nivel,
-                    tb_perfil.descricao,
-                    tb_menus.nome,
-                    tb_menus.url,
-                    tb_nivel_permissoes.criar,
-                    tb_nivel_permissoes.editar,
-                    tb_nivel_permissoes.excluir,
-                    tb_nivel_permissoes.ver,
-                    tb_nivel_permissoes.btn_pdf
+                    -- tb_usuarios.id,
+                    -- tb_usuarios.`name`,
+                    -- tb_usuarios.nivel,
+                    -- tb_perfil.descricao,
+                    -- tb_menus.nome,
+                    -- tb_menus.url,
+                COALESCE(tb_nivel_permissoes.criar, 0) AS criar,
+                COALESCE(tb_nivel_permissoes.editar, 0) AS editar,
+                COALESCE(tb_nivel_permissoes.excluir, 0) AS excluir,
+                COALESCE(tb_nivel_permissoes.ver, 0) AS ver,
+                COALESCE(tb_nivel_permissoes.btn_pdf, 0) AS btn_pdf
                     
                 FROM tb_usuarios
                 inner join tb_perfil on tb_perfil.id = tb_usuarios.nivel
@@ -100,11 +106,12 @@ class Usuarios extends Authenticatable
             'menu_url' => $urlAmigavel
             ]);
         
-        if (!$resultado){
+        if (!$resultado ){
             abort(403, 'Rota não mapeada para permissões.');
             return false;
         }
 
+        //var_dump($resultado);exit;
         return $resultado;
 
 

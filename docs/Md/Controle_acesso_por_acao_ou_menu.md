@@ -5,10 +5,33 @@ tb_menus
 tb_usuarios
 
 # Uso no controller
-$permissoes = Auth::user()->hasPermission(Route::currentRouteName());
+    $permissoes = Auth::user()->hasPermission(Route::currentRouteName());
+
+# Ou No __construct
+
+    private $permissao; 
+    
+    public function __construct(){
+        $this->permissao = (Auth::user()->hasPermission(Route::currentRouteName()));
+    }
+
+
+
+## Inibir o usuario de ver
+if (!$permissoes || (int)$permissoes->ver !== 1) {
+    abort(403);
+    //ou
+    return redirect()->back()->withInput()->with('error', 'Você não pode acessar.');   
+}
+
+## Inibir o salvar no controller
+if (!$this->permissao || (int)$this->permissao->criar !== 1) { // criar/editar/excluir
+    return redirect()->back()->withInput()->with('error', 'Você não pode acessar.');   
+// abort(403);
+}
 
 return Inertia::render('Cliente/Relatorio',[
-    'permissoes'     => $permissoes
+    'permissoes'     => $permissoes ou $this->permissao
 ]);
 
 # Na view(vue)
@@ -27,6 +50,7 @@ HTML:
 app/Models/Usuarios.php
 app/Models/NivelPermissao.php
 routes/web.php
+app/Http/Middleware/HandleInertiaRequests.php
 
 # Definicao
 Ajustar na tb_nivel_permissoes :
@@ -41,3 +65,7 @@ tem os ajustes de acesso aparece ou não no menu do usuario, de acordo com o niv
 
 Route::currentRouteName() => retorna o nome de como tá definido em web.php, *named routes*.
                              usado para consulta ,junto com o nivel do usuario que já é passado diretamente na model.
+
+
+* Adicionado no HandleInertiaRequests.php , as permissoes globais para usar na tela.                           
+{{ $page.props.permissoes }} pra nao precisar usar o defineProps.
