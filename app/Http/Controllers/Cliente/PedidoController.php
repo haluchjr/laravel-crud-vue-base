@@ -87,14 +87,10 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-        $permissao = (Auth::user()->hasPermission(Route::currentRouteName()));
-        
-        if (!$permissao || (int)$permissao->criar !== 1) {
-            return redirect()->back()->withInput()->with('error', 'Você não pode salvar.');   
-            // abort(403);
+        if (!Auth::user()->hasPermission(Route::currentRouteName(),'salvar') ){
+            return redirect()->back()->with('error', 'Seu nível de usuario não permite salvar.' );
         }
-             //dd($request->all());
-             //log::error($request->all());
+    
         try{
             DB::beginTransaction();
 

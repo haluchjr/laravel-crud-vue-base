@@ -68,7 +68,7 @@ class Usuarios extends Authenticatable
         return $this->nivel === $nivelRequerido;
     }
     
-    public function hasPermission(string $urlAmigavel, bool $exibirAcoes = false)
+    public function hasPermission(string $urlAmigavel, string $acao, bool $exibirOpcoes = false)
     {
         if ($this->nivel == 99){
 
@@ -94,28 +94,42 @@ class Usuarios extends Authenticatable
         //     return false;
         // }
         
+        $acoesPermitidas = [
+            'salvar',
+            'editar',
+            'excluir',
+            'ver',
+            'btn_pdf',
+        ];
+
+        if (! in_array($acao, $acoesPermitidas, true)) {
+            throw new InvalidArgumentException('Ação inválida.');
+        }
+
         $sql = "SELECT
-                    COALESCE (tb_nivel_permissoes.criar, 0) AS criar,
-                    COALESCE ( tb_nivel_permissoes.editar, 0) AS editar,
-                    COALESCE (tb_nivel_permissoes.excluir, 0) AS excluir,
-                    COALESCE (tb_nivel_permissoes.ver, 0) AS ver,
-                    COALESCE (tb_nivel_permissoes.btn_pdf, 0) AS btn_pdf
-                FROM
-                    tb_nivel_permissoes
-                where 
-                    tb_nivel_permissoes.nivel_id = :nivel_id
-                AND tb_nivel_permissoes.url_amigavel = :menu_url";
+                    EXISTS 
+                    (
+                        SELECT
+                            1
+                        FROM
+                            tb_nivel_permissoes
+                        where tb_nivel_permissoes.url_amigavel = '{$urlAmigavel}' 
+                        and tb_nivel_permissoes.{$acao} = '1'
+                    ) AS autorizado";
 
-        $resultado = DB::selectOne($sql, [
-            'nivel_id' => $this->nivel,
-            'menu_url' => $urlAmigavel
-            ]); 
+        if ($exibirOpcoes){
+            $sql = "SELECT *
+                    FROM tb_nivel_permissoes
+                    where tb_nivel_permissoes.url_amigavel = '{$urlAmigavel}' ";
+        }
 
-        if (!$resultado && !$exibirAcoes){
-            abort(403, 'Rota não mapeada para permissões.');
+        $resultado = DB::selectOne($sql);
+
+        if ((int)$resultado->autorizado !== 1 ){
             return false;
         }
 
+        
         return $resultado;
 
     }
