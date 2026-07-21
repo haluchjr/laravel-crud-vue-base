@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref,computed } from 'vue'
 import { Head , usePage, Link } from '@inertiajs/vue3'
 import Layout from '@/Layouts/CrudLayout.vue'
 import DadosPessoaisForm from '@/Pages/Usuario/Partials/DadosPessoais.vue';
@@ -10,8 +10,9 @@ defineProps({
   enderecos_cadastrados:Array,
   dados_pessoais: Object,
   endereco_editado : Object,
-  permissoes:Object
 });
+
+
 </script>
 
 <template>

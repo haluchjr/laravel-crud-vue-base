@@ -33,17 +33,16 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-         return Inertia::render('Usuario/Index');
+        
+        return Inertia::render('Usuario/Index');
     }
 
     public function alterarDados(){
-
-    //print_r($this->enderecoRepository->selecionaEnderecoByID(request('enderecoId')));    exit;
         return Inertia::render('Usuario/MeusDados',[
             'dados_pessoais'        => $this->usuarioRepository->visualizaCadastroPorId(Auth::user()->id),
             'tipos_enderecos'       => $this->tipoEnderecoRepository->findAll(),
             'enderecos_cadastrados' => $this->enderecoRepository->listarEnderecosByID(Auth::user()->id),
-            'permissoes'            => Auth::user()->hasPermission(Route::currentRouteName()),
+            //'permissoes'            => Auth::user()->hasPermission(Route::currentRouteName(),'botoes',true),
             'endereco_editado' => Inertia::lazy(function () {
                 return $this->enderecoRepository->selecionaEnderecoByID(request('enderecoId'));
             }),

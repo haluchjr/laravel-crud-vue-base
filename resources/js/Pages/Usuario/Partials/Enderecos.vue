@@ -89,7 +89,7 @@ const editarEnderecoSelecionado = (id) => {
 watch(
     () => props.endereco_editado,
     (novo) => {
-        console.log('WATCH', novo);
+        if (!novo) return;
         form.id = novo.id;
         form.apelido = novo.apelido;
         form.bairro = novo.bairro;
@@ -99,9 +99,19 @@ watch(
         form.tipo_endereco_id = Number(novo.tipo_endereco_id);
         form.endereco = novo.endereco;
         form.cep = novo.cep;
+
+        if (!novo) {
+            form.reset();
+            return;
+        }
     },
     { immediate: true }
 );
+
+const NovoEndereco = () => {
+    form.reset();
+    return;
+}
 </script>
 
 <template>
@@ -163,6 +173,7 @@ watch(
     <div class="row mt-3">
         <div class="col-md-12 d-flex justify-content-start">
             <button class="btn btn-sm btn-outline-success " @click="enviar">Salvar</button>
+            <button class="btn btn-sm btn-outline-success " @click="NovoEndereco">Novo</button>
             
         </div>
     </div>

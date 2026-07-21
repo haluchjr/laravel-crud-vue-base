@@ -42,7 +42,7 @@ class HandleInertiaRequests extends Middleware
                     'name' => $request->user()->name,
                     'email' => $request->user()->email, 
                     'nivel' => $request->user()->nivel,
-                    //'permissoes' => Auth::user()->hasPermission(Route::currentRouteName(), true), 
+                    'permissoes' => Auth::user()->hasPermission(Route::currentRouteName(), 'botoes', true), 
                 ] : null, // Se não tiver logado, envia null com segurança
             ],
             /* 

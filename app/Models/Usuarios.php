@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Validation\ValidationException;
 use App\Models\Perfil;
 use App\Models\NivelPermissao;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 class Usuarios extends Authenticatable
@@ -95,6 +96,7 @@ class Usuarios extends Authenticatable
         // }
         
         $acoesPermitidas = [
+            'botoes',
             'salvar',
             'editar',
             'excluir',
@@ -103,34 +105,52 @@ class Usuarios extends Authenticatable
         ];
 
         if (! in_array($acao, $acoesPermitidas, true)) {
-            throw new InvalidArgumentException('Ação inválida.');
+            ////throw new InvalidArgumentException('Ação inválida.');
+            echo "ruim,..";exit;
         }
 
-        $sql = "SELECT
-                    EXISTS 
-                    (
-                        SELECT
-                            1
-                        FROM
-                            tb_nivel_permissoes
-                        where tb_nivel_permissoes.url_amigavel = '{$urlAmigavel}' 
-                        and tb_nivel_permissoes.{$acao} = '1'
-                    ) AS autorizado";
+        if (!is_null($acao)){
 
-        if ($exibirOpcoes){
-            $sql = "SELECT *
+            if ($acoesPermitidas[0] == $acao && $exibirOpcoes){
+                $sql = "SELECT *
                     FROM tb_nivel_permissoes
                     where tb_nivel_permissoes.url_amigavel = '{$urlAmigavel}' ";
-        }
 
-        $resultado = DB::selectOne($sql);
+                $resultado = DB::selectOne($sql);
 
-        if ((int)$resultado->autorizado !== 1 ){
-            return false;
+
+                if(!is_object($resultado)){
+                    log::error("Problema com permissão. Verificar banco. " ,[
+                        'URL Amigavel' => $urlAmigavel,
+                    ]);
+                    return false;
+                }
+                
+                return $resultado;  
+            }
+
+
+            $sql = "SELECT
+                        EXISTS 
+                        (
+                            SELECT
+                                1
+                            FROM
+                                tb_nivel_permissoes
+                            where tb_nivel_permissoes.url_amigavel = '{$urlAmigavel}' 
+                            and tb_nivel_permissoes.{$acao} = '1'
+                        ) AS autorizado";
+                        
+            $resultado = DB::selectOne($sql);
+            if ((int)$resultado->autorizado !== 1 ){
+                return false;
+            }
+
+            return $resultado;
         }
 
         
-        return $resultado;
+
 
     }
 

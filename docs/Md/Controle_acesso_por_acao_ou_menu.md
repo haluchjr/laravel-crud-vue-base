@@ -4,35 +4,22 @@ tb_nivel
 tb_menus
 tb_usuarios
 
-# Uso no controller
-    $permissoes = Auth::user()->hasPermission(Route::currentRouteName());
-
-
 ## Inibir o usuario de ver
-if (!$permissoes || (int)$permissoes->ver !== 1) {
-    abort(403);
-    //ou
-    return redirect()->back()->withInput()->with('error', 'Você não pode acessar.');   
+if (!Auth::user()->hasPermission(Route::currentRouteName(),'ver') ){
+    return redirect()->back()->with('error', 'Mensagem' );
 }
 
 ## Inibir o salvar no controller
-if (!$this->permissao || (int)$this->permissao->criar !== 1) { // criar/editar/excluir
-    return redirect()->back()->withInput()->with('error', 'Você não pode acessar.');   
-// abort(403);
+if (!Auth::user()->hasPermission(Route::currentRouteName(),'salvar') ){
+    return redirect()->back()->with('error', 'Seu nível de usuario não permite salvar.' );
 }
 
-return Inertia::render('Cliente/Relatorio',[
-    'permissoes'     => $permissoes ou $this->permissao
-]);
 
 # Na view(vue)
+Exibe as acoes, validar no front pra estilizar.
 JS:
-const { dados } = defineProps({
-    permissoes:{
-        type: Object,
-        required:true,
-    }
-});
+const page = usePage()
+const permissoes = computed(() => page.props.auth.user.permissoes)
 
 HTML:
 <span v-if="permissoes.criar">teste</span>
@@ -61,3 +48,22 @@ Route::currentRouteName() => retorna o nome de como tá definido em web.php, *na
 
 * Adicionado no HandleInertiaRequests.php , as permissoes globais para usar na tela.                           
 {{ $page.props.permissoes }} pra nao precisar usar o defineProps.
+
+
+* Se quiser deixar formulario somente leitura.
+JS:
+const page = usePage()
+const permissoes = computed(() => page.props.auth.user.permissoes)
+const somenteLeitura = computed(() => !permissoes.value.salvar);
+
+HTML:
+ <fieldset :disabled="somenteLeitura">
+ ...campos...
+ Tudo fica somente leitura aqui, ideal para perfil que soh pode ler.
+
+ </fieldset>
+
+ Se for por campo:
+<input type="text"
+        :readonly="somenteLeitura"
+    ...
