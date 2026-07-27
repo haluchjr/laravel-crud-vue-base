@@ -34,7 +34,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/pedido/novo',[PedidoCliente::class,'create'])->name('usuario.novo');
         Route::post('/pedido/salvar',[PedidoCliente::class,'store'])->name('usuario.salvar');
         Route::get('/pedido/listar',[PedidoCliente::class,'listar'])->name('usuario.index');
+        
         Route::get('/pedido/relatorio',[PedidoCliente::class,'relatorioPedidos'])->name('usuario.listar');
+        Route::post('/pedido/relatorio/exportar',[PedidoCliente::class,'relatorioPedidosExportarPara'])->name('usuario.exportarPara');
+        
+
 
         Route::get('/sistema/dados',[UsuarioCliente::class,'alterarDados'])->name('usuario.ajustes');
         Route::post('/sistema/dados',[UsuarioCliente::class,'SalvaralterarDados'])->name('usuario.ajustes.salvar');

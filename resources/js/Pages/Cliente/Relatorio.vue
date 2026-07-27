@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { router, useForm,usePage} from '@inertiajs/vue3'; 
+import { useForm, Link, router } from '@inertiajs/vue3';
 import Layout from '@/Layouts/CrudLayout.vue';
 import ModalBootstrap from '@/Components/ModalBs.vue';
 
@@ -11,11 +11,16 @@ const { dados } = defineProps({
     },
     
 });
+
+function exportarPara(formato){
+    router.post(route('usuario.exportarPara'),{
+        'formato': formato,
+    });
+}
 </script>
 
 <template>
 <Layout>
-    
     <template #header>
         <h1 class="h3 mb-0">Relatório de pedidos</h1>
     </template>
@@ -43,7 +48,12 @@ const { dados } = defineProps({
 
 
     </div>
+    <div>
+       <span  @click="exportarPara('xlsx')" class="bi bi-file-excel btn btn-outline-dark btn-sm" style="width: 150px;" >Exportar para Excel</span>
+       <span  @click="exportarPara('pdf')" class="bi bi-file-excel btn btn-outline-dark btn-sm" style="width: 150px;" >Exportar para Excel</span>
+        
 
+    </div>
     <template #sistema>
         <span>Sistema de pedidos</span>
     </template>

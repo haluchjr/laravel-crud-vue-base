@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+
+
+use Barryvdh\DomPDF\Facade\Pdf; //Gerar pdf.
+
 // user request
 use App\Http\Requests\ValidaNovoPedidoRequest;
 
@@ -17,6 +21,7 @@ use App\Repositories\PedidoRepository as PedidoGeralRepository;
 use App\Repositories\PedidoItensRepository as PedidoItensGeralRepository;
 use App\Repositories\PedidoItemArquivoRepository as PedidoItemArquivoGeralRepository;
 use App\Repositories\Cliente\PedidoRepository as PedidoClienteRepository;
+use Illuminate\Support\Facades\Storage;
 
 class PedidoController extends Controller
 {
@@ -29,6 +34,26 @@ class PedidoController extends Controller
         protected PedidoItemArquivoGeralRepository $PedidoItemArquivoGeralRepository
     ) {
         
+    }
+
+
+    public function relatorioPedidosExportarPara(Request $request){
+        $pedidos = $this->PedidoClienteRepository->listarPedidosByIdCliente(Auth::user()->id, 1000);
+
+        // Hash para identificar esse PDF
+        $hash = sha1(json_encode([
+            'usuario' => Auth::id(),
+            'filtros' => $request->all(),
+        ]));
+
+        $arquivo = "pdf/pedidos_{$hash}.pdf";
+        $pdf = Pdf::loadView('pdf.clientes.relatorioPedidos');
+        
+        //return $pdf->stream('relatorio.pdf');
+        Storage::disk('local')->put($arquivo, $pdf->output());
+
+        return response()->file(Storage::disk('local')->path($arquivo));
+
     }
 
     public function listar(){
