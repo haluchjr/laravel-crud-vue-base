@@ -13,9 +13,9 @@ const { dados } = defineProps({
 });
 
 function exportarPara(formato){
-    router.post(route('usuario.exportarPara'),{
-        'formato': formato,
-    });
+  const url = route('usuario.exportarPara', { formato: formato });
+    // Abre no navegador em uma nova aba/janela, o que força o download
+    window.open(url, '_blank');
 }
 </script>
 
@@ -48,12 +48,16 @@ function exportarPara(formato){
 
 
     </div>
-    <div>
-       <span  @click="exportarPara('xlsx')" class="bi bi-file-excel btn btn-outline-dark btn-sm" style="width: 150px;" >Exportar para Excel</span>
-       <span  @click="exportarPara('pdf')" class="bi bi-file-excel btn btn-outline-dark btn-sm" style="width: 150px;" >Exportar para Excel</span>
         
-
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <span  @click="exportarPara('xlsx')" class="bi bi-filetype-xls btn btn-outline-dark"  title="Exportar para Excel"></span>
+        <span  @click="exportarPara('pdf')"  class="bi bi-filetype-pdf btn btn-outline-dark"  title="Exportar para Pdf"></span>
+        <span  @click="exportarPara('csv')"  class="bi bi-filetype-csv btn btn-outline-dark"  title="Exportar para CSV"></span>
     </div>
+
+
+
+    
     <template #sistema>
         <span>Sistema de pedidos</span>
     </template>

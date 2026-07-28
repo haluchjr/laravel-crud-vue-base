@@ -38,21 +38,127 @@ class PedidoController extends Controller
 
 
     public function relatorioPedidosExportarPara(Request $request){
-        $pedidos = $this->PedidoClienteRepository->listarPedidosByIdCliente(Auth::user()->id, 1000);
-
-        // Hash para identificar esse PDF
-        $hash = sha1(json_encode([
-            'usuario' => Auth::id(),
-            'filtros' => $request->all(),
-        ]));
-
-        $arquivo = "pdf/pedidos_{$hash}.pdf";
-        $pdf = Pdf::loadView('pdf.clientes.relatorioPedidos');
+        $formatoArquivo = $request->formato;
         
-        //return $pdf->stream('relatorio.pdf');
-        Storage::disk('local')->put($arquivo, $pdf->output());
+        $pedidos = $this->PedidoClienteRepository->listarPedidosByIdCliente(Auth::user()->id, 1000);
+        
+        switch ($formatoArquivo){
+            case 'pdf': 
+            {
+                $pdf = Pdf::loadView('pdf.clientes.relatorioPedidos', ['pedidos' => $pedidos]);
+                // Força o download imediato do PDF no navegador (sem guardar em disco)
+                return $pdf->download('relatorio_pedidos.pdf');
 
-        return response()->file(Storage::disk('local')->path($arquivo));
+                /* Se quiiser fazer cache
+                // Hash para identificar esse PDF
+                $hash = sha1(json_encode([
+                    'usuario' => Auth::id(),
+                    'filtros' => $request->all(),
+                ]));
+        
+                $arquivo = "pdf/pedidos_{$hash}.pdf";
+                $pdf = Pdf::loadView('pdf.clientes.relatorioPedidos',['pedidos' => $pedidos]);
+                
+                Storage::disk('local')->put($arquivo, $pdf->output());
+        
+                return response()->file(Storage::disk('local')->path($arquivo));
+                */
+                break;
+            }
+            case 'csv': 
+            {
+                $headers = [
+                    "Content-type"        => "text/csv; charset=UTF-8",
+                    "Content-Disposition" => "attachment; filename=relatorio_pedidos.csv",
+                    "Pragma"              => "no-cache",
+                    "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+                    "Expires"             => "0"
+                ];
+
+                return response()->stream(function () use ($pedidos) {
+                    $handle = fopen('php://output', 'w');
+                    
+                    // Adiciona BOM para o Excel reconhecer acentos e UTF-8 corretamente
+                    fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+
+                    // Cabeçalho das colunas
+                    fputcsv($handle, ['ID', 'Data', 'Valor Total', 'Status'], ';');
+
+                    // Linhas de dados
+                    foreach ($pedidos as $pedido) {
+                        fputcsv($handle, [
+                            $pedido->id,
+                            $pedido->name,
+                            $pedido->descricao_site
+                        ], ';');
+                    }
+
+                    fclose($handle);
+                }, 200, $headers);
+
+
+                break;
+            }
+                
+            case 'xlsx':
+            {
+                $filename = "relatorio_pedidos.xls";
+
+                $headers = [
+                    "Content-Type"        => "application/vnd.ms-excel; charset=UTF-8",
+                    "Content-Disposition" => "attachment; filename=\"{$filename}\"",
+                    "Pragma"              => "no-cache",
+                    "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+                    "Expires"             => "0"
+                ];
+
+                return response()->stream(function () use ($pedidos) {
+                    $output = fopen('php://output', 'w');
+
+                    // BOM UTF-8 para garantir acentuação correta no Excel
+                    fwrite($output, "\xEF\xBB\xBF");
+
+                    // Estrutura HTML que o Excel reconhece como planilha
+                    fwrite($output, "
+                        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>
+                        <head><meta charset='UTF-8'></head>
+                        <body>
+                        <table border='1'>
+                            <thead>
+                                <tr style='background-color: #f2f2f2; font-weight: bold;'>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    ");
+
+                    foreach ($pedidos as $pedido) {
+                        fwrite($output, "
+                            <tr>
+                                <td>{$pedido->id}</td>
+                                <td>{$pedido->name}</td>
+                                <td>{$pedido->descricao_site}</td>
+                            </tr>
+                        ");
+                    }
+
+                    fwrite($output, "
+                            </tbody>
+                        </table>
+                        </body>
+                        </html>
+                    ");
+
+                    fclose($output);
+                }, 200, $headers);
+            
+                break;
+            }
+
+        }
+        
 
     }
 

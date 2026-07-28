@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Teste PDF</title>
 </head>
 <body>
-    PDF TESTE.
+    <h1>PDF TESTE</h1>
+
+    <pre style="font-size: 10px;">
+        @php
+            print_r($pedidos->toArray()); // O ->toArray() deixa o output bem mais limpo se for um Eloquent Collection
+        @endphp
+    </pre>
 </body>
 </html>

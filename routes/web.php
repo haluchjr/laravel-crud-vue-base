@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/pedido/listar',[PedidoCliente::class,'listar'])->name('usuario.index');
         
         Route::get('/pedido/relatorio',[PedidoCliente::class,'relatorioPedidos'])->name('usuario.listar');
-        Route::post('/pedido/relatorio/exportar',[PedidoCliente::class,'relatorioPedidosExportarPara'])->name('usuario.exportarPara');
+        Route::get('/pedido/relatorio/exportar',[PedidoCliente::class,'relatorioPedidosExportarPara'])->name('usuario.exportarPara');
         
 
 
